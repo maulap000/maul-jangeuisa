@@ -41,6 +41,8 @@ body{font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--cr
 .price-pill .label{font-size:0.68rem;color:rgba(255,255,255,0.42);letter-spacing:0.08em;margin-bottom:6px;}
 .price-pill .amount{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;color:#fff;line-height:1;}
 .price-pill.featured .amount{color:var(--gold-light);}
+a.price-pill{text-decoration:none;display:block;cursor:pointer;transition:all 0.2s;}
+a.price-pill:hover{transform:translateY(-3px);border-color:rgba(168,137,90,0.5);box-shadow:0 6px 20px rgba(0,0,0,0.25);}
 
 .hero-cta{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;animation:fadeUp 0.7s 0.28s ease both;}
 .btn-call-main{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#c0a070 0%,#9e7845 100%);color:#1a0f00;text-decoration:none;padding:18px 28px;border-radius:var(--r);font-weight:800;letter-spacing:0.02em;border:none;box-shadow:0 1px 0 rgba(255,255,255,0.25) inset,0 4px 20px rgba(168,137,90,0.35);transition:all 0.2s;}
@@ -253,18 +255,18 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
   <div class="hero-eyebrow">후불장례종합서비스</div>
   <h1>당황하지<br>않으셔도 됩니다<span class="muted">사람을 중심에 둔 장례 전문가가<br>끝까지 함께합니다</span></h1>
   <div class="hero-prices">
-    <div class="price-pill">
+    <a href="mubinso.html" class="price-pill">
       <div class="label">무빈소 장례</div>
       <div class="amount">130만원</div>
-    </div>
-    <div class="price-pill featured">
+    </a>
+    <a href="small.html" class="price-pill featured">
       <div class="label">작은 장례 · 추천</div>
       <div class="amount">160만원</div>
-    </div>
-    <div class="price-pill">
+    </a>
+    <a href="normal.html" class="price-pill">
       <div class="label">일반 장례</div>
       <div class="amount">250만원</div>
-    </div>
+    </a>
   </div>
   <div class="hero-cta">
     <a href="tel:18771852" class="btn-call-main">
