@@ -148,6 +148,15 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
   .compare-cards{gap:16px;}
   .diff-grid{gap:12px;}
 }
+
+/* 스크롤 인디케이터 */
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:32px;animation:fadeUp 0.7s 0.5s ease both;}
+.scroll-hint-text{font-size:0.72rem;color:rgba(255,255,255,0.45);letter-spacing:0.14em;}
+.scroll-hint-arrow{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.scroll-hint-arrow span{display:block;width:10px;height:10px;border-right:2px solid rgba(168,137,90,0.6);border-bottom:2px solid rgba(168,137,90,0.6);transform:rotate(45deg);animation:scrollBounce 1.4s infinite;}
+.scroll-hint-arrow span:nth-child(2){animation-delay:0.15s;opacity:0.65;}
+.scroll-hint-arrow span:nth-child(3){animation-delay:0.3s;opacity:0.35;}
+@keyframes scrollBounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(4px);}}
 </style>
 </head>
 <body>
@@ -205,6 +214,10 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
     </a>
     <a href="#details" class="btn-ghost">포함 내역 보기 ↓</a>
   </div>
+<div class="scroll-hint">
+  <span class="scroll-hint-text">포함 내역 · 상세 안내</span>
+  <div class="scroll-hint-arrow"><span></span><span></span><span></span></div>
+</div>
 </section>
 
 <section id="details" style="background:var(--white);">
