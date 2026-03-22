@@ -83,7 +83,6 @@ a.price-pill:hover{transform:translateY(-3px);border-color:rgba(168,137,90,0.5);
 .pc-note{font-size:0.82rem;color:var(--gray);line-height:1.8;margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.05);}
 .pc-tag{display:inline-block;font-size:0.72rem;color:var(--gray);background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.08);border-radius:4px;padding:2px 8px;}
 .pc.best .pc-tag{background:rgba(168,137,90,0.07);border-color:rgba(168,137,90,0.2);color:var(--gold);}
-/* 상세 링크 */
 .pc-link{
   display:inline-flex;align-items:center;gap:5px;
   margin-top:14px;font-size:0.8rem;font-weight:600;
@@ -112,6 +111,21 @@ a.price-pill:hover{transform:translateY(-3px);border-color:rgba(168,137,90,0.5);
 .svc:hover{border-color:rgba(168,137,90,0.25);transform:translateX(3px);}
 .svc-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
 .svc strong{color:var(--navy);font-weight:600;margin-right:6px;}
+
+/* 블로그 최신 글 섹션 */
+.blog{background:var(--white);padding:72px 24px;}
+.blog-grid{margin-top:32px;display:flex;flex-direction:column;gap:16px;}
+.blog-card{background:var(--cream);border-radius:var(--r);padding:22px 20px;border:1px solid rgba(0,0,0,0.06);transition:all 0.25s;text-decoration:none;display:block;color:inherit;}
+.blog-card:hover{border-color:rgba(168,137,90,0.3);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.07);}
+.blog-card-date{font-size:0.72rem;color:var(--gold);letter-spacing:0.06em;margin-bottom:8px;}
+.blog-card-title{font-family:'Noto Serif KR',serif;font-size:1rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:8px;}
+.blog-card-excerpt{font-size:0.84rem;color:var(--gray);line-height:1.8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.blog-card-more{display:inline-flex;align-items:center;gap:4px;margin-top:12px;font-size:0.8rem;font-weight:600;color:var(--gold);}
+.blog-card-more svg{width:12px;height:12px;}
+.blog-more-link{display:flex;justify-content:center;margin-top:24px;}
+.blog-more-link a{display:inline-flex;align-items:center;gap:6px;color:var(--navy);text-decoration:none;font-size:0.88rem;font-weight:600;border:1px solid rgba(0,0,0,0.12);border-radius:50px;padding:10px 24px;transition:all 0.2s;letter-spacing:0.04em;}
+.blog-more-link a:hover{border-color:rgba(168,137,90,0.4);color:var(--gold);}
+.blog-loading{text-align:center;padding:40px 0;color:var(--gray);font-size:0.88rem;line-height:2;}
 
 .contact{background:linear-gradient(145deg,var(--navy) 0%,#1a3060 100%);padding:72px 24px;text-align:center;position:relative;overflow:hidden;}
 .contact::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(168,137,90,0.07) 0%,transparent 65%);pointer-events:none;}
@@ -207,6 +221,7 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
   .step{flex-direction:column;align-items:center;text-align:center;padding-bottom:0;padding-right:0;}
   .step:not(:last-child)::after{left:60%;top:17px;width:auto;height:2px;bottom:auto;right:0;background:linear-gradient(90deg,rgba(168,137,90,0.3),rgba(168,137,90,0.05));}
   .step-body{padding-top:12px;}
+  .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 }
 @media(min-width:1024px){
   .inner{max-width:960px;}
@@ -220,6 +235,7 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
   .pricing{padding:96px 24px;}
   .about{padding:96px 24px;}
   .services{padding:96px 24px;}
+  .blog{padding:96px 24px;}
   .contact{padding:96px 24px;}
   .price-grid{gap:16px;}
   .about-grid{gap:16px;}
@@ -414,6 +430,24 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
   </div>
 </section>
 
+<!-- 블로그 최신 글 -->
+<section class="blog">
+  <div class="inner">
+    <span class="sec-label rv">BLOG</span>
+    <h2 class="sec-title rv">장례 정보 블로그</h2>
+    <div class="bar rv"></div>
+    <p class="sec-desc rv">장례에 관한 유용한 정보와 실질적인 안내를 전해드립니다.</p>
+    <div class="blog-grid" id="blogGrid">
+      <div class="blog-loading">글을 불러오는 중입니다…</div>
+    </div>
+    <div class="blog-more-link rv">
+      <a href="https://maulj24.com" target="_blank" rel="noopener">블로그 전체 글 보기
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="contact">
   <div class="inner" style="position:relative;z-index:1;">
     <span class="sec-label rv" style="color:var(--gold-light)">CONTACT</span>
@@ -467,6 +501,64 @@ function applyScale(){document.documentElement.style.fontSize=scale+'%';lbl.text
 document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(i<steps.length-1){scale=steps[i+1];applyScale();}};
 document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
 try{const saved=localStorage.getItem('mj_font');if(saved&&steps.includes(Number(saved))){scale=Number(saved);applyScale();}}catch(e){}
+
+// 블로그 최신 글 불러오기 (maulj24.com 워드프레스)
+(function(){
+  var grid=document.getElementById('blogGrid');
+  if(!grid)return;
+
+  function stripHtml(h){
+    var d=document.createElement('div');
+    d.innerHTML=h;
+    return(d.textContent||d.innerText||'').replace(/\s+/g,' ').trim();
+  }
+
+  function fmtDate(s){
+    var d=new Date(s);
+    return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
+  }
+
+  function renderCards(items){
+    grid.innerHTML=items.map(function(p){
+      return '<a href="'+p.link+'" target="_blank" rel="noopener" class="blog-card rv">'
+        +'<div class="blog-card-date">'+fmtDate(p.date)+'</div>'
+        +'<div class="blog-card-title">'+p.title+'</div>'
+        +'<div class="blog-card-excerpt">'+stripHtml(p.excerpt)+'</div>'
+        +'<span class="blog-card-more">자세히 읽기'
+        +' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
+        +'</span>'
+        +'</a>';
+    }).join('');
+    grid.querySelectorAll('.rv').forEach(function(el){ro.observe(el);});
+  }
+
+  function showError(){
+    grid.innerHTML='<p class="blog-loading">블로그 글을 불러올 수 없습니다.<br>'
+      +'<a href="https://maulj24.com" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;">블로그 바로가기 →</a></p>';
+  }
+
+  // 1차: WordPress REST API
+  fetch('https://maulj24.com/wp-json/wp/v2/posts?per_page=3&_fields=id,title,link,excerpt,date')
+    .then(function(r){if(!r.ok)throw new Error('api');return r.json();})
+    .then(function(posts){
+      if(!posts||!posts.length){showError();return;}
+      renderCards(posts.map(function(p){
+        return{link:p.link,date:p.date,title:p.title.rendered,excerpt:p.excerpt.rendered};
+      }));
+    })
+    .catch(function(){
+      // 2차 fallback: RSS → JSON (CORS 우회)
+      fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent('https://maulj24.com/feed/')+'&count=3')
+        .then(function(r){return r.json();})
+        .then(function(data){
+          if(!data.items||!data.items.length){showError();return;}
+          renderCards(data.items.map(function(p){
+            return{link:p.link,date:p.pubDate,title:p.title,excerpt:p.description};
+          }));
+        })
+        .catch(showError);
+    });
+})();
 </script>
 </body>
 </html>
