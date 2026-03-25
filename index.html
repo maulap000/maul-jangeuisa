@@ -241,19 +241,7 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
   .about-grid{gap:16px;}
 }
 
-/* 블로그 위젯 */
-.blog-sec{background:var(--stone);padding:64px 24px;}
-@media(min-width:1024px){.blog-sec{padding:80px 24px;}}
-.blog-list{margin-top:24px;display:flex;flex-direction:column;gap:0;border:1px solid rgba(168,137,90,0.12);border-radius:12px;overflow:hidden;background:var(--white);}
-.blog-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(0,0,0,0.05);text-decoration:none;transition:background 0.15s;}
-.blog-item:last-child{border-bottom:none;}
-.blog-item:hover{background:rgba(168,137,90,0.04);}
-.blog-item-title{font-size:0.9rem;color:var(--text);font-weight:500;line-height:1.5;flex:1;}
-.blog-item:hover .blog-item-title{color:var(--navy);}
-.blog-item-date{font-size:0.75rem;color:var(--gray);white-space:nowrap;flex-shrink:0;}
-.blog-loading{padding:32px;text-align:center;color:var(--gray);font-size:0.85rem;}
-.blog-more{display:inline-flex;align-items:center;gap:6px;margin-top:18px;color:var(--gold);font-size:0.82rem;font-weight:600;text-decoration:none;letter-spacing:0.04em;transition:color 0.2s;}
-.blog-more:hover{color:var(--navy);}
+
 </style>
 </head>
 <body>
@@ -489,21 +477,6 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
   </div>
 </section>
 
-<!-- 블로그 최신글 -->
-<section class="blog-sec">
-  <div class="inner">
-    <span class="sec-label rv">마을장의사 블로그</span>
-    <h2 class="sec-title rv">장례에 관한<br>유용한 정보들</h2>
-    <div class="bar rv"></div>
-    <div class="blog-list rv" id="blogList">
-      <div class="blog-loading">글을 불러오는 중입니다…</div>
-    </div>
-    <a href="https://maulj24.com" target="_blank" class="blog-more rv">
-      블로그 전체 보기
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </a>
-  </div>
-</section>
 
 <footer>
   <div class="footer-brand">마을장의사</div>
@@ -525,25 +498,7 @@ footer{background:var(--navy-deep);padding:40px 24px 60px;text-align:center;bord
 </div>
 
 <script>
-// 블로그 최신글 로드
-(function(){
-  fetch('/api/blog')
-    .then(function(r){return r.json();})
-    .then(function(posts){
-      var list=document.getElementById('blogList');
-      if(!posts||!posts.length){list.innerHTML='<div class="blog-loading">등록된 글이 없습니다.</div>';return;}
-      list.innerHTML=posts.map(function(p){
-        var d=new Date(p.date);
-        var ds=(d.getFullYear())+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
-        var title=p.title.rendered.replace(/&#8211;/g,'–').replace(/&amp;/g,'&').replace(/&#8217;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-        return '<a href="'+p.link+'" target="_blank" class="blog-item"><span class="blog-item-title">'+title+'</span><span class="blog-item-date">'+ds+'</span></a>';
-      }).join('');
-    })
-    .catch(function(){
-      var list=document.getElementById('blogList');
-      list.innerHTML='<div class="blog-loading">블로그 연결 중입니다.</div>';
-    });
-})();
+
 
 const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:0.1});
 document.querySelectorAll('.pc[data-href]').forEach(card=>{card.addEventListener('click',function(e){if(!e.target.closest('a')){window.location.href=this.dataset.href;}});});
