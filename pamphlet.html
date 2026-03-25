@@ -406,8 +406,8 @@ em { font-style: normal; }
 /* ── 인쇄 ── */
 @media print {
   body, html { background: white !important; padding: 0; margin: 0; width: 100%; height: 100vh; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page { box-shadow: none; width: 100%; height: 100vh; border: none; padding: 0; margin: 0; page-break-after: avoid; page-break-before: avoid; overflow: hidden; }
-  @page { size: A4 portrait; margin: 1cm; }
+  .page { box-shadow: none; width: 100%; height: 100vh; border: none; padding: 10mm; box-sizing: border-box; margin: 0; page-break-after: avoid; page-break-before: avoid; overflow: hidden; }
+  @page { size: A4 portrait; margin: 0; }
 }
 </style>
 </head>
@@ -549,11 +549,9 @@ em { font-style: normal; }
   <div class="ft">
     <div class="ft-left">
       <div class="ft-tel">1877-1852</div>
-      <div class="ft-sub">언제든 연락주시면 상황에 맞게 꼼꼼히 안내해 드립니다.</div>
     </div>
     <div class="ft-right">
       <span class="ft-brand">마을<em>장의사</em>.com</span>
-      홈페이지에서 더 다양한 상품과 상세 내용을 확인하세요.
     </div>
   </div>
 
