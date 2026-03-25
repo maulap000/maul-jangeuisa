@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마을장의사 — 프리미엄 장례 안내문</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #16243d;
+  --gold: #b3915f;
+  --gold-light: #c8ac80;
+  --cream: #faf8f5;
+  --stone: #e8e4db;
+  --white: #ffffff;
+  --gray: #6b7280;
+  --text: #2a2c35;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #d4d0c7;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 24px;
+  color: var(--text);
+  word-break: keep-all;
+}
+em { font-style: normal; }
+
+/* ── A4 용지 ── */
+.page {
+  width: 210mm;
+  background: var(--white);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  padding-top: 14mm;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── 헤더 (고급화) ── */
+.hd {
+  padding: 10px 24px 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--navy);
+  position: relative;
+}
+.hd-brand {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 26pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.hd-brand em { color: var(--gold); font-style: normal; }
+.hd-right { text-align: right; }
+.hd-tagline {
+  font-size: 7.5pt;
+  color: var(--gray);
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.hd-tel {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.hd-tel span {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--gold);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── 신뢰 배지 띠 ── */
+.sub-banner {
+  background: linear-gradient(90deg, var(--cream), #f0ebd8);
+  border-bottom: 1px solid var(--stone);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.04em;
+}
+.badge::before { content: '✔'; color: var(--gold); font-size: 10pt; line-height: 1; }
+.badge-divider { color: var(--gold-light); font-size: 9pt; opacity: 0.5; margin: 0 2px; }
+
+/* ── 섹션 타이틀 ── */
+.section-title {
+  padding: 12px 24px 6px;
+  text-align: center;
+  margin-top: 4px;
+}
+.section-title h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.15em;
+  position: relative;
+  display: inline-block;
+}
+.section-title h2::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: var(--gold);
+}
+
+/* ── 상품 2단 ── */
+.products {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 16px 24px 12px;
+}
+
+/* 카드 프리미엄 개선 */
+.card {
+  border: 1px solid var(--stone);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  box-shadow: 0 4px 16px rgba(22, 36, 61, 0.04);
+}
+.card.featured {
+  border: 1.5px solid var(--gold-light);
+  box-shadow: 0 6px 20px rgba(179, 145, 95, 0.12);
+}
+
+/* 카드 헤더 */
+.card-head {
+  padding: 14px 20px 12px;
+  background: linear-gradient(180deg, var(--cream), var(--white));
+  border-bottom: 1px solid var(--stone);
+  position: relative;
+}
+.card.featured .card-head {
+  background: linear-gradient(180deg, #fdfbf7, var(--white));
+  border-bottom-color: rgba(179, 145, 95, 0.2);
+}
+.card-label {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--white);
+  background: var(--gray);
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+.card.featured .card-label {
+  background: var(--gold);
+}
+.card-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 19pt;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+/* 가격 행 */
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.price-orig {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18pt;
+  font-weight: 500;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+.price-arrow {
+  font-size: 12pt;
+  color: var(--gold-light);
+}
+.price-real {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 30pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+.price-unit { font-size: 11pt; color: var(--navy); font-weight: 500; }
+.card-support {
+  margin-top: 8px;
+}
+.tag {
+  background: rgba(179, 145, 95, 0.08);
+  border: 1px solid rgba(179, 145, 95, 0.3);
+  color: #967448;
+  font-size: 8pt;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+/* 카드 바디 */
+.card-body {
+  padding: 12px 20px 14px;
+  background: var(--white);
+}
+.inc-title {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.1em;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--navy);
+  margin-bottom: 6px;
+}
+.inc-table { width: 100%; border-collapse: collapse; }
+.inc-table tr { border-bottom: 1px dashed var(--stone); }
+.inc-table tr:last-child { border-bottom: none; }
+.inc-table td {
+  padding: 6px 2px;
+  font-size: 9.5pt;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.inc-table td:first-child {
+  font-weight: 600;
+  color: var(--navy);
+  width: 75px;
+  white-space: nowrap;
+}
+.inc-table td:last-child { color: var(--text); }
+.inc-table tr.hl td:first-child { color: var(--gold); }
+.inc-table tr.hl td:last-child { font-weight: 700; color: var(--navy); }
+.sub-note { font-size: 7.5pt; color: #888; display: block; margin-top: 2px; line-height: 1.4; }
+
+/* ── 공통 안내 ── */
+.common {
+  margin: 4px 24px 12px;
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 14px 20px;
+  border: 1px solid var(--stone);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+.common-item {
+  position: relative;
+  padding-left: 14px;
+  font-size: 8.5pt;
+  color: var(--text);
+  line-height: 1.6;
+}
+.common-item::before {
+  content: '■';
+  color: var(--gold);
+  font-size: 6pt;
+  position: absolute;
+  left: 0;
+  top: 4px;
+}
+.common-item strong {
+  display: block;
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 8.5pt;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+/* ── 별도 납부 ── */
+.separate {
+  margin: 0 24px 14px;
+  border: 1px solid var(--stone);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.separate-head {
+  background: var(--navy);
+  padding: 10px 16px;
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.separate-head::before {
+  content: '!';
+  display: inline-block;
+  background: var(--gold);
+  color: var(--white);
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  font-size: 10px;
+  text-align: center;
+  line-height: 14px;
+}
+.separate-grid {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+}
+.sep-item {
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 8.5pt;
+  color: var(--text);
+  line-height: 1.5;
+  border-bottom: 1px solid var(--stone);
+}
+.sep-item:last-child { border-bottom: none; }
+.sep-item::before { content: '·'; color: var(--gold); font-size: 14pt; line-height: 1; flex-shrink: 0; font-weight: bold; }
+.sep-item strong { width: 90px; flex-shrink: 0; color: var(--navy); font-weight: 700; white-space: nowrap; }
+
+/* ── 푸터 ── */
+.ft {
+  margin-top: auto;
+  background: var(--navy);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--white);
+}
+.ft-left {
+  display: flex;
+  flex-direction: column;
+}
+.ft-tel {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 24pt;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.ft-sub {
+  font-size: 8.5pt;
+  color: rgba(255,255,255,0.7);
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+}
+.ft-right {
+  text-align: right;
+  font-size: 8.5pt;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.8;
+}
+.ft-brand {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14pt;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 2px;
+}
+.ft-brand em { color: var(--gold); font-style: normal; }
+
+/* ── 인쇄 ── */
+@media print {
+  body, html { background: white !important; padding: 0; margin: 0; width: 100%; height: 100vh; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { box-shadow: none; width: 100%; height: 100vh; border: none; padding: 0; margin: 0; page-break-after: avoid; page-break-before: avoid; overflow: hidden; }
+  @page { size: A4 portrait; margin: 1cm; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 헤더 -->
+  <div class="hd">
+    <div class="hd-brand">마을<em>장의사</em></div>
+    <div class="hd-right">
+      <div class="hd-tagline">장례지도사가 직접 운영하는 후불장례 종합서비스<br>가입비 없음 &nbsp;·&nbsp; 선납금 없음 &nbsp;·&nbsp; 발인날 전액 결제</div>
+      <div class="hd-tel">1877-1852 <span>24시간 대기</span></div>
+    </div>
+  </div>
+
+  <!-- 신뢰 배지 -->
+  <div class="sub-banner">
+    <span class="badge">완전 후불 — 발인날 결제</span>
+    <span class="badge-divider">|</span>
+    <span class="badge">가입비·선납금 제로</span>
+    <span class="badge-divider">|</span>
+    <span class="badge">장례지도사 직접 책임운영</span>
+    <span class="badge-divider">|</span>
+    <span class="badge">숨은 강요 비용 없음</span>
+  </div>
+
+  <!-- 섹션 타이틀 -->
+  <div class="section-title">
+    <h2>프리미엄 후불상조 플랜 안내</h2>
+  </div>
+
+  <!-- 상품 2단 -->
+  <div class="products">
+
+    <!-- 작은 장례 -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-label">가장 합리적인 선택</div>
+        <div class="card-name">작은 장례</div>
+        <div class="price-row">
+          <span class="price-orig">200만원</span>
+          <span class="price-arrow">▶</span>
+          <span class="price-real">160</span>
+          <span class="price-unit">만원</span>
+        </div>
+        <div class="card-support">
+          <span class="tag">꽃제단 40만원 지원 적용가</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="inc-title">상세 포함 내역</div>
+        <table class="inc-table">
+          <tbody>
+            <tr><td>관</td><td>화장용 고급 오동나무관</td></tr>
+            <tr><td>수의</td><td>화장 전용 면수의</td></tr>
+            <tr><td>책임운영</td><td>장례지도사 3일간 전담 진행</td></tr>
+            <tr><td>상복</td><td>남성양복 3벌 · 여성한복 3벌 (대여)</td></tr>
+            <tr><td>장의차량</td><td>장의버스 <strong>또는</strong> 리무진 중 택 1<br><span class="sub-note">버스: 왕복 200km 內 / 리무진: 관내 편도</span></td></tr>
+            <tr><td>앰뷸런스</td><td>관내 무료 제공 (사전 신청 시)</td></tr>
+            <tr class="hl"><td>염습·입관</td><td>국가공인 장례지도사 2명 직접 진행</td></tr>
+            <tr><td>입관용품</td><td>고급 입관용품 일체 대여 및 제공</td></tr>
+            <tr class="hl"><td>관꽃 장식</td><td>입관 시 생화 관꽃 장식 무상 제공</td></tr>
+            <tr><td>접객도우미</td><td>총 2명 지원 (1일차 1명, 2일차 1명)<br><span class="sub-note">1일 10시간 기준 지원</span></td></tr>
+            <tr><td>봉안함</td><td>화장 전용 목함 무료 제공</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 일반 장례 -->
+    <div class="card featured">
+      <div class="card-head">
+        <div class="card-label">품격을 더한 진행</div>
+        <div class="card-name">일반 장례</div>
+        <div class="price-row">
+          <span class="price-orig">290만원</span>
+          <span class="price-arrow">▶</span>
+          <span class="price-real">250</span>
+          <span class="price-unit">만원</span>
+        </div>
+        <div class="card-support">
+          <span class="tag">꽃제단 40만원 지원 적용가</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="inc-title">상세 포함 내역</div>
+        <table class="inc-table">
+          <tbody>
+            <tr><td>관</td><td>화장용 고급 오동나무관</td></tr>
+            <tr><td>수의</td><td>격식 있는 저마수의 또는 한복수의</td></tr>
+            <tr><td>책임운영</td><td>장례지도사 3일간 전담 진행</td></tr>
+            <tr><td>상복</td><td>남성양복 5벌 · 여성한복 5벌 (대여)</td></tr>
+            <tr><td>장의차량</td><td>장의버스 <strong>+</strong> 장의리무진 <strong>모두 포함</strong><br><span class="sub-note">버스: 왕복 200km 內 / 리무진: 관내 편도</span></td></tr>
+            <tr><td>앰뷸런스</td><td>관내 무료 제공 (사전 신청 시)</td></tr>
+            <tr class="hl"><td>염습·입관</td><td>국가공인 장례지도사 2명 직접 진행</td></tr>
+            <tr><td>입관용품</td><td>고급 입관용품 일체 대여 및 제공</td></tr>
+            <tr class="hl"><td>관꽃 장식</td><td>입관 시 생화 관꽃 장식 무상 제공</td></tr>
+            <tr><td>접객도우미</td><td>총 4명 지원 (1일차 2명, 2일차 2명)<br><span class="sub-note">1일 10시간 기준 지원</span></td></tr>
+            <tr><td>봉안함</td><td>고급 황토자기함 또는 목함 중 택 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /products -->
+
+  <!-- 공통 안내 -->
+  <div class="common">
+    <div class="common-item">
+      <strong>완전 후불제</strong>
+      모든 일정 종료 후, 발인날 결제하여 투명합니다.
+    </div>
+    <div class="common-item">
+      <strong>가입비·선납금 無</strong>
+      복잡한 계약서 없이 문자로 일정 약속을 확인합니다.
+    </div>
+    <div class="common-item">
+      <strong>책임운영제</strong>
+      상담한 장례지도사가 처음부터 끝까지 함께합니다.
+    </div>
+    <div class="common-item">
+      <strong>숨은 강요 비용 無</strong>
+      사전에 안내된 금액 외 어떠한 추가 청구도 없습니다.
+    </div>
+  </div>
+
+  <!-- 별도 납부 안내 -->
+  <div class="separate">
+    <div class="separate-head">장례식장 등 시설에 별도로 납부하시는 항목 (상조 서비스 외)</div>
+    <div class="separate-grid">
+      <div class="sep-item"><strong>시설 이용료</strong> 안치실 · 염습실 · 빈소(홀) 사용료</div>
+      <div class="sep-item"><strong>식사·제사상</strong> 장례식장 식당에 조문객 인원만큼 직접 결제</div>
+      <div class="sep-item"><strong>빈소 꽃제단</strong> 장례식장에 납부 <span style="color: var(--navy); font-weight: 700;">[마을장의사가 40만원 지원]</span></div>
+      <div class="sep-item"><strong>장지·화장료</strong> 화장장 이용료 및 봉안당(납골당), 수목장 등 장지 비용</div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <div class="ft">
+    <div class="ft-left">
+      <div class="ft-tel">1877-1852</div>
+      <div class="ft-sub">언제든 연락주시면 상황에 맞게 꼼꼼히 안내해 드립니다.</div>
+    </div>
+    <div class="ft-right">
+      <span class="ft-brand">마을<em>장의사</em>.com</span>
+      홈페이지에서 더 다양한 상품과 상세 내용을 확인하세요.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
