@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<!-- 모바일 화면에서 A4 비율(픽셀 기준) 유지 & 강제 원본 크기 렌더링 (터치 줌 가능) -->
-<meta name="viewport" content="width=850">
+<!-- 모바일 스마트폰 전용 세로형 반응형 배치를 위해 표준 뷰포트 선언 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>마을장의사 — 프리미엄 장례 안내문</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -404,6 +404,40 @@ em { font-style: normal; }
   margin-bottom: 2px;
 }
 .ft-brand em { color: var(--gold); font-style: normal; }
+
+/* ── 모바일 (방안 1: 반응형 세로 1단 레이아웃) ── */
+@media screen and (max-width: 820px) {
+  body {
+    padding: 0;
+    min-height: auto;
+  }
+  .page {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    padding: 32px 20px 48px; 
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .products {
+    grid-template-columns: 1fr; /* 좌우 2단 배치를 상하 1단으로 압축 */
+    gap: 32px;
+  }
+  .info-wrap {
+    flex-direction: column; /* 연락처 등 병렬 요소를 세로 분배 */
+    gap: 20px;
+  }
+  h2.sec-title {
+    font-size: 1.4rem;
+  }
+  .feature-box .desc {
+    font-size: 0.95rem; /* 모바일에서 가독성 향상 */
+  }
+  .print-btn {
+    display: none !important; /* 모바일에서는 인쇄 버튼 불필요하므로 숨김 */
+  }
+}
 
 /* ── 인쇄 ── */
 .print-btn {
