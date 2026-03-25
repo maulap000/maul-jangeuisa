@@ -173,23 +173,49 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
   <a href="ijang.html">개장·이장서비스</a>
 </nav>
 
-<section class="hero">
-  <div class="hero-label">무빈소 장례</div>
-  <h1>빈소 없이 조용하게<br><em>정성은 그대로</em></h1>
-  <p class="hero-sub">가입비 없음 &nbsp;·&nbsp; 완전 후불 &nbsp;·&nbsp; 발인날 결제</p>
-  <div class="hero-price">130<span>만원</span></div>
-  <div class="hero-cta">
-    <a href="tel:18771852" class="btn-call">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-      1877-1852 상담하기
-    </a>
-    <a href="#include" class="btn-ghost">포함 내역 보기 ↓</a>
+<section class="hero" style="padding-bottom: 40px;">
+  <a href="index.html" class="back-btn" style="position:absolute; top: 100px; left: 24px; color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.8rem; display:inline-flex; align-items:center; gap:6px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="15 18 9 12 15 6"/></svg> 메인으로
+  </a>
+  <div class="hero-label" style="margin-top: 24px;">무빈소 장례</div>
+  <h1 style="margin-bottom: 16px; font-size: clamp(1.8rem, 6vw, 2.7rem);">빈소 없이 조용하게</h1>
+  
+  <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(168,137,90,0.4); border-radius: 12px; padding: 18px 24px; margin: 0 auto 24px; max-width: 320px;">
+    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 4px;">가입비 없음 · 완전 후불 · 발인날 결제</div>
+    <div style="font-family: 'Noto Serif KR', serif; font-size: 2.2rem; font-weight: 700; color: #fff; line-height: 1;">130<span style="font-size: 1rem; font-weight: 400; opacity: 0.8; margin-left: 4px;">만원</span></div>
   </div>
-<div class="scroll-hint">
-  <span class="scroll-hint-text">포함 내역 · 상세 안내</span>
-  <div class="scroll-hint-arrow"><span></span><span></span><span></span></div>
-</div>
-  <p class="hero-note">선납금 없음 &nbsp;·&nbsp; 계약서 없음 &nbsp;·&nbsp; 24시간 상담 가능</p>
+
+  <div class="hero-cta">
+    <a href="tel:18771852" class="btn-call" style="box-shadow: 0 4px 16px rgba(168,137,90,0.3);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      1877-1852 빠른 연결
+    </a>
+  </div>
+</section>
+
+<section id="include" style="background:var(--white); padding-top: 40px; margin-top: -16px; border-top-left-radius: 20px; border-top-right-radius: 20px; position: relative; z-index: 10;">
+  <div class="inner">
+    <span class="sec-label rv">INCLUDES</span>
+    <h2 class="sec-title rv">포함 내역</h2>
+    <div class="bar rv"></div>
+    <div class="table-wrap rv" style="margin-top:10px;">
+      <table class="include-table">
+        <tbody>
+          <tr class="highlight"><td>장례지도사</td><td><span class="highlight-val">담당 장례지도사 파견</span><span class="sub-text">상담부터 발인까지 전담 진행</span></td></tr>
+          <tr class="highlight"><td>염습·입관</td><td><span class="highlight-val">국가 공인 장례지도사 2명 직접 진행</span></td></tr>
+          <tr><td>관</td><td>화장용 오동나무관</td></tr>
+          <tr><td>수의</td><td>화장 면수의</td></tr>
+          <tr><td>입관용품</td><td>입관용품 일체 포함</td></tr>
+          <tr><td>행정 대행</td><td>화장장/안치실 예약 및 장지 안내 대행</td></tr>
+          <tr class="highlight"><td>장의차량</td><td><span class="highlight-val">장의버스 또는 장의리무진 택일</span><span class="sub-text">버스: 왕복 복귀 / 리무진: 편도</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="notice rv" style="margin-top: 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p style="font-size:0.8rem;">안내된 항목 외 추가 비용은 없습니다. 단, 안치실 사용료 등 시설 이용료 및 화장/장지 비용은 시설에 별도 납부하셔야 합니다.</p>
+    </div>
+  </div>
 </section>
 
 <section style="background:var(--stone);">
@@ -265,64 +291,7 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
   </div>
 </section>
 
-<div id="include" style="display:block;padding-top:80px;margin-top:-80px;"></div>
-<section style="background:var(--cream);">
-  <div class="inner">
-    <span class="sec-label rv">포함 내역</span>
-    <h2 class="sec-title rv">130만원에 포함된 서비스</h2>
-    <div class="bar rv"></div>
-    <p class="sec-desc rv">아래 항목이 모두 포함된 금액입니다. 안내된 항목 외 추가 청구는 없습니다.</p>
-    <div class="table-wrap rv">
-      <table class="include-table">
-        <thead>
-          <tr><th>항목</th><th>포함 내역</th></tr>
-        </thead>
-        <tbody>
-          <tr class="highlight">
-            <td>장례지도사</td>
-            <td><span class="highlight-val">담당 장례지도사 파견</span><span class="sub-text">상담부터 발인까지 전담 진행</span></td>
-          </tr>
-          <tr class="highlight">
-            <td>염습·입관</td>
-            <td><span class="highlight-val">국가 공인 장례지도사 2명 직접 진행</span><span class="sub-text">전문 인력이 직접 고인을 정성껏 모십니다</span></td>
-          </tr>
-          <tr>
-            <td>관</td>
-            <td>화장용 오동나무관</td>
-          </tr>
-          <tr>
-            <td>수의</td>
-            <td>화장 면수의</td>
-          </tr>
-          <tr>
-            <td>입관용품</td>
-            <td>입관용품 일체 포함<span class="sub-text">입관에 필요한 모든 용품이 포함됩니다</span></td>
-          </tr>
-          <tr>
-            <td>화장 예약</td>
-            <td>화장장 예약 및 안내 대행</td>
-          </tr>
-          <tr>
-            <td>장지 예약</td>
-            <td>봉안당(납골당) 등 장지 예약 안내<span class="sub-text">장지 이용료는 해당 시설에 별도 납부</span></td>
-          </tr>
-          <tr>
-            <td>안치실 예약</td>
-            <td>장례식장 안치실 예약 대행<span class="sub-text">안치실 사용료는 별도</span></td>
-          </tr>
-          <tr class="highlight">
-            <td>장의차량</td>
-            <td><span class="highlight-val">장의버스 또는 장의리무진 중 택일</span><span class="sub-text">· 장의버스: 화장장에서 장례식장으로 복귀까지 포함</span><span class="sub-text">· 장의리무진: 화장장에서 고인 인도 후 철수(편도)</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="notice rv">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p>위 금액은 마을장의사가 제공하는 서비스 비용입니다. <strong>장례지도사가 직접 처음부터 끝까지 함께</strong>하며, 안내된 항목 외 추가 비용을 청구하지 않습니다.</p>
-    </div>
-  </div>
-</section>
+<!-- 이전 상세내역 섹션 삭제 -> 히어로 아랫단으로 통합됨 -->
 
 <section style="background:var(--white);">
   <div class="inner">
