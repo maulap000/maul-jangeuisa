@@ -90,8 +90,8 @@ a {
   height: 42px;
   border: 1px solid var(--soft-line);
   color: var(--brass);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: .85rem;
+  font-family: "Noto Serif KR", "Nanum Myeongjo", "Batang", Georgia, "Times New Roman", serif;
+  font-size: .92rem;
   font-weight: 700;
 }
 
@@ -347,6 +347,10 @@ a {
 .site-footer p {
   margin: 8px 0 0;
   color: var(--muted);
+}
+
+.principles p {
+  grid-column: 2;
 }
 
 .comparison {
@@ -667,7 +671,8 @@ a {
 
   .hero-lead {
     font-size: 1rem;
-    word-break: break-all;
+    word-break: keep-all;
+    overflow-wrap: normal;
   }
 
   .hero-actions {
