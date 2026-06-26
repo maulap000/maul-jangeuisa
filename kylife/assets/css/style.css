@@ -27,6 +27,16 @@ body {
   font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
   line-height: 1.6;
   letter-spacing: 0;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p,
+dd,
+li {
+  overflow-wrap: anywhere;
 }
 
 a {
@@ -463,6 +473,13 @@ a {
   .product-detail,
   .contact-panel {
     grid-template-columns: 1fr;
+  }
+
+  .intro-grid h2,
+  .section-head h2,
+  .contact-panel h2 {
+    font-size: 25px;
+    word-break: break-all;
   }
 
   .product-card {
