@@ -453,6 +453,7 @@ a {
   .hero-copy {
     margin-top: 16px;
     font-size: 16px;
+    word-break: break-all;
   }
 
   .hero-facts {
