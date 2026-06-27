@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="길영라이프 永 심볼">
+  <defs>
+    <linearGradient id="face" x1="70" y1="32" x2="184" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.5" stop-color="#f2eadc"/>
+      <stop offset="1" stop-color="#c9ad78"/>
+    </linearGradient>
+    <filter id="relief" x="-18%" y="-18%" width="136%" height="136%">
+      <feDropShadow dx="0" dy="5" stdDeviation="3.2" flood-color="#000000" flood-opacity=".48"/>
+      <feDropShadow dx="-1.4" dy="-1.4" stdDeviation=".7" flood-color="#ffffff" flood-opacity=".45"/>
+      <feDropShadow dx="1.2" dy="1.2" stdDeviation=".8" flood-color="#7b623a" flood-opacity=".42"/>
+    </filter>
+    <filter id="edgeGrain" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.038" numOctaves="2" seed="19" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <text x="128" y="183"
+        text-anchor="middle"
+        font-family="HYGungSo-Bold, HCR Batang, Batang, SimSun, serif"
+        font-size="172"
+        font-weight="700"
+        fill="#0d0f0d"
+        opacity=".38"
+        transform="translate(4 5) rotate(-4 128 128) scale(1.03 1)">永</text>
+  <text x="128" y="183"
+        text-anchor="middle"
+        font-family="HYGungSo-Bold, HCR Batang, Batang, SimSun, serif"
+        font-size="172"
+        font-weight="700"
+        fill="url(#face)"
+        filter="url(#relief)"
+        transform="rotate(-4 128 128) scale(1.03 1)">永</text>
+  <text x="128" y="183"
+        text-anchor="middle"
+        font-family="HYGungSo-Bold, HCR Batang, Batang, SimSun, serif"
+        font-size="172"
+        font-weight="700"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="1.2"
+        opacity=".28"
+        filter="url(#edgeGrain)"
+        transform="rotate(-4 128 128) scale(1.03 1)">永</text>
+</svg>
