@@ -163,7 +163,8 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
 .approved-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.86rem}
 .approved-table th,.approved-table td{padding:12px;text-align:left;border:1px solid #d9d7d1;vertical-align:top}
 .approved-table th{background:#1c2840;color:white}
-</style></head>
+</style><link rel="stylesheet" href="talktalk.css">
+</head>
 <body>
 <header class="topbar">
 <a class="topbar-brand" href="index.html">마을<em>장의사</em></a>
@@ -423,7 +424,7 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
 <span class="sec-label rv" style="color:var(--gold-light)">CONTACT</span>
 <h2 class="sec-title rv">궁금한 점이 있으시면<br/>편하게 전화주세요</h2>
 <div class="contact-num rv">1877-1852</div>
-<p class="contact-sub rv">24시간 상담 가능  ·  전화만 가능</p>
+<p class="contact-sub rv">24시간 전화상담 · 방문상담은 사전 예약</p>
 <div class="contact-btns rv">
 <a class="btn-call-lg" href="tel:18771852">
 <svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24" width="16"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"></path></svg>
@@ -431,11 +432,16 @@ footer{background:var(--navy-deep);padding:32px 24px 48px;text-align:center;bord
       </a>
 <a class="btn-ghost-lg" href="tel:01044947896">010-4494-7896</a>
 </div>
+<div class="talktalk-info">
+<a class="talktalk-button" href="https://talk.naver.com/WC91MB" target="_blank" rel="noopener noreferrer">네이버 톡톡 자동안내 ↗</a>
+<p>장례 상품과 이용 방법을 자동안내로 확인하실 수 있습니다.<br>장례지도사가 직접 운영하여 채팅·문자 답변은 늦을 수 있습니다.<br>상담은 24시간 전화해 주세요.<br><a href="tel:18771852">1877-1852</a> · 급한 상담 <a href="tel:01044947896">010-4494-7896</a></p>
+</div>
+
 </div>
 </section>
 <footer>
 <div class="footer-brand">마을장의사</div>
-<div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br/>사업자등록번호: 209-90-98193<br/>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br/>대표: 김광룡 (장례지도사) · 전화만 가능</div>
+<div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br/>사업자등록번호: 209-90-98193<br/>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br/>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
 </footer>
 <div class="font-ctrl">
 <button class="font-btn" id="btnPlus">확대</button>
@@ -456,5 +462,6 @@ document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(
 document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
 try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
 </script>
+<a class="talktalk-float" href="https://talk.naver.com/WC91MB" target="_blank" rel="noopener noreferrer" aria-label="네이버 톡톡 자동안내 (새 창)">톡톡 자동안내 ↗</a>
 </body>
 </html>
