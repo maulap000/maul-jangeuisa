@@ -86,6 +86,12 @@ body{font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--pa
 .arrow{width:20px;height:20px;color:var(--navy);opacity:0.3;transition:all 0.35s ease;}
 .choice:hover .arrow,.read:hover .arrow{opacity:1;color:var(--gold);transform:translateX(4px);}
 
+.urgent{margin-top:46px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;font-size:0.86rem;color:var(--gray);}
+.urgent-q{color:var(--gray);}
+.urgent a{color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(168,137,90,0.55);padding-bottom:2px;transition:color 0.2s,border-color 0.2s;}
+.urgent a:hover{color:var(--gold);border-color:var(--gold);}
+.urgent .num{font-size:1.08rem;letter-spacing:0.06em;}
+
 /* 질문 화면 */
 .q-wrap{padding-top:48px;}
 .q-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;}
@@ -151,7 +157,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .r-row{grid-template-columns:44px 1fr;}
 }
 @media print{
-  .topbar,.nav-dropdown,.page-meta,.band,footer,.r-actions,.r-close{display:none!important;}
+  .topbar,.nav-dropdown,.page-meta,.band,footer,.r-actions,.r-close,.urgent{display:none!important;}
   body{background:#fff;}
   .page{padding:0;min-height:0;}
   .screen{animation:none;}
@@ -331,6 +337,9 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       +'<button class="choice" data-track="self"><span class="choice-idx num">A</span><span><span class="choice-title">나의 장례를 미리 생각해 둡니다</span><span class="choice-desc">내 뜻을 정리해 두고 싶은 분</span></span>'+ARROW+'</button>'
       +'<button class="choice" data-track="family"><span class="choice-idx num">B</span><span><span class="choice-title">부모님·가족의 장례를 미리 알아봅니다</span><span class="choice-desc">그날 당황하지 않도록 챙겨 두고 싶은 분</span></span>'+ARROW+'</button>'
       +'</div>'
+      +'<div class="urgent"><span class="urgent-q">지금 장례를 치러야 하는 상황이신가요?</span>'
+      +'<a href="index.html">비용과 절차 바로 보기</a>'
+      +'<a class="num" href="tel:18771852">1877-1852</a></div>'
     );
     stage.querySelectorAll('.choice').forEach(function(b){
       b.addEventListener('click',function(){track=b.getAttribute('data-track');qIndex=0;answers=[];renderQuestion();});
