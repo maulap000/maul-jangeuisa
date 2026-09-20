@@ -311,5 +311,6 @@ document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(
 document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
 try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
 </script>
+<script src="track.js" defer></script>
 </body>
 </html>

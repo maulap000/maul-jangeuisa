@@ -417,6 +417,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       +'<div class="r-actions"><button class="meta-link" id="rRestart">처음으로</button><button class="meta-link" id="rPrint">이 정리 인쇄하기</button></div>'
       +'</div>'
     );
+    if(window.mjTrack){window.mjTrack('prepare_complete',{track:track});}
     document.getElementById('rRestart').addEventListener('click',renderIntro);
     document.getElementById('rPrint').addEventListener('click',function(){window.print();});
     const NL=String.fromCharCode(10);
@@ -434,5 +435,6 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   renderIntro();
 })();
 </script>
+<script src="track.js" defer></script>
 </body>
 </html>
