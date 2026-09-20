@@ -132,6 +132,16 @@ body{font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--pa
 .r-close{margin-top:88px;text-align:center;color:#555b66;font-size:0.95rem;line-height:2.1;}
 .r-actions{display:flex;justify-content:center;gap:28px;margin-top:34px;}
 
+.handoff{margin-top:84px;padding-top:34px;border-top:1px solid var(--line);}
+.handoff h3{font-family:'Noto Serif KR',serif;font-weight:600;color:var(--navy);font-size:1.12rem;line-height:1.6;margin-top:14px;}
+.handoff p{margin-top:10px;font-size:0.9rem;color:#555b66;line-height:1.95;max-width:33em;}
+.handoff-actions{display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:22px;}
+.ho-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:1px solid var(--navy);background:var(--navy);color:#fff;font-family:inherit;font-size:0.9rem;letter-spacing:0.02em;text-decoration:none;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;}
+.ho-btn:hover{background:var(--navy-deep);}
+.ho-btn.ghost{background:none;color:var(--navy);border-color:var(--line);}
+.ho-btn.ghost:hover{border-color:var(--gold);color:var(--gold);}
+.ho-done{margin-top:14px;font-size:0.84rem;color:var(--gold);min-height:1.6em;}
+
 /* 하단 문의 */
 .band{background:var(--navy-deep);text-align:center;padding:84px 24px 76px;}
 .band .eyebrow{color:var(--gold-light);}
@@ -157,7 +167,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .r-row{grid-template-columns:44px 1fr;}
 }
 @media print{
-  .topbar,.nav-dropdown,.page-meta,.band,footer,.r-actions,.r-close,.urgent{display:none!important;}
+  .topbar,.nav-dropdown,.page-meta,.band,footer,.r-actions,.r-close,.urgent,.handoff{display:none!important;}
   body{background:#fff;}
   .page{padding:0;min-height:0;}
   .screen{animation:none;}
@@ -397,12 +407,28 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
           const ext=c.url.indexOf('http')===0;
           return '<a class="read" href="'+c.url+'"'+(ext?' target="_blank" rel="noopener"':'')+'><span><span class="read-label">'+c.label+'</span><span class="read-title">'+c.title+'</span></span>'+ARROW+'</a>';
         }).join('')+'</div>':'')
+      +'<div class="handoff"><span class="eyebrow">상담으로 이어 가기</span>'
+      +'<h3>이 정리를 그대로 보내 상담하실 수 있습니다</h3>'
+      +'<p>아래 버튼을 누르면 위 답변이 복사되고 카카오톡 상담창이 열립니다. 대화창에 붙여 넣어 보내 주시면, 처음부터 다시 설명하지 않으셔도 이어서 상담해 드립니다. 답변은 어디에도 저장되지 않으며, 직접 보내실 때에만 전달됩니다.</p>'
+      +'<div class="handoff-actions"><a class="ho-btn" id="hoKakao" href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">복사하고 카카오톡 상담 열기</a><button class="ho-btn ghost" id="hoCopy">정리 내용만 복사하기</button></div>'
+      +'<p class="ho-done" id="hoDone" aria-live="polite"></p>'
+      +'<p class="fineprint">채팅 답변은 늦을 수 있습니다. 급하신 경우에는 꼭 1877-1852로 전화해 주세요.</p></div>'
       +'<p class="r-close">궁금한 점이 생기시면,<br>편하실 때 연락 주셔도 됩니다.</p>'
       +'<div class="r-actions"><button class="meta-link" id="rRestart">처음으로</button><button class="meta-link" id="rPrint">이 정리 인쇄하기</button></div>'
       +'</div>'
     );
     document.getElementById('rRestart').addEventListener('click',renderIntro);
     document.getElementById('rPrint').addEventListener('click',function(){window.print();});
+    const NL=String.fromCharCode(10);
+    const memo='[마을장의사 미리 준비 — '+TRACKS[track].name+']'+NL+answers.map(function(a,i){return (i+1)+'. '+a.summary;}).join(NL)+NL+'(마을장의사.com 미리 준비에서 작성)';
+    function copyMemo(){
+      const done=document.getElementById('hoDone');
+      function ok(){done.textContent='복사되었습니다. 상담 대화창에 붙여 넣어 주세요.';}
+      function fallback(){try{const ta=document.createElement('textarea');ta.value=memo;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const r=document.execCommand('copy');document.body.removeChild(ta);if(r){ok();}else{done.textContent='복사가 되지 않았습니다. 위 답변을 길게 눌러 직접 복사해 주세요.';}}catch(e){done.textContent='복사가 되지 않았습니다. 위 답변을 길게 눌러 직접 복사해 주세요.';}}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(memo).then(ok,fallback);}else{fallback();}
+    }
+    document.getElementById('hoCopy').addEventListener('click',copyMemo);
+    document.getElementById('hoKakao').addEventListener('click',copyMemo);
   }
 
   renderIntro();
