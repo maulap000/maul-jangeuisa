@@ -97,12 +97,13 @@ html{scroll-padding-top:80px;}
 .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231c2840' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px;}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--navy);}
 .field textarea{min-height:120px;resize:vertical;}
-.field .hint{margin-top:7px;font-size:0.85rem;color:var(--soft);line-height:1.7;}
+.field .hint{margin-top:7px;font-size:0.9rem;color:var(--soft);line-height:1.7;}
 .field .hint.on{color:var(--gold-text);}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .pair .mini{display:block;font-size:0.82rem;color:var(--soft);margin-bottom:4px;}
 .acct-row{display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:10px;}
 .acct-row span{font-size:0.88rem;color:var(--navy);}
+.btn-text{margin-top:8px;padding:6px 0;border:0;background:none;color:var(--navy);font-family:inherit;font-size:0.9rem;text-align:left;cursor:pointer;border-bottom:1px solid rgba(168,137,90,0.6);}
 .quick{display:flex;gap:8px;margin-top:8px;}
 .quick button,.btn-line{min-height:44px;padding:8px 16px;border:1px solid rgba(28,40,64,0.3);background:none;color:var(--navy);font-family:inherit;font-size:0.9rem;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .quick button:hover,.btn-line:hover{border-color:var(--gold);}
@@ -131,7 +132,9 @@ html{scroll-padding-top:80px;}
 .out-actions{display:grid;gap:10px;padding:16px 18px 18px;}
 .copy{min-height:52px;padding:12px 16px;border:1px solid var(--navy);background:var(--navy);color:#fff;font-family:inherit;font-size:1rem;cursor:pointer;transition:background 0.2s;-webkit-tap-highlight-color:transparent;}
 .copy:hover{background:var(--navy-deep);}
-.share{display:none;min-height:52px;padding:12px 16px;border:1px solid var(--navy);background:none;color:var(--navy);font-family:inherit;font-size:1rem;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.back-links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:14px;font-size:0.92rem;}
+.back-links a{color:var(--navy);text-decoration:none;border-bottom:1px solid rgba(168,137,90,0.6);padding-bottom:2px;}
+.share{display:none;min-height:52px;padding:12px 16px;border:1px solid var(--navy);background:var(--navy);color:#fff;font-family:inherit;font-size:1rem;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .copied{display:none;margin:0 18px 18px;padding:12px 14px;border-left:2px solid var(--gold);background:#f7f5f0;font-size:0.92rem;color:var(--navy);line-height:1.75;}
 .note-box{display:none;margin-top:16px;padding:12px 14px;border-left:2px solid var(--gold);font-size:0.9rem;color:#555b66;line-height:1.8;}
 
@@ -180,6 +183,10 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .field,.tip{grid-template-columns:1fr;row-gap:8px;}
   .field>label,.field>.lab{padding-top:0;}
   .more .fields{margin:0 10px 6px;}
+  .ts-label::before{content:'글씨가 작으면 + · ';}
+}
+@media(max-width:400px){
+  .pair{grid-template-columns:1fr;}
 }
 @media print{
   .topbar,.nav-dropdown,.page-meta,.band,footer,.pledge,.lead,#partInput,#partMore,#partTips,.jump-out,.part-lead,.cnt,.out-actions,.copied,.blank-note,.note-box,.closing{display:none!important;}
@@ -193,13 +200,13 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 <body>
 
 <header class="topbar">
-  <a href="index.html" class="topbar-brand">마을<em>장의사</em></a>
+  <a target="_blank" rel="noopener" href="index.html" class="topbar-brand">마을<em>장의사</em></a>
   <nav class="nav-inline">
-    <a href="sangjo.html">후불상조서비스</a>
-    <a href="jangji.html">화장장지서비스</a>
-    <a href="ijang.html">개장·이장서비스</a>
-    <a href="process.html">진행 절차</a>
-    <a href="prepare.html">미리 준비</a>
+    <a target="_blank" rel="noopener" href="sangjo.html">후불상조서비스</a>
+    <a target="_blank" rel="noopener" href="jangji.html">화장장지서비스</a>
+    <a target="_blank" rel="noopener" href="ijang.html">개장·이장서비스</a>
+    <a target="_blank" rel="noopener" href="process.html">진행 절차</a>
+    <a target="_blank" rel="noopener" href="prepare.html">미리 준비</a>
   </nav>
   <div class="topbar-right">
     <button class="nav-hamburger" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">
@@ -212,16 +219,16 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   </div>
 </header>
 <nav class="nav-dropdown" id="navDropdown">
-  <a href="sangjo.html">후불상조서비스</a>
-  <a href="jangji.html">화장장지서비스</a>
-  <a href="ijang.html">개장·이장서비스</a>
-  <a href="process.html">진행 절차</a>
-  <a href="prepare.html">미리 준비</a>
+  <a target="_blank" rel="noopener" href="sangjo.html">후불상조서비스</a>
+  <a target="_blank" rel="noopener" href="jangji.html">화장장지서비스</a>
+  <a target="_blank" rel="noopener" href="ijang.html">개장·이장서비스</a>
+  <a target="_blank" rel="noopener" href="process.html">진행 절차</a>
+  <a target="_blank" rel="noopener" href="prepare.html">미리 준비</a>
 </nav>
 
 <main class="page">
   <div class="page-meta">
-    <a href="index.html" class="meta-link">
+    <a href="index.html" class="meta-link" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       메인으로
     </a>
@@ -246,9 +253,11 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <section class="part" id="partInput">
     <div class="part-idx num">01</div>
-    <h2>여섯 가지만 적어 주세요</h2>
-    <p class="part-lead">적는 대로 아래 문안이 바로 바뀝니다.</p>
+    <h2>아는 것만 적어 주세요</h2>
+    <p class="part-lead">적는 대로 아래 문안이 바로 바뀝니다. 모르는 칸은 비워 두셔도 됩니다.</p>
     <div class="fields">
+      <div class="field"><label for="fMode">누가 알리나요</label><div><select id="fMode" autocomplete="off"><option value="self">가족이 직접 알립니다</option><option value="org">회사·모임에서 대신 알립니다 (직원·회원의 상)</option></select></div></div>
+      <div class="field" id="whoField" style="display:none;"><label for="fWho" id="lblWho">내 이름</label><div><input type="text" id="fWho" placeholder="예: 홍철수" autocomplete="off"><p class="hint" id="whoHint"></p></div></div>
       <div class="field"><label for="fName">고인 성함</label><div><input type="text" id="fName" placeholder="예: 홍길동" autocomplete="off"></div></div>
       <div class="field"><label for="fRelSel" id="lblRel">고인과의 관계 (나에게 고인은)</label><div><select id="fRelSel" autocomplete="off">
         <option value="">고르지 않음</option>
@@ -260,60 +269,58 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
         <optgroup label="자녀"><option value="son">아들</option><option value="daughter">딸</option></optgroup>
         <option value="custom">그 밖의 관계 (직접 입력)</option></select>
         <div id="relCustomWrap" style="display:none;margin-top:8px;"><input type="text" id="fRel" aria-label="관계 직접 입력" placeholder="예: 백부, 숙모, 고모" autocomplete="off"><p class="hint">"상"은 빼고 관계만 적어 주세요.</p></div>
-        <p class="hint on" id="relHint" aria-live="polite"></p></div></div>
+        <p class="hint on" id="relHint" aria-live="polite"></p>
+        <button type="button" class="btn-text" id="whoReveal">"홍철수의 부친 故 ○○○ 님"처럼 내 이름도 넣기</button></div></div>
       <div class="field"><label for="fDeath">돌아가신 날</label><div><input type="date" id="fDeath" min="2000-01-01" max="2099-12-31" autocomplete="off"><div class="quick"><button type="button" data-day="0">오늘</button><button type="button" data-day="-1">어제</button></div></div></div>
-      <div class="field"><label for="fPlace">빈소<span class="sub">장례식장 이름과 호실</span></label><div><div id="placeWrap"><input type="text" id="fPlace" placeholder="예: ○○병원 장례식장 3호실" autocomplete="off"></div><label class="check"><input type="checkbox" id="fNoHall">빈소 없이 진행합니다 (무빈소 장례)</label></div></div>
-      <div class="field" role="group" aria-labelledby="lblOut"><span class="lab" id="lblOut">발인<span class="sub">장례식장을 떠나는 날짜와 시각</span></span><div><div class="pair"><div><span class="mini">날짜</span><input type="date" id="fOutD" aria-label="발인 날짜" min="2000-01-01" max="2099-12-31" autocomplete="off"></div><div><span class="mini">시각</span><select id="fOutTS" aria-label="발인 시각" autocomplete="off"></select></div></div><input type="time" id="fOutT" aria-label="발인 시각 직접 입력" autocomplete="off" style="display:none;margin-top:8px;"></div></div>
-      <div class="field"><label for="fFamily">상주와 가족</label><div><textarea id="fFamily" autocomplete="off" placeholder="한 줄에 한 분씩&#10;아들 홍○○&#10;며느리 이○○&#10;딸 홍○○"></textarea><p class="hint">한 줄에 한 분씩 "관계 이름"으로 적어 주세요. 보통 배우자 → 아들·며느리 → 딸·사위 → 손주 순서로 적습니다.</p></div></div>
+      <div class="field"><label for="fPlace">빈소<span class="sub">장례식장 이름과 호실</span></label><div><div id="placeWrap"><input type="text" id="fPlace" placeholder="예: ○○병원 장례식장 3호실" autocomplete="off"></div><label class="check"><input type="checkbox" id="fNoHall">빈소 없이 진행합니다 (무빈소 장례)</label><label class="check"><input type="checkbox" id="fNoVisit">빈소는 있지만 조문과 꽃은 받지 않습니다 (가족장)</label></div></div>
+      <div class="field" role="group" aria-labelledby="lblOut"><span class="lab" id="lblOut">발인<span class="sub">장례식장을 떠나는 날짜와 시각</span></span><div><div id="outWrap"><div class="pair"><div><span class="mini">날짜</span><input type="date" id="fOutD" aria-label="발인 날짜" min="2000-01-01" max="2099-12-31" autocomplete="off"></div><div><span class="mini">시각</span><select id="fOutTS" aria-label="발인 시각" autocomplete="off"></select></div></div><input type="time" id="fOutT" aria-label="발인 시각 직접 입력" autocomplete="off" style="display:none;margin-top:8px;"></div><label class="check"><input type="checkbox" id="fOutTBD">발인 일정이 아직 정해지지 않았습니다</label></div></div>
+      <div class="field"><label for="fFamily">상주와 가족</label><div><textarea id="fFamily" autocomplete="off" placeholder="한 줄에 한 분씩&#10;아들 홍○○&#10;며느리 이○○&#10;딸 홍○○"></textarea><p class="hint" id="famHint"></p></div></div>
     </div>
     <p class="warn" id="dateWarn" role="status"></p>
-    <a class="jump-out" href="#partOut">만들어진 문안 보기</a>
 
-    <details class="more">
-      <summary><span>더 적을 내용이 있으면 <small>종교 · 연세 · 주소 · 입관 · 장지 · 연락처 · 계좌 · 조문 사양 · 회사에서 대신 알릴 때</small></span></summary>
+    <details class="more" id="moreBox">
+      <summary><span>종교 · 계좌 등 더 적기 <small>종교 · 연세 · 빈소 주소 · 입관 · 장지 · 연락처 · 조의금 계좌</small></span></summary>
       <div class="fields">
         <div class="field"><label for="fFaith">종교</label><div><select id="fFaith" autocomplete="off"><option value="none">일반</option><option value="prot">개신교</option><option value="cath">천주교</option><option value="budd">불교</option><option value="won">원불교</option></select><p class="hint">종교에 따라 돌아가심을 이르는 말과 맺음말이 바뀝니다. 고인의 종교를 잘 모르시면 "일반"이 가장 무난합니다.</p></div></div>
         <div class="field"><label for="fAge">연세 (향년)</label><div><input type="text" id="fAge" inputmode="numeric" placeholder="예: 85" autocomplete="off"><p class="hint">숫자만 적어 주세요. 가족이 쓰시는 나이대로 적으시면 됩니다.</p></div></div>
-        <div class="field"><label for="fWho" id="lblWho">내 이름 (알리는 분)</label><div><input type="text" id="fWho" placeholder="예: 홍철수" autocomplete="off"><p class="hint">적으시면 "홍철수의 부친 故 홍길동 님"처럼 누구의 상인지 분명해집니다.</p></div></div>
-        <div class="field"><label for="fAddr">빈소 주소</label><div><input type="text" id="fAddr" placeholder="예: 서울시 ○○구 ○○로 00" autocomplete="off"></div></div>
-        <div class="field" role="group" aria-labelledby="lblIn"><span class="lab" id="lblIn">입관</span><div><div class="pair"><div><span class="mini">날짜</span><input type="date" id="fInD" aria-label="입관 날짜" min="2000-01-01" max="2099-12-31" autocomplete="off"></div><div><span class="mini">시각</span><select id="fInTS" aria-label="입관 시각" autocomplete="off"></select></div></div><input type="time" id="fInT" aria-label="입관 시각 직접 입력" autocomplete="off" style="display:none;margin-top:8px;"></div></div>
+        <div class="field" id="addrField"><label for="fAddr">빈소 주소</label><div><input type="text" id="fAddr" placeholder="예: 서울시 ○○구 ○○로 00" autocomplete="off"></div></div>
+        <div class="field" role="group" aria-labelledby="lblIn"><span class="lab" id="lblIn">입관<span class="sub">고인을 관에 모시는 때</span></span><div><div class="pair"><div><span class="mini">날짜</span><input type="date" id="fInD" aria-label="입관 날짜" min="2000-01-01" max="2099-12-31" autocomplete="off"></div><div><span class="mini">시각</span><select id="fInTS" aria-label="입관 시각" autocomplete="off"></select></div></div><input type="time" id="fInT" aria-label="입관 시각 직접 입력" autocomplete="off" style="display:none;margin-top:8px;"></div></div>
         <div class="field"><label for="fGrave">장지<span class="sub">화장장·묘지 등 모시는 곳</span></label><div><input type="text" id="fGrave" placeholder="예: ○○추모공원" autocomplete="off"></div></div>
         <div class="field"><label for="fTel">상주 연락처</label><div><input type="text" id="fTel" placeholder="예: 홍철수 010-0000-0000" autocomplete="off"></div></div>
         <div class="field"><label for="fAcctMode">조의금 계좌<span class="sub">마음 전하실 곳</span></label><div>
           <select id="fAcctMode" autocomplete="off"><option value="none">적지 않습니다</option><option value="one">대표 계좌 하나만 적습니다</option><option value="each">가족별로 각자 적습니다</option></select>
           <div id="acctOneWrap" style="display:none;margin-top:8px;"><input type="text" id="fAcct" aria-label="대표 계좌" placeholder="예: ○○은행 000-00-000000 홍○○" autocomplete="off"></div>
-          <div id="acctEachWrap" style="display:none;margin-top:8px;"><div id="acctRows"></div><p class="hint" id="acctEachHint">위 "상주와 가족" 칸에 적으신 분들이 여기에 나옵니다. 계좌를 알릴 분만 적고, 나머지는 비워 두세요.</p></div>
-          <p class="hint">형제가 각자 자기 손님께 보낼 때는 "가족별로"를 고르고, 보내는 분의 계좌만 남겨 복사하셔도 됩니다.</p>
-          <div id="acctKeepWrap" style="display:none;"><label class="check"><input type="checkbox" id="fAcctKeep" checked>조문을 받지 않는 문안(조문 사양·가족장·무빈소)에도 계좌를 넣습니다</label><p class="hint on">넣으실 때는 "마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다"라는 말을 앞에 붙여 드립니다. 빼고 싶으시면 체크를 푸세요.</p></div></div></div>
-        <div class="field"><span class="lab">조문</span><div><label class="check"><input type="checkbox" id="fNoVisit">가족끼리 조용히 모십니다 (조문·조화 사양)</label></div></div>
-        <div class="field"><label for="fMode">누가 알리나요</label><div><select id="fMode" autocomplete="off"><option value="self">가족이 직접 알립니다</option><option value="org">회사·모임에서 대신 알립니다</option></select><p class="hint">회사 공지나 모임 대화방에 대신 올릴 때 고르세요. "총무팀 홍철수 과장 빙부상" 같은 형식으로 바뀝니다.</p></div></div>
+          <div id="acctEachWrap" style="display:none;margin-top:8px;"><div id="acctRows"></div><p class="hint" id="acctEachHint">위 "상주와 가족" 칸에 적으신 분들이 여기에 나옵니다. 계좌를 알릴 분만 적고, 나머지는 비워 두세요.</p><span class="mini" style="display:block;margin-top:12px;">이번 글에 넣을 계좌</span><select id="fAcctPick" aria-label="이번 글에 넣을 계좌" autocomplete="off"><option value="all">적은 계좌를 모두 넣습니다</option></select><p class="hint">형제가 각자 자기 손님께 보낼 때는 여기서 보낼 분을 고른 뒤 복사하세요. 계좌는 한 번만 적으면 됩니다.</p></div>
+          <div id="acctKeepWrap" style="display:none;"><label class="check"><input type="checkbox" id="fAcctKeep" checked>조문은 받지 않아도 계좌는 알립니다</label><label class="check"><input type="checkbox" id="fAcctLead" checked>계좌 앞에 양해의 말을 붙입니다</label><p class="hint">양해의 말: "마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다."</p></div></div></div>
       </div>
     </details>
-    <div class="after-fields"><span>이 페이지는 적으신 내용을 저장하지도, 어디로 보내지도 않습니다. 방문 통계 장치도 넣지 않았습니다. 창을 닫으면 사라집니다.</span><button type="button" class="btn-line" id="btnClear">적은 내용 모두 지우기</button></div>
+    <div class="after-fields"><span>이 페이지는 적으신 내용을 저장하지도, 어디로 보내지도 않습니다. 방문 통계 장치도 넣지 않았습니다. 그래서 새로고침하거나 창을 닫으면 적은 내용이 지워집니다. 복사한 글은 휴대폰 메모장에도 붙여 두세요.</span><button type="button" class="btn-line" id="btnClear">적은 내용 모두 지우기</button></div>
+    <a class="jump-out" href="#partOut">만들어진 문안 보기</a>
   </section>
 
   <section class="part" id="partOut">
     <div class="part-idx num">02</div>
     <h2>문안을 골라 복사하세요</h2>
-    <p class="part-lead">복사한 뒤 문자나 카카오톡에 붙여 넣어 보내시면 됩니다. 붙여 넣은 뒤 고쳐 쓰셔도 좋습니다.</p>
+    <p class="part-lead">대부분 맨 위 "기본" 문안을 쓰십니다. 복사한 뒤 문자나 카카오톡에 붙여 넣어 보내시면 되고, 붙여 넣은 뒤 고쳐 쓰셔도 좋습니다.</p>
+    <p class="back-links"><a href="#partInput">적은 내용 고치기</a><a href="#moreBox" id="openMore">종교 · 계좌 넣기</a></p>
     <p class="note-box" id="noVisitNote">조문을 사양하신다고 하셔서 "가족장" 문안을 맨 위에 두었습니다. 빈소를 알리지 않는 문안입니다.</p>
     <p class="note-box" id="noHallNote">빈소 없이 진행하신다고 하셔서 "무빈소 장례" 문안을 맨 위에 두었습니다. 다른 문안에서도 빈소 줄을 뺐습니다.</p>
     <div class="outs">
-      <div class="out"><div class="out-head"><span class="out-name">기본</span><span class="out-desc">격식을 갖춘 문안</span></div><pre id="o1"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
-      <div class="out"><div class="out-head"><span class="out-name">간결</span><span class="out-desc">짧게 알릴 때</span></div><pre id="o2"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
-      <div class="out" id="cardFamily"><div class="out-head"><span class="out-name">가족장</span><span class="out-desc">조문을 받지 않고 알리기만 할 때 · 빈소를 적지 않습니다</span></div><pre id="o3"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
-      <div class="out" id="cardNoHall"><div class="out-head"><span class="out-name">무빈소 장례</span><span class="out-desc">빈소를 차리지 않고 가족끼리 모실 때</span></div><pre id="o7"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">기본</span><span class="out-desc">대부분 이 문안을 쓰십니다</span></div><pre id="o1"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">간결</span><span class="out-desc">짧게 알릴 때</span></div><pre id="o2"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out" id="cardFamily"><div class="out-head"><span class="out-name">가족장</span><span class="out-desc">조문을 받지 않고 알리기만 할 때 · 빈소를 적지 않습니다</span></div><pre id="o3"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out" id="cardNoHall"><div class="out-head"><span class="out-name">무빈소 장례</span><span class="out-desc">빈소를 차리지 않고 가족끼리 모실 때</span></div><pre id="o7"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
     </div>
   </section>
 
   <section class="part" id="partMore">
     <div class="part-idx num">03</div>
     <h2>일정이 바뀌었을 때, 장례를 마친 뒤</h2>
-    <p class="part-lead">일정이 바뀌면 위 칸을 새 내용으로 고치세요. 아래 정정 안내가 함께 바뀝니다. 감사 인사는 장례 뒤에 쓰실 글이니, 지금 복사해 휴대폰 메모장에 붙여 두시면 다시 적지 않으셔도 됩니다.</p>
+    <p class="part-lead">일정이 바뀌면 위 칸을 고치세요. 정정 안내가 함께 바뀝니다. 감사 인사는 지금 복사해 메모장에 붙여 두시면 장례 뒤에 다시 적지 않으셔도 됩니다.</p>
     <div class="outs">
-      <div class="out"><div class="out-head"><span class="out-name">정정 안내</span><span class="out-desc">발인 시각이나 호실이 바뀌었을 때</span></div><pre id="o4"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
-      <div class="out"><div class="out-head"><span class="out-name">감사 인사</span><span class="out-desc">장례를 마친 뒤 위로해 주신 분들께</span></div><pre id="o5"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
-      <div class="out"><div class="out-head"><span class="out-name">감사 인사 · 짧게</span><span class="out-desc">문자 한 통으로</span></div><pre id="o6"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">정정 안내</span><span class="out-desc">발인 시각이나 호실이 바뀌었을 때</span></div><pre id="o4"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">감사 인사</span><span class="out-desc">장례를 마친 뒤 위로해 주신 분들께</span></div><pre id="o5"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">감사 인사 · 짧게</span><span class="out-desc">문자 한 통으로</span></div><pre id="o6"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
     </div>
   </section>
 
@@ -328,8 +335,8 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
       <div class="tip"><div class="tip-k">단체 대화방</div><div class="tip-v">모임 대화방에는 그 모임을 아는 가족이 올리는 편이 자연스럽습니다. 문안은 같은 것을 쓰시면 됩니다.</div></div>
     </div>
     <div class="reads">
-<a class="read" href="process.html"><span><span class="read-label">진행 절차</span><span class="read-title">전화 한 통부터 발인까지의 순서</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
-<a class="read" href="faq.html"><span><span class="read-label">자주 묻는 질문</span><span class="read-title">전화로 많이 물어보시는 것들</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
+<a class="read" href="process.html" target="_blank" rel="noopener"><span><span class="read-label">진행 절차</span><span class="read-title">전화 한 통부터 발인까지의 순서</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
+<a class="read" href="faq.html" target="_blank" rel="noopener"><span><span class="read-label">자주 묻는 질문</span><span class="read-title">전화로 많이 물어보시는 것들</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
     </div>
   </section>
 
@@ -434,19 +441,25 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var acctMemo={};
   function syncAcctRows(fam){
     var box=$('acctRows');
-    Array.prototype.forEach.call(box.querySelectorAll('input'),function(inp){acctMemo[inp.getAttribute('data-who')]=inp.value;});
+    Array.prototype.forEach.call(box.querySelectorAll('input'),function(inp){acctMemo[inp.getAttribute('data-i')]=inp.value;});
     var key=fam.join('|');if(box.getAttribute('data-key')===key)return;box.setAttribute('data-key',key);
     box.innerHTML='';
+    // 이번 글에 넣을 계좌 고르기
+    var pick=$('fAcctPick'), keep=pick.value;
+    pick.innerHTML='<option value="all">적은 계좌를 모두 넣습니다</option>';
+    fam.forEach(function(line,i){var o=document.createElement('option');o.value=String(i);o.textContent=line+'의 계좌만 넣습니다';pick.appendChild(o);});
+    pick.value=(keep&&pick.querySelector('option[value="'+keep+'"]'))?keep:'all';
     $('acctEachHint').textContent=fam.length?'계좌를 알릴 분만 적고, 나머지는 비워 두세요. 예: ○○은행 000-00-000000':'먼저 위 "상주와 가족" 칸에 가족을 적어 주세요. 적으신 분들이 여기에 나옵니다.';
     fam.forEach(function(line,i){
       var row=document.createElement('label');row.className='acct-row';
       var sp=document.createElement('span');sp.textContent=line;
-      var inp=document.createElement('input');inp.type='text';inp.autocomplete='off';inp.placeholder='은행 · 계좌번호';inp.setAttribute('data-who',line);inp.value=acctMemo[line]||'';
+      var inp=document.createElement('input');inp.type='text';inp.autocomplete='off';inp.placeholder='은행 · 계좌번호';inp.setAttribute('data-who',line);inp.setAttribute('data-i',String(i));inp.value=acctMemo[String(i)]||'';
       inp.addEventListener('input',build);
       row.appendChild(sp);row.appendChild(inp);box.appendChild(row);
     });
   }
 
+  var whoOpen=false;
   function relation(){
     var sel=$('fRelSel').value;
     $('relCustomWrap').style.display=(sel==='custom')?'block':'none';
@@ -456,6 +469,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   }
 
   function build(){
+    Array.prototype.forEach.call(document.querySelectorAll('.copied'),function(n){n.style.display='none';});
     var org=$('fMode').value==='org';
     var f=FAITH[$('fFaith').value]||FAITH.none;
     var rel=relation();
@@ -467,24 +481,32 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var place=v('fPlace')||B+B+' 장례식장 '+B+'호실', addr=v('fAddr');
     var inD=dateText($('fInD').value,true), inT=timeText(timeOf('fInTS','fInT'));
     var outD=dateText($('fOutD').value,true), outT=timeText(timeOf('fOutTS','fOutT'));
-    var out=(outD||B+'월 '+B+'일')+(outT?' '+outT:(outD?'':' '+B+'시'));
+    var outTBD=$('fOutTBD').checked;
+    $('outWrap').style.display=outTBD?'none':'block';
+    var out=outTBD?'정해지는 대로 다시 알려 드리겠습니다':((outD||B+'월 '+B+'일')+(outT?' '+outT:(outD?'':' '+B+'시')));
     var inn=(inD||inT)?((inD||B+'월 '+B+'일')+(inT?' '+inT:'')):'';
     var grave=v('fGrave'), tel=v('fTel'), noVisit=$('fNoVisit').checked;
     var fam=$('fFamily').value.split(NL).map(function(x){return x.replace(/\s+/g,' ').trim();}).filter(Boolean);
     var famLines=fam.length?fam:[B+' '+B+'○'];
+    var showFam=!(org&&!fam.length);
     var names=fam.map(nameOnly);
     var sign=!fam.length?(B+'○ 올림'):(names.length<=3?names.join('·')+' 올림':names.slice(0,2).join('·')+' 외 유가족 일동 올림');
 
     // 모드에 따라 입력칸 이름 바꾸기
     $('lblRel').textContent=org?'고인은 상을 당하신 분의':'고인과의 관계 (나에게 고인은)';
-    $('lblWho').firstChild.nodeValue=org?'상을 당하신 분':'내 이름 (알리는 분)';
+    var showWho=org||whoOpen||v('fWho')!=='';
+    $('whoField').style.display=showWho?'':'none';
+    $('whoReveal').style.display=showWho?'none':'';
+    $('lblWho').firstChild.nodeValue=org?'상을 당하신 분':'내 이름';
+    $('whoHint').textContent=org?'소속과 직함까지 적으시면 "총무팀 홍철수 과장 빙부상"처럼 들어갑니다.':'적지 않으셔도 됩니다. 적으시면 "홍철수의 부친 故 홍길동 님"처럼 누구의 상인지 분명해집니다.';
+    $('famHint').textContent=org?'가족 이름을 모르시면 비워 두세요. 문안에서 유족 줄이 빠집니다.':'한 줄에 한 분씩 "관계 이름"으로 적어 주세요. 보통 배우자 → 아들·며느리 → 딸·사위 → 손주 순서로 적습니다.';
     $('fWho').placeholder=org?'예: 총무팀 홍철수 과장':'예: 홍철수';
 
     // 안내 문구
     var hint='';
     if(rel){
-      if(rel.inlaw){hint=org?'회사·모임에서 알릴 때는 "'+rel.sang+'"(또는 '+rel.third+'상)이라고 씁니다.':'사위 본인이 알릴 때는 "'+rel.third+'"이라고 쓰고, 회사·모임에서 대신 알릴 때 "'+rel.sang+'"이라고 씁니다.';}
-      else if(rel.spouse){hint=org?'회사·모임에서 알릴 때는 "'+rel.sang+'"이라고 씁니다.':'"'+rel.sang+'"은 남이 높여 이르는 말입니다. 본인이 알릴 때는 "'+rel.third+'"라고 씁니다.';}
+      if(rel.inlaw){hint=org?'회사·모임에서 알릴 때는 "'+rel.sang+'"(또는 '+rel.third+'상)이라고 씁니다.':'사위 본인이 알릴 때는 "'+rel.third+'"'+(hasBatchim(rel.third)?'이라고':'라고')+' 쓰고, 회사·모임에서 대신 알릴 때 "'+rel.sang+'"이라고 씁니다.';}
+      else if(rel.spouse){hint=org?'회사·모임에서 알릴 때는 "'+rel.sang+'"이라고 씁니다.':'"'+rel.sang+'"은 남이 높여 이르는 말입니다. 본인이 알릴 때는 "'+rel.third+'"'+(hasBatchim(rel.third)?'이라고':'라고')+' 씁니다.';}
       else if(rel.child&&!org){hint='자녀의 부고는 가까운 분들께만 조용히 알리는 경우가 많습니다. 아래 "가족장" 문안도 살펴보세요.';}
       else if(org){hint='이 경우를 "'+rel.sang+'"이라고 합니다.';}
     }else if(who){hint='관계를 고르시면 "'+who+'의 ○○ 故 '+name+' 님"처럼 누구의 상인지 들어갑니다.';}
@@ -527,6 +549,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
 
     var noHall=$('fNoHall').checked;
     $('placeWrap').style.display=noHall?'none':'block';
+    $('addrField').style.display=noHall?'none':'';
     function schedule(arr,withAddr,withPlace){
       if(withPlace!==false&&!noHall){arr.push('빈소: '+place);if(withAddr&&addr)arr.push('주소: '+addr);}
       if(inn)arr.push('입관: '+inn);
@@ -540,12 +563,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     if(acctMode==='each')syncAcctRows(fam);
     var acctLines=[];
     if(acctMode==='one'){var one=v('fAcct');if(one)acctLines.push(one);}
-    else if(acctMode==='each'){Array.prototype.forEach.call($('acctRows').querySelectorAll('input'),function(inp){var t=inp.value.replace(/\s+/g,' ').trim();if(t)acctLines.push(inp.getAttribute('data-who')+': '+t);});}
+    else if(acctMode==='each'){var pickV=$('fAcctPick').value;Array.prototype.forEach.call($('acctRows').querySelectorAll('input'),function(inp){var t=inp.value.replace(/\s+/g,' ').trim();if(!t)return;if(pickV!=='all'&&pickV!==inp.getAttribute('data-i'))return;acctLines.push(pickV==='all'?(inp.getAttribute('data-who')+': '+t):(t+' '+nameOnly(inp.getAttribute('data-who'))));});}
     var acct=acctLines.length>0;
     var quiet=noVisit||noHall;                       // 조문을 받지 않는 경우
-    $('acctKeepWrap').style.display=acct?'block':'none';
+    $('acctKeepWrap').style.display=(acct&&quiet)?'block':'none';
     var showAcct=acct&&(!quiet||$('fAcctKeep').checked);
-    var acctLead=quiet?'마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.':'';
+    var LEAD='마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.';
+    var acctLead=(quiet&&$('fAcctLead').checked)?LEAD:'';
     function pushAcct(arr,compact){
       if(!showAcct)return;
       if(compact&&acctLines.length===1&&!acctLead){arr.push('마음 전하실 곳: '+acctLines[0]);return;}
@@ -558,7 +582,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     // 1 기본
     var a=['[부고]'+(sangTitle?' '+sangTitle:''),'',first,''];
     schedule(a,true);
-    a.push('',org?'유족':'상주');famLines.forEach(function(x){a.push(x);});
+    if(showFam){a.push('',org?'유족':'상주');famLines.forEach(function(x){a.push(x);});}
     if(tel)a.push('연락처: '+tel);
     if(noHall){a.push('',noHallLine+' 조문은 정중히 사양하오니 너그러이 양해해 주시기 바랍니다.');}
     else if(noVisit){a.push('','고인과 유가족의 뜻에 따라 조문과 조화는 정중히 사양합니다.');}
@@ -570,7 +594,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     if(sangTitle){b.push('[부고] '+sangTitle,deceased+' '+death+' '+noun);}
     else{b.push('[부고] '+lead.replace(/(께서|이|가|이\(가\))$/,'')+' '+death+' '+noun);}
     schedule(b,false);
-    b.push((org?'유족: ':'상주: ')+famLines.join(', '));
+    if(showFam)b.push((org?'유족: ':'상주: ')+famLines.join(', '));
     if(tel)b.push('연락처: '+tel);
     if(noHall)b.push('빈소 없이 가족끼리 모십니다. 조문은 정중히 사양합니다.');
     else if(noVisit)b.push('조문·조화는 정중히 사양합니다.');
@@ -581,20 +605,22 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       '고인과 유가족의 뜻에 따라 장례는 가족장으로 조용히 치르고자 합니다.',
       '조문과 조화는 정중히 사양하오니 너그러이 양해해 주시기 바랍니다.',''];
     schedule(c,false,false);
-    if(acct&&$('fAcctKeep').checked){c.push('','마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.','마음 전하실 곳');acctLines.forEach(function(x){c.push(x);});}
-    if(org){c.push('',f.orgClose,'','유족: '+famLines.join(', '));}
-    else{c.push('','마음으로 함께해 주시는 것만으로 큰 위로가 됩니다.','',sign);}
+    function quietAcct(arr){if(!(acct&&$('fAcctKeep').checked))return;arr.push('');if($('fAcctLead').checked)arr.push(LEAD);arr.push('마음 전하실 곳');acctLines.forEach(function(x){arr.push(x);});}
+    var faithOn=$('fFaith').value!=='none';
+    quietAcct(c);
+    if(org){c.push('',f.orgClose);if(showFam)c.push('','유족: '+famLines.join(', '));}
+    else{c.push('',faithOn?f.close:'마음으로 함께해 주시는 것만으로 큰 위로가 됩니다.','',sign);}
 
     // 3-2 무빈소 장례
     var h=['[부고]'+(sangTitle?' '+sangTitle:''),'',firstEnd,'',
       '고인과 유가족의 뜻에 따라 빈소를 마련하지 않고, 가족끼리 조용히 모시는 무빈소 장례로 진행합니다.',
       '조문을 받지 못함을 너그러이 양해해 주시기 바랍니다.',''];
     if(inn)h.push('입관: '+inn);
-    h.push('발인·화장: '+out);
+    h.push('발인: '+out);
     if(grave)h.push('장지: '+grave);
-    if(acct&&$('fAcctKeep').checked){h.push('','마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.','마음 전하실 곳');acctLines.forEach(function(x){h.push(x);});}
-    if(org){h.push('',f.orgClose,'','유족: '+famLines.join(', '));}
-    else{h.push('','멀리서 마음으로 고인을 기억해 주시면 큰 위로가 되겠습니다.','',sign);}
+    quietAcct(h);
+    if(org){h.push('',f.orgClose);if(showFam)h.push('','유족: '+famLines.join(', '));}
+    else{h.push('',faithOn?f.close:'멀리서 마음으로 고인을 기억해 주시면 큰 위로가 되겠습니다.','',sign);}
 
     // 4 정정 안내
     var d=['[부고 정정]'+(sangTitle?' '+sangTitle:''),'',
@@ -617,17 +643,19 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       var t=outs[k].join(NL);$(k).textContent=t;
       var card=$(k).parentNode, blank=card.querySelector('.blank-note'), cnt=card.querySelector('.cnt');
       if(blank)blank.style.display=(t.indexOf('○')!==-1)?'block':'none';
-      if(cnt)cnt.textContent='약 '+t.length+'자';
+      if(cnt)cnt.textContent='';
     });
     $('noVisitNote').style.display=(noVisit&&!noHall)?'block':'none';
     $('noHallNote').style.display=noHall?'block':'none';
     $('cardFamily').style.order=(noVisit&&!noHall)?'-1':'0';
     $('cardNoHall').style.order=noHall?'-2':'0';
+    $('cardNoHall').style.display=noHall?'':'none';
+    $('cardFamily').style.display=noHall?'none':'';
   }
 
   // 시각 선택 목록 채우기
   function fillTimes(selId,from,to){
-    var s=$(selId), html='<option value="">시각 선택</option>';
+    var s=$(selId), html='<option value="">아직 미정 (날짜만 나옵니다)</option>';
     for(var h=from;h<=to;h++){['00','30'].forEach(function(mm){var val=(h<10?'0':'')+h+':'+mm;html+='<option value="'+val+'">'+timeText(val)+'</option>';});}
     html+='<option value="etc">그 밖의 시각 직접 입력</option>';s.innerHTML=html;
   }
@@ -642,13 +670,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     btn.addEventListener('click',function(){var d=new Date();d.setDate(d.getDate()+Number(btn.getAttribute('data-day')));$('fDeath').value=iso(d);build();});
   });
 
-  var IDS=['fNoHall','fAcctKeep','fAcctMode','fMode','fName','fAge','fRelSel','fRel','fWho','fFaith','fDeath','fPlace','fAddr','fInD','fInTS','fInT','fOutD','fOutTS','fOutT','fGrave','fFamily','fTel','fAcct','fNoVisit'];
+  var IDS=['fOutTBD','fAcctPick','fAcctLead','fNoHall','fAcctKeep','fAcctMode','fMode','fName','fAge','fRelSel','fRel','fWho','fFaith','fDeath','fPlace','fAddr','fInD','fInTS','fInT','fOutD','fOutTS','fOutT','fGrave','fFamily','fTel','fAcct','fNoVisit'];
   IDS.forEach(function(id){$(id).addEventListener('input',build);$(id).addEventListener('change',build);});
   window.addEventListener('pageshow',build);
 
   $('btnClear').addEventListener('click',function(){
     IDS.forEach(function(id){var e=$(id);if(e.type==='checkbox'){e.checked=false;}else if(e.tagName==='SELECT'){e.selectedIndex=0;}else{e.value='';}});
-    $('fOutT').style.display='none';$('fInT').style.display='none';$('fAcctKeep').checked=true;acctMemo={};$('acctRows').innerHTML='';$('acctRows').removeAttribute('data-key');build();
+    $('fOutT').style.display='none';$('fInT').style.display='none';$('fAcctKeep').checked=true;$('fAcctLead').checked=true;whoOpen=false;acctMemo={};$('acctRows').innerHTML='';$('acctRows').removeAttribute('data-key');build();
     $('live').textContent='적으신 내용을 모두 지웠습니다.';window.scrollTo(0,$('partInput').offsetTop-70);
   });
 
@@ -656,7 +684,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function selectPre(pre){try{var r=document.createRange();r.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}catch(e){}}
   function after(card,ok,pre){
     var note=card.querySelector('.copied');
-    note.textContent=ok?'복사되었습니다. 문자나 카카오톡을 열고, 글 쓰는 칸을 길게 눌러 "붙여넣기"를 누르세요.':'자동 복사가 되지 않았습니다. 위 글이 선택되어 있으니 길게 눌러 "복사"를 누르세요.';
+    var pc=window.matchMedia&&window.matchMedia('(pointer:fine)').matches;
+    note.textContent=ok?(pc?'복사되었습니다. 붙여 넣을 곳에서 Ctrl+V를 누르세요.':'복사되었습니다. 문자나 카카오톡을 열고, 글 쓰는 칸을 길게 눌러 "붙여넣기"를 누르세요.'):(pc?'자동 복사가 되지 않았습니다. 위 글이 선택되어 있으니 Ctrl+C로 복사하세요.':'자동 복사가 되지 않았습니다. 위 글이 선택되어 있으니 길게 눌러 "복사"를 누르세요.');
     note.style.display='block';$('live').textContent=note.textContent;if(!ok)selectPre(pre);
   }
   function copyText(text,card,pre){
@@ -667,7 +696,15 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var pre=card.querySelector('pre');
     Array.prototype.forEach.call(card.querySelectorAll('.copy'),function(btn){btn.addEventListener('click',function(){copyText(pre.textContent,card,pre);});});
     var sh=card.querySelector('.share');
-    if(sh){if(navigator.share){sh.style.display='block';sh.addEventListener('click',function(){navigator.share({text:pre.textContent}).catch(function(){});});}}
+    if(sh){var touch=!(window.matchMedia&&window.matchMedia('(pointer:fine)').matches);if(navigator.share&&touch){sh.style.display='block';sh.addEventListener('click',function(){navigator.share({text:pre.textContent}).catch(function(){});});}}
+  });
+    $('whoReveal').addEventListener('click',function(){whoOpen=true;build();$('fWho').focus();});
+  // 결과에서 '종교·계좌 넣기'를 누르면 접힌 칸을 열고 그리로 간다
+  $('openMore').addEventListener('click',function(e){e.preventDefault();var m=$('moreBox');m.open=true;window.scrollTo(0,m.getBoundingClientRect().top+window.pageYOffset-70);});
+  // 적은 내용이 있으면 새로고침·뒤로 가기 전에 한 번 묻는다
+  window.addEventListener('beforeunload',function(e){
+    var filled=IDS.some(function(id){var el=$(id);return el.type!=='checkbox'&&el.tagName!=='SELECT'&&el.value.trim()!=='';});
+    if(filled){e.preventDefault();e.returnValue='';}
   });
   build();
 })();
