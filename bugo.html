@@ -262,7 +262,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
         <div id="relCustomWrap" style="display:none;margin-top:8px;"><input type="text" id="fRel" aria-label="관계 직접 입력" placeholder="예: 백부, 숙모, 고모" autocomplete="off"><p class="hint">"상"은 빼고 관계만 적어 주세요.</p></div>
         <p class="hint on" id="relHint" aria-live="polite"></p></div></div>
       <div class="field"><label for="fDeath">돌아가신 날</label><div><input type="date" id="fDeath" min="2000-01-01" max="2099-12-31" autocomplete="off"><div class="quick"><button type="button" data-day="0">오늘</button><button type="button" data-day="-1">어제</button></div></div></div>
-      <div class="field"><label for="fPlace">빈소<span class="sub">장례식장 이름과 호실</span></label><div><input type="text" id="fPlace" placeholder="예: ○○병원 장례식장 3호실" autocomplete="off"></div></div>
+      <div class="field"><label for="fPlace">빈소<span class="sub">장례식장 이름과 호실</span></label><div><div id="placeWrap"><input type="text" id="fPlace" placeholder="예: ○○병원 장례식장 3호실" autocomplete="off"></div><label class="check"><input type="checkbox" id="fNoHall">빈소 없이 진행합니다 (무빈소 장례)</label></div></div>
       <div class="field" role="group" aria-labelledby="lblOut"><span class="lab" id="lblOut">발인<span class="sub">장례식장을 떠나는 날짜와 시각</span></span><div><div class="pair"><div><span class="mini">날짜</span><input type="date" id="fOutD" aria-label="발인 날짜" min="2000-01-01" max="2099-12-31" autocomplete="off"></div><div><span class="mini">시각</span><select id="fOutTS" aria-label="발인 시각" autocomplete="off"></select></div></div><input type="time" id="fOutT" aria-label="발인 시각 직접 입력" autocomplete="off" style="display:none;margin-top:8px;"></div></div>
       <div class="field"><label for="fFamily">상주와 가족</label><div><textarea id="fFamily" autocomplete="off" placeholder="한 줄에 한 분씩&#10;아들 홍○○&#10;며느리 이○○&#10;딸 홍○○"></textarea><p class="hint">한 줄에 한 분씩 "관계 이름"으로 적어 주세요. 보통 배우자 → 아들·며느리 → 딸·사위 → 손주 순서로 적습니다.</p></div></div>
     </div>
@@ -284,7 +284,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
           <div id="acctOneWrap" style="display:none;margin-top:8px;"><input type="text" id="fAcct" aria-label="대표 계좌" placeholder="예: ○○은행 000-00-000000 홍○○" autocomplete="off"></div>
           <div id="acctEachWrap" style="display:none;margin-top:8px;"><div id="acctRows"></div><p class="hint" id="acctEachHint">위 "상주와 가족" 칸에 적으신 분들이 여기에 나옵니다. 계좌를 알릴 분만 적고, 나머지는 비워 두세요.</p></div>
           <p class="hint">형제가 각자 자기 손님께 보낼 때는 "가족별로"를 고르고, 보내는 분의 계좌만 남겨 복사하셔도 됩니다.</p>
-          <p class="hint on" id="acctNote" style="display:none;">조문을 사양하실 때는 계좌를 함께 적지 않는 것이 보통이어서 문안에서 뺐습니다. 따로 물어 오시는 분께만 알려 드리세요.</p></div></div>
+          <div id="acctKeepWrap" style="display:none;"><label class="check"><input type="checkbox" id="fAcctKeep" checked>조문을 받지 않는 문안(조문 사양·가족장·무빈소)에도 계좌를 넣습니다</label><p class="hint on">넣으실 때는 "마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다"라는 말을 앞에 붙여 드립니다. 빼고 싶으시면 체크를 푸세요.</p></div></div></div>
         <div class="field"><span class="lab">조문</span><div><label class="check"><input type="checkbox" id="fNoVisit">가족끼리 조용히 모십니다 (조문·조화 사양)</label></div></div>
         <div class="field"><label for="fMode">누가 알리나요</label><div><select id="fMode" autocomplete="off"><option value="self">가족이 직접 알립니다</option><option value="org">회사·모임에서 대신 알립니다</option></select><p class="hint">회사 공지나 모임 대화방에 대신 올릴 때 고르세요. "총무팀 홍철수 과장 빙부상" 같은 형식으로 바뀝니다.</p></div></div>
       </div>
@@ -297,10 +297,12 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <h2>문안을 골라 복사하세요</h2>
     <p class="part-lead">복사한 뒤 문자나 카카오톡에 붙여 넣어 보내시면 됩니다. 붙여 넣은 뒤 고쳐 쓰셔도 좋습니다.</p>
     <p class="note-box" id="noVisitNote">조문을 사양하신다고 하셔서 "가족장" 문안을 맨 위에 두었습니다. 빈소를 알리지 않는 문안입니다.</p>
+    <p class="note-box" id="noHallNote">빈소 없이 진행하신다고 하셔서 "무빈소 장례" 문안을 맨 위에 두었습니다. 다른 문안에서도 빈소 줄을 뺐습니다.</p>
     <div class="outs">
       <div class="out"><div class="out-head"><span class="out-name">기본</span><span class="out-desc">격식을 갖춘 문안</span></div><pre id="o1"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
       <div class="out"><div class="out-head"><span class="out-name">간결</span><span class="out-desc">짧게 알릴 때</span></div><pre id="o2"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
       <div class="out" id="cardFamily"><div class="out-head"><span class="out-name">가족장</span><span class="out-desc">조문을 받지 않고 알리기만 할 때 · 빈소를 적지 않습니다</span></div><pre id="o3"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
+      <div class="out" id="cardNoHall"><div class="out-head"><span class="out-name">무빈소 장례</span><span class="out-desc">빈소를 차리지 않고 가족끼리 모실 때</span></div><pre id="o7"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="copy">이 문안 복사하기</button><button type="button" class="share">문자·카카오톡으로 바로 보내기</button></div><p class="copied"></p></div>
     </div>
   </section>
 
@@ -523,8 +525,10 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var sangTitle=(org&&rel)?((who||'○○○')+' '+rel.sang):'';
     var noun=junior?f.jNoun:f.noun;
 
+    var noHall=$('fNoHall').checked;
+    $('placeWrap').style.display=noHall?'none':'block';
     function schedule(arr,withAddr,withPlace){
-      if(withPlace!==false){arr.push('빈소: '+place);if(withAddr&&addr)arr.push('주소: '+addr);}
+      if(withPlace!==false&&!noHall){arr.push('빈소: '+place);if(withAddr&&addr)arr.push('주소: '+addr);}
       if(inn)arr.push('입관: '+inn);
       arr.push('발인: '+out);
       if(grave)arr.push('장지: '+grave);
@@ -538,15 +542,27 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     if(acctMode==='one'){var one=v('fAcct');if(one)acctLines.push(one);}
     else if(acctMode==='each'){Array.prototype.forEach.call($('acctRows').querySelectorAll('input'),function(inp){var t=inp.value.replace(/\s+/g,' ').trim();if(t)acctLines.push(inp.getAttribute('data-who')+': '+t);});}
     var acct=acctLines.length>0;
-    var showAcct=acct&&!noVisit;
+    var quiet=noVisit||noHall;                       // 조문을 받지 않는 경우
+    $('acctKeepWrap').style.display=acct?'block':'none';
+    var showAcct=acct&&(!quiet||$('fAcctKeep').checked);
+    var acctLead=quiet?'마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.':'';
+    function pushAcct(arr,compact){
+      if(!showAcct)return;
+      if(compact&&acctLines.length===1&&!acctLead){arr.push('마음 전하실 곳: '+acctLines[0]);return;}
+      if(!compact)arr.push('');
+      if(acctLead)arr.push(acctLead);
+      arr.push('마음 전하실 곳');acctLines.forEach(function(x){arr.push(x);});
+    }
+    var noHallLine='빈소는 마련하지 않고 가족끼리 조용히 모십니다.';
 
     // 1 기본
     var a=['[부고]'+(sangTitle?' '+sangTitle:''),'',first,''];
     schedule(a,true);
     a.push('',org?'유족':'상주');famLines.forEach(function(x){a.push(x);});
     if(tel)a.push('연락처: '+tel);
-    if(noVisit){a.push('','고인과 유가족의 뜻에 따라 조문과 조화는 정중히 사양합니다.');}
-    if(showAcct){a.push('','마음 전하실 곳');acctLines.forEach(function(x){a.push(x);});}
+    if(noHall){a.push('',noHallLine+' 조문은 정중히 사양하오니 너그러이 양해해 주시기 바랍니다.');}
+    else if(noVisit){a.push('','고인과 유가족의 뜻에 따라 조문과 조화는 정중히 사양합니다.');}
+    pushAcct(a,false);
     a.push('',org?f.orgClose:f.close);
 
     // 2 간결
@@ -556,16 +572,29 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     schedule(b,false);
     b.push((org?'유족: ':'상주: ')+famLines.join(', '));
     if(tel)b.push('연락처: '+tel);
-    if(noVisit)b.push('조문·조화는 정중히 사양합니다.');
-    if(showAcct){if(acctLines.length===1){b.push('마음 전하실 곳: '+acctLines[0]);}else{b.push('마음 전하실 곳');acctLines.forEach(function(x){b.push(x);});}}
+    if(noHall)b.push('빈소 없이 가족끼리 모십니다. 조문은 정중히 사양합니다.');
+    else if(noVisit)b.push('조문·조화는 정중히 사양합니다.');
+    pushAcct(b,true);
 
     // 3 가족장
     var c=['[부고]'+(sangTitle?' '+sangTitle:''),'',firstEnd,'',
       '고인과 유가족의 뜻에 따라 장례는 가족장으로 조용히 치르고자 합니다.',
       '조문과 조화는 정중히 사양하오니 너그러이 양해해 주시기 바랍니다.',''];
     schedule(c,false,false);
+    if(acct&&$('fAcctKeep').checked){c.push('','마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.','마음 전하실 곳');acctLines.forEach(function(x){c.push(x);});}
     if(org){c.push('',f.orgClose,'','유족: '+famLines.join(', '));}
     else{c.push('','마음으로 함께해 주시는 것만으로 큰 위로가 됩니다.','',sign);}
+
+    // 3-2 무빈소 장례
+    var h=['[부고]'+(sangTitle?' '+sangTitle:''),'',firstEnd,'',
+      '고인과 유가족의 뜻에 따라 빈소를 마련하지 않고, 가족끼리 조용히 모시는 무빈소 장례로 진행합니다.',
+      '조문을 받지 못함을 너그러이 양해해 주시기 바랍니다.',''];
+    if(inn)h.push('입관: '+inn);
+    h.push('발인·화장: '+out);
+    if(grave)h.push('장지: '+grave);
+    if(acct&&$('fAcctKeep').checked){h.push('','마음을 전하고자 문의하시는 분들이 계셔 부득이 안내드립니다.','마음 전하실 곳');acctLines.forEach(function(x){h.push(x);});}
+    if(org){h.push('',f.orgClose,'','유족: '+famLines.join(', '));}
+    else{h.push('','멀리서 마음으로 고인을 기억해 주시면 큰 위로가 되겠습니다.','',sign);}
 
     // 4 정정 안내
     var d=['[부고 정정]'+(sangTitle?' '+sangTitle:''),'',
@@ -575,24 +604,25 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
 
     // 5·6 감사 인사 (유족이 직접 보내는 글)
     var whom='故 '+name+(junior?'':' 님');
-    var thanksLine=noVisit?f.thanks.replace('고인의 마지막 길을 함께해 주신 덕분에','멀리서 마음으로 함께해 주신 덕분에'):f.thanks;
+    var thanksLine=(noVisit||noHall)?f.thanks.replace('고인의 마지막 길을 함께해 주신 덕분에','멀리서 마음으로 함께해 주신 덕분에'):f.thanks;
     var e=['삼가 감사의 인사를 올립니다.','',
-      '바쁘신 중에도 '+whom+'의 장례에 '+(noVisit?'따뜻한 위로의 마음을 전해 주셔서':'찾아 주시고 따뜻이 위로해 주셔서')+' 깊이 감사드립니다.',
+      '바쁘신 중에도 '+whom+'의 장례에 '+((noVisit||noHall)?'따뜻한 위로의 마음을 전해 주셔서':'찾아 주시고 따뜻이 위로해 주셔서')+' 깊이 감사드립니다.',
       thanksLine,'',
       '마땅히 찾아뵙고 인사드려야 하나, 우선 글로 대신함을 너그러이 양해해 주시기 바랍니다.',
       '베풀어 주신 은혜 오래 잊지 않겠습니다. 늘 건강하시고 댁내 평안하시기를 빕니다.','',sign];
     var g=[whom+'의 장례에 따뜻한 위로를 보내 주셔서 진심으로 감사드립니다. 덕분에 장례를 잘 마쳤습니다. 우선 글로 인사드림을 양해해 주시기 바랍니다.',sign];
 
-    var outs={o1:a,o2:b,o3:c,o4:d,o5:e,o6:g};
+    var outs={o1:a,o2:b,o3:c,o7:h,o4:d,o5:e,o6:g};
     Object.keys(outs).forEach(function(k){
       var t=outs[k].join(NL);$(k).textContent=t;
       var card=$(k).parentNode, blank=card.querySelector('.blank-note'), cnt=card.querySelector('.cnt');
       if(blank)blank.style.display=(t.indexOf('○')!==-1)?'block':'none';
       if(cnt)cnt.textContent='약 '+t.length+'자';
     });
-    $('noVisitNote').style.display=noVisit?'block':'none';
-    $('acctNote').style.display=(noVisit&&acct)?'block':'none';
-    $('cardFamily').style.order=noVisit?'-1':'0';
+    $('noVisitNote').style.display=(noVisit&&!noHall)?'block':'none';
+    $('noHallNote').style.display=noHall?'block':'none';
+    $('cardFamily').style.order=(noVisit&&!noHall)?'-1':'0';
+    $('cardNoHall').style.order=noHall?'-2':'0';
   }
 
   // 시각 선택 목록 채우기
@@ -612,13 +642,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     btn.addEventListener('click',function(){var d=new Date();d.setDate(d.getDate()+Number(btn.getAttribute('data-day')));$('fDeath').value=iso(d);build();});
   });
 
-  var IDS=['fAcctMode','fMode','fName','fAge','fRelSel','fRel','fWho','fFaith','fDeath','fPlace','fAddr','fInD','fInTS','fInT','fOutD','fOutTS','fOutT','fGrave','fFamily','fTel','fAcct','fNoVisit'];
+  var IDS=['fNoHall','fAcctKeep','fAcctMode','fMode','fName','fAge','fRelSel','fRel','fWho','fFaith','fDeath','fPlace','fAddr','fInD','fInTS','fInT','fOutD','fOutTS','fOutT','fGrave','fFamily','fTel','fAcct','fNoVisit'];
   IDS.forEach(function(id){$(id).addEventListener('input',build);$(id).addEventListener('change',build);});
   window.addEventListener('pageshow',build);
 
   $('btnClear').addEventListener('click',function(){
     IDS.forEach(function(id){var e=$(id);if(e.type==='checkbox'){e.checked=false;}else if(e.tagName==='SELECT'){e.selectedIndex=0;}else{e.value='';}});
-    $('fOutT').style.display='none';$('fInT').style.display='none';acctMemo={};$('acctRows').innerHTML='';$('acctRows').removeAttribute('data-key');build();
+    $('fOutT').style.display='none';$('fInT').style.display='none';$('fAcctKeep').checked=true;acctMemo={};$('acctRows').innerHTML='';$('acctRows').removeAttribute('data-key');build();
     $('live').textContent='적으신 내용을 모두 지웠습니다.';window.scrollTo(0,$('partInput').offsetTop-70);
   });
 
