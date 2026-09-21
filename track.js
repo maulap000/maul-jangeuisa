@@ -1,7 +1,7 @@
 /* 마을장의사 방문 통계 — 구글 애널리틱스(GA4)
    측정 ID가 비어 있으면 아무 일도 하지 않는다. 이름·연락처 등 개인정보는 보내지 않는다. */
 (function(){
-  var GA_ID=''; // 예: 'G-XXXXXXXXXX' — 애널리틱스 속성을 만든 뒤 여기에 넣는다
+  var GA_ID='G-5WFBWV7NKF'; // 예: 'G-XXXXXXXXXX' — 애널리틱스 속성을 만든 뒤 여기에 넣는다
   if(!GA_ID)return;
   var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(s);
   window.dataLayer=window.dataLayer||[];
