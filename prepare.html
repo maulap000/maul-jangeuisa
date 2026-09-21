@@ -250,7 +250,7 @@ document.addEventListener('click',function(e){if(!e.target.closest('#navDropdown
 
 let scale=100;const steps=[80,90,100,110,120,130,140];
 const lbl=document.getElementById('fontLabel');
-function applyScale(){document.documentElement.style.fontSize=scale+'%';lbl.textContent=scale+'%';try{localStorage.setItem('mj_font',scale);}catch(e){}}
+function applyScale(){document.documentElement.style.fontSize=(17*scale/100)+'px';lbl.textContent=scale+'%';try{localStorage.setItem('mj_font',scale);}catch(e){}}
 document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(i<steps.length-1){scale=steps[i+1];applyScale();}};
 document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
 try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
