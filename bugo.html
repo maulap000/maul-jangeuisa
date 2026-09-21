@@ -331,7 +331,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function $(id){return document.getElementById(id);}
   function v(id){return $(id).value.trim();}
   function dateText(s,withDay){if(!s)return '';var p=s.split('-');var d=new Date(Number(p[0]),Number(p[1])-1,Number(p[2]));if(isNaN(d))return '';return (d.getMonth()+1)+'월 '+d.getDate()+'일'+(withDay?'('+DAYS[d.getDay()]+')':'');}
-  function timeText(s){if(!s)return '';var p=s.split(':');var h=Number(p[0]),m=Number(p[1]);var ap=h<12?'오전':'오후';var hh=h%12;if(hh===0)hh=12;return ap+' '+hh+'시'+(m?' '+m+'분':'');}
+  function timeText(s){if(!s)return '';var p=s.split(':');var h=Number(p[0]),m=Number(p[1]);if(h===12&&m===0)return '낮 12시';if(h===0&&m===0)return '밤 12시(자정)';var ap=h<12?'오전':'오후';var hh=h%12;if(hh===0)hh=12;return ap+' '+hh+'시'+(m?' '+m+'분':'');}
   function relation(){
     var sel=$('fRelSel').value;
     $('fRel').style.display=(sel==='custom')?'block':'none';
@@ -369,7 +369,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     if(who&&rel.plain){whose=who+(org?' 님':'')+'의 '+rel.plain+' ';}
     else if(rel.plain&&!org){whose='저희 '+rel.plain+' ';}
     var subject=whose+deceased;
-    var sangTitle=(org&&rel.sang)?((who?who+' ':'')+rel.sang):'';
+    var sangTitle=(org&&rel.sang)?((who?who:'○○○')+' '+rel.sang):'';
     var decline='고인과 유가족의 뜻에 따라 조문과 조화는 정중히 사양합니다.';
 
     function schedule(arr,withAddr){
