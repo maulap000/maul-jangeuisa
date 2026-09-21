@@ -127,6 +127,10 @@ html{scroll-padding-top:80px;}
 .out-name{font-family:'Noto Serif KR',serif;font-size:1rem;color:var(--navy);font-weight:600;}
 .out-desc{display:block;font-size:0.85rem;color:var(--soft);margin-top:2px;}
 .out pre{margin:0;padding:20px 18px 8px;font-family:'Noto Sans KR',sans-serif;font-size:1rem;line-height:1.9;color:var(--text);white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;}
+.out textarea.edit{display:block;width:calc(100% - 36px);margin:18px 18px 4px;min-height:320px;padding:12px;border:1px solid var(--navy);background:#fffdf8;font-family:'Noto Sans KR',sans-serif;font-size:max(16px,1rem);line-height:1.8;color:var(--text);border-radius:0;resize:vertical;}
+.edited-note{margin:8px 18px 0;font-size:0.88rem;color:var(--gold-text);line-height:1.7;}
+.edit-bar{display:flex;flex-wrap:wrap;gap:4px 20px;padding:4px 18px 0;}
+.edit-bar .btn-text{margin-top:6px;}
 .cnt{padding:0 18px;font-size:0.82rem;color:var(--soft);}
 .blank-note{display:none;margin:10px 18px 0;font-size:0.86rem;color:#6b4a14;line-height:1.7;}
 .out-actions{display:grid;gap:10px;padding:16px 18px 18px;}
@@ -189,7 +193,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .pair{grid-template-columns:1fr;}
 }
 @media print{
-  .topbar,.nav-dropdown,.page-meta,.band,footer,.pledge,.lead,#partInput,#partMore,#partTips,.jump-out,.part-lead,.cnt,.out-actions,.copied,.blank-note,.note-box,.closing{display:none!important;}
+  .topbar,.nav-dropdown,.page-meta,.band,footer,.pledge,.lead,#partInput,#partMore,#partTips,.jump-out,.edit-bar,.edited-note,.back-links,.part-lead,.cnt,.out-actions,.copied,.blank-note,.note-box,.closing{display:none!important;}
   body{background:#fff;}
   .page{padding:0;min-height:0;}
   .part{margin-top:20px;}
@@ -306,10 +310,10 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <p class="note-box" id="noVisitNote">조문을 사양하신다고 하셔서 "가족장" 문안을 맨 위에 두었습니다. 빈소를 알리지 않는 문안입니다.</p>
     <p class="note-box" id="noHallNote">빈소 없이 진행하신다고 하셔서 "무빈소 장례" 문안을 맨 위에 두었습니다. 다른 문안에서도 빈소 줄을 뺐습니다.</p>
     <div class="outs">
-      <div class="out"><div class="out-head"><span class="out-name">기본</span><span class="out-desc">대부분 이 문안을 쓰십니다</span></div><pre id="o1"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
-      <div class="out"><div class="out-head"><span class="out-name">간결</span><span class="out-desc">짧게 알릴 때</span></div><pre id="o2"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
-      <div class="out" id="cardFamily"><div class="out-head"><span class="out-name">가족장</span><span class="out-desc">조문을 받지 않고 알리기만 할 때 · 빈소를 적지 않습니다</span></div><pre id="o3"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
-      <div class="out" id="cardNoHall"><div class="out-head"><span class="out-name">무빈소 장례</span><span class="out-desc">빈소를 차리지 않고 가족끼리 모실 때</span></div><pre id="o7"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">기본</span><span class="out-desc">대부분 이 문안을 쓰십니다</span></div><pre id="o1"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">간결</span><span class="out-desc">짧게 알릴 때</span></div><pre id="o2"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out" id="cardFamily"><div class="out-head"><span class="out-name">가족장</span><span class="out-desc">조문을 받지 않고 알리기만 할 때 · 빈소를 적지 않습니다</span></div><pre id="o3"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out" id="cardNoHall"><div class="out-head"><span class="out-name">무빈소 장례</span><span class="out-desc">빈소를 차리지 않고 가족끼리 모실 때</span></div><pre id="o7"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
     </div>
   </section>
 
@@ -318,9 +322,9 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <h2>일정이 바뀌었을 때, 장례를 마친 뒤</h2>
     <p class="part-lead">일정이 바뀌면 위 칸을 고치세요. 정정 안내가 함께 바뀝니다. 감사 인사는 지금 복사해 메모장에 붙여 두시면 장례 뒤에 다시 적지 않으셔도 됩니다.</p>
     <div class="outs">
-      <div class="out"><div class="out-head"><span class="out-name">정정 안내</span><span class="out-desc">발인 시각이나 호실이 바뀌었을 때</span></div><pre id="o4"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
-      <div class="out"><div class="out-head"><span class="out-name">감사 인사</span><span class="out-desc">장례를 마친 뒤 위로해 주신 분들께</span></div><pre id="o5"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
-      <div class="out"><div class="out-head"><span class="out-name">감사 인사 · 짧게</span><span class="out-desc">문자 한 통으로</span></div><pre id="o6"></pre><p class="cnt"></p><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">정정 안내</span><span class="out-desc">발인 시각이나 호실이 바뀌었을 때</span></div><pre id="o4"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">감사 인사</span><span class="out-desc">장례를 마친 뒤 위로해 주신 분들께</span></div><pre id="o5"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
+      <div class="out"><div class="out-head"><span class="out-name">감사 인사 · 짧게</span><span class="out-desc">문자 한 통으로</span></div><pre id="o6"></pre><textarea class="edit" aria-label="문안 직접 고치기" autocomplete="off" spellcheck="false" style="display:none;"></textarea><p class="cnt"></p><p class="edited-note" style="display:none;">직접 고친 글입니다. 위 칸을 바꿔도 이 글은 바뀌지 않습니다.</p><div class="edit-bar"><button type="button" class="btn-text edit-on">이 글 직접 고치기</button><button type="button" class="btn-text edit-off" style="display:none;">자동 글로 되돌리기</button></div><p class="blank-note">아직 정해지지 않은 곳(○○)이 있습니다. 보내기 전에 확인해 주세요.</p><div class="out-actions"><button type="button" class="share">문자·카카오톡으로 바로 보내기</button><button type="button" class="copy">이 문안 복사하기</button></div><p class="copied"></p></div>
     </div>
   </section>
 
@@ -460,6 +464,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   }
 
   var whoOpen=false;
+  var edited={};   // 직접 고친 문안(카드 id → true)
   function relation(){
     var sel=$('fRelSel').value;
     $('relCustomWrap').style.display=(sel==='custom')?'block':'none';
@@ -641,6 +646,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var outs={o1:a,o2:b,o3:c,o7:h,o4:d,o5:e,o6:g};
     Object.keys(outs).forEach(function(k){
       var t=outs[k].join(NL);$(k).textContent=t;
+      if(edited[k]){t=$(k).parentNode.querySelector('textarea.edit').value;}
       var card=$(k).parentNode, blank=card.querySelector('.blank-note'), cnt=card.querySelector('.cnt');
       if(blank)blank.style.display=(t.indexOf('○')!==-1)?'block':'none';
       if(cnt)cnt.textContent='';
@@ -676,12 +682,12 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
 
   $('btnClear').addEventListener('click',function(){
     IDS.forEach(function(id){var e=$(id);if(e.type==='checkbox'){e.checked=false;}else if(e.tagName==='SELECT'){e.selectedIndex=0;}else{e.value='';}});
-    $('fOutT').style.display='none';$('fInT').style.display='none';$('fAcctKeep').checked=true;$('fAcctLead').checked=true;whoOpen=false;acctMemo={};$('acctRows').innerHTML='';$('acctRows').removeAttribute('data-key');build();
+    $('fOutT').style.display='none';$('fInT').style.display='none';$('fAcctKeep').checked=true;$('fAcctLead').checked=true;whoOpen=false;Array.prototype.forEach.call(document.querySelectorAll('.edit-off'),function(b){if(b.style.display!=='none')b.click();});acctMemo={};$('acctRows').innerHTML='';$('acctRows').removeAttribute('data-key');build();
     $('live').textContent='적으신 내용을 모두 지웠습니다.';window.scrollTo(0,$('partInput').offsetTop-70);
   });
 
   // 복사·공유
-  function selectPre(pre){try{var r=document.createRange();r.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}catch(e){}}
+  function selectPre(pre){if(pre.tagName==='TEXTAREA'){try{pre.focus();pre.setSelectionRange(0,pre.value.length);}catch(e){}return;}try{var r=document.createRange();r.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}catch(e){}}
   function after(card,ok,pre){
     var note=card.querySelector('.copied');
     var pc=window.matchMedia&&window.matchMedia('(pointer:fine)').matches;
@@ -694,9 +700,15 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   }
   Array.prototype.forEach.call(document.querySelectorAll('.out'),function(card){
     var pre=card.querySelector('pre');
-    Array.prototype.forEach.call(card.querySelectorAll('.copy'),function(btn){btn.addEventListener('click',function(){copyText(pre.textContent,card,pre);});});
+    var ta=card.querySelector('textarea.edit'), onBtn=card.querySelector('.edit-on'), offBtn=card.querySelector('.edit-off'), enote=card.querySelector('.edited-note');
+    function current(){return edited[pre.id]?ta.value:pre.textContent;}
+    function blankCheck(){var bn=card.querySelector('.blank-note');if(bn)bn.style.display=(current().indexOf('○')!==-1)?'block':'none';}
+    onBtn.addEventListener('click',function(){edited[pre.id]=true;ta.value=pre.textContent;ta.style.display='block';pre.style.display='none';onBtn.style.display='none';offBtn.style.display='';enote.style.display='block';ta.style.height='auto';ta.style.height=Math.max(320,ta.scrollHeight+4)+'px';ta.focus();});
+    offBtn.addEventListener('click',function(){edited[pre.id]=false;ta.style.display='none';pre.style.display='';onBtn.style.display='';offBtn.style.display='none';enote.style.display='none';card.querySelector('.copied').style.display='none';blankCheck();});
+    ta.addEventListener('input',function(){card.querySelector('.copied').style.display='none';blankCheck();});
+    Array.prototype.forEach.call(card.querySelectorAll('.copy'),function(btn){btn.addEventListener('click',function(){copyText(current(),card,edited[pre.id]?ta:pre);});});
     var sh=card.querySelector('.share');
-    if(sh){var touch=!(window.matchMedia&&window.matchMedia('(pointer:fine)').matches);if(navigator.share&&touch){sh.style.display='block';sh.addEventListener('click',function(){navigator.share({text:pre.textContent}).catch(function(){});});}}
+    if(sh){var touch=!(window.matchMedia&&window.matchMedia('(pointer:fine)').matches);if(navigator.share&&touch){sh.style.display='block';sh.addEventListener('click',function(){navigator.share({text:current()}).catch(function(){});});}}
   });
     $('whoReveal').addEventListener('click',function(){whoOpen=true;build();$('fWho').focus();});
   // 결과에서 '종교·계좌 넣기'를 누르면 접힌 칸을 열고 그리로 간다
@@ -704,6 +716,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   // 적은 내용이 있으면 새로고침·뒤로 가기 전에 한 번 묻는다
   window.addEventListener('beforeunload',function(e){
     var filled=IDS.some(function(id){var el=$(id);return el.type!=='checkbox'&&el.tagName!=='SELECT'&&el.value.trim()!=='';});
+    if(!filled){filled=Object.keys(edited).some(function(k){return edited[k];});}
     if(filled){e.preventDefault();e.returnValue='';}
   });
   build();
