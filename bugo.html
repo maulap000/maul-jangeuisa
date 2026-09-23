@@ -158,6 +158,18 @@ html{scroll-padding-top:80px;}
 .fb-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
 .fb-links a{display:inline-block;padding:11px 16px;border:1px solid var(--navy);color:var(--navy);text-decoration:none;font-size:0.95rem;}
 .fb-links a:hover{border-color:var(--gold);color:var(--gold-text);}
+.fb-form{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:grid;gap:10px;}
+.fb-form label{display:grid;gap:5px;font-size:0.88rem;font-weight:700;color:var(--navy);}
+.fb-form textarea,.fb-form input[type=text]{width:100%;padding:10px 12px;border:1px solid rgba(28,40,64,0.3);background:#fff;color:var(--text);font-family:inherit;font-size:0.95rem;line-height:1.6;font-weight:400;}
+.fb-form textarea{min-height:96px;resize:vertical;}
+.fb-form textarea:focus,.fb-form input[type=text]:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.fb-trap{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+.fb-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;}
+.fb-actions button{min-height:44px;padding:8px 20px;border:1px solid var(--navy);background:var(--navy);color:#fff;font-family:inherit;font-size:0.95rem;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.fb-actions button:disabled{opacity:0.6;cursor:default;}
+.fb-note{font-size:0.86rem;font-weight:700;color:#555b66;}
+.fb-note.sent{color:#2f5a8a;}
+.fb-note.error{color:#a33a2f;}
 .closing{margin-top:88px;text-align:center;color:#555b66;font-size:0.95rem;line-height:2.1;}
 .textsize button{width:44px;height:44px;font-size:1.1rem;}
 .textsize{font-size:0.85rem;}
@@ -348,8 +360,35 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <span class="eyebrow">의견 보내기</span>
   <p>문안이 우리 집에서 쓰는 말과 다르거나, 고쳤으면 하는 점이 있으면 알려 주세요. 현장에서 쓰는 표현에 맞춰 계속 고쳐 갑니다.</p>
   <div class="fb-links"><a href="https://talk.naver.com/WC91MB" target="_blank" rel="noopener noreferrer">네이버 톡톡으로 보내기</a><a href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">카카오톡 채널로 보내기</a></div>
-  <small>적으신 부고 내용은 함께 보내지 않습니다. 의견만 적어 주시면 됩니다. 이 페이지는 "글로 보내는 부고"입니다.</small>
+  <form class="fb-form" id="fbForm" novalidate>
+    <label>이 자리에서 바로 적어 보내기<textarea id="fbMessage" maxlength="1000" rows="4" placeholder="예: 저희 지역에서는 '장지'보다 '장례지'라는 말을 더 씁니다."></textarea></label>
+    <label>답장이 필요하면 연락처 (선택)<input type="text" id="fbContact" maxlength="120" autocomplete="off" placeholder="전화번호나 이메일. 비워 두셔도 됩니다."></label>
+    <input class="fb-trap" type="text" name="website" id="fbTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="fb-actions"><button type="submit" id="fbSend">의견 보내기</button><span class="fb-note" id="fbNote" role="status" aria-live="polite"></span></div>
+  </form>
+  <small>로그인이나 개인정보 입력 없이 보낼 수 있습니다. 적으신 부고 내용은 함께 보내지 않으며, 위 칸에 적은 의견과 보낸 시각만 남습니다. 이 페이지는 "글로 보내는 부고"입니다.</small>
 </div>
+<script>
+(function(){
+  var form=document.getElementById('fbForm'),msg=document.getElementById('fbMessage'),contact=document.getElementById('fbContact'),trap=document.getElementById('fbTrap'),btn=document.getElementById('fbSend'),note=document.getElementById('fbNote');
+  if(!form)return;
+  function say(text,kind){note.textContent=text;note.className='fb-note'+(kind?' '+kind:'');}
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var text=msg.value.trim();
+    if(text.length<5){say('의견을 다섯 글자 이상 적어 주세요.','error');msg.focus();return;}
+    btn.disabled=true;btn.textContent='보내는 중…';say('');
+    fetch('https://app.maulj24.com/api/feedback',{method:'POST',headers:{'content-type':'text/plain;charset=UTF-8'},body:JSON.stringify({source:'bugo',message:text,contact:contact.value.trim(),website:trap.value})})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok,error:j.error};}).catch(function(){return {ok:false};});})
+      .then(function(res){
+        if(res.ok){say('잘 받았습니다. 고맙습니다.','sent');msg.value='';contact.value='';}
+        else{say(res.error||'지금은 보낼 수 없습니다. 톡톡이나 카카오톡으로 보내 주세요.','error');}
+      })
+      .catch(function(){say('연결이 되지 않았습니다. 톡톡이나 카카오톡으로 보내 주세요.','error');})
+      .then(function(){btn.disabled=false;btn.textContent='의견 보내기';});
+  });
+})();
+</script>
 <a class="read" href="process.html" target="_blank" rel="noopener"><span><span class="read-label">진행 절차</span><span class="read-title">전화 한 통부터 발인까지의 순서</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
 <a class="read" href="faq.html" target="_blank" rel="noopener"><span><span class="read-label">자주 묻는 질문</span><span class="read-title">전화로 많이 물어보시는 것들</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
     </div>
