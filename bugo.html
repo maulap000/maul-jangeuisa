@@ -378,7 +378,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     var text=msg.value.trim();
     if(text.length<5){say('의견을 다섯 글자 이상 적어 주세요.','error');msg.focus();return;}
     btn.disabled=true;btn.textContent='보내는 중…';say('');
-    fetch('https://app.maulj24.com/api/feedback',{method:'POST',headers:{'content-type':'text/plain;charset=UTF-8'},body:JSON.stringify({source:'bugo',message:text,contact:contact.value.trim(),website:trap.value})})
+    fetch('https://api.xn--hz2b29jx3fkcys.com/api/feedback',{method:'POST',headers:{'content-type':'text/plain;charset=UTF-8'},body:JSON.stringify({source:'bugo',message:text,contact:contact.value.trim(),website:trap.value})})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok,error:j.error};}).catch(function(){return {ok:false};});})
       .then(function(res){
         if(res.ok){say('잘 받았습니다. 고맙습니다.','sent');msg.value='';contact.value='';}
