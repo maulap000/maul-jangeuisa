@@ -152,6 +152,12 @@ html{scroll-padding-top:80px;}
 .read:hover .arrow{opacity:1;color:var(--gold);transform:translateX(4px);}
 .read-label{display:block;font-size:0.76rem;letter-spacing:0.12em;color:var(--gold-text);font-weight:600;margin-bottom:6px;}
 .read-title{display:block;font-family:'Noto Serif KR',serif;font-weight:500;font-size:1.04rem;color:var(--navy);line-height:1.6;}
+.feedback{margin-top:44px;padding:18px 20px 20px;border:1px solid var(--line);border-left:2px solid var(--gold);}
+.feedback p{margin:8px 0 0;font-size:0.95rem;line-height:1.85;color:var(--navy);}
+.feedback small{display:block;margin-top:10px;font-size:0.84rem;color:#555b66;line-height:1.7;}
+.fb-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.fb-links a{display:inline-block;padding:11px 16px;border:1px solid var(--navy);color:var(--navy);text-decoration:none;font-size:0.95rem;}
+.fb-links a:hover{border-color:var(--gold);color:var(--gold-text);}
 .closing{margin-top:88px;text-align:center;color:#555b66;font-size:0.95rem;line-height:2.1;}
 .textsize button{width:44px;height:44px;font-size:1.1rem;}
 .textsize{font-size:0.85rem;}
@@ -192,7 +198,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .pair{grid-template-columns:1fr;}
 }
 @media print{
-  .topbar,.nav-dropdown,.page-meta,.band,footer,.pledge,.lead,#partInput,#partMore,#partTips,.jump-out,.edit-bar,.edited-note,.back-links,.part-lead,.cnt,.out-actions,.copied,.blank-note,.note-box,.closing{display:none!important;}
+  .topbar,.nav-dropdown,.page-meta,.band,footer,.pledge,.lead,#partInput,#partMore,#partTips,.jump-out,.edit-bar,.edited-note,.back-links,.part-lead,.cnt,.out-actions,.copied,.blank-note,.note-box,.feedback,.closing{display:none!important;}
   body{background:#fff;}
   .page{padding:0;min-height:0;}
   .part{margin-top:20px;}
@@ -338,6 +344,12 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
       <div class="tip"><div class="tip-k">단체 대화방</div><div class="tip-v">모임 대화방에는 그 모임을 아는 가족이 올리는 편이 자연스럽습니다. 문안은 같은 것을 쓰시면 됩니다.</div></div>
     </div>
     <div class="reads">
+<div class="feedback" id="feedback">
+  <span class="eyebrow">의견 보내기</span>
+  <p>문안이 우리 집에서 쓰는 말과 다르거나, 고쳤으면 하는 점이 있으면 알려 주세요. 현장에서 쓰는 표현에 맞춰 계속 고쳐 갑니다.</p>
+  <div class="fb-links"><a href="https://talk.naver.com/WC91MB" target="_blank" rel="noopener noreferrer">네이버 톡톡으로 보내기</a><a href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">카카오톡 채널로 보내기</a></div>
+  <small>적으신 부고 내용은 함께 보내지 않습니다. 의견만 적어 주시면 됩니다. 이 페이지는 "글로 보내는 부고"입니다.</small>
+</div>
 <a class="read" href="process.html" target="_blank" rel="noopener"><span><span class="read-label">진행 절차</span><span class="read-title">전화 한 통부터 발인까지의 순서</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
 <a class="read" href="faq.html" target="_blank" rel="noopener"><span><span class="read-label">자주 묻는 질문</span><span class="read-title">전화로 많이 물어보시는 것들</span></span><svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg></a>
     </div>
