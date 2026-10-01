@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src https://feedback.xn--hz2b29jx3fkcys.com; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="description" content="장례 지도 - 서울의 구 경계와 장례식장 위치만 그린 지도. 구를 누르거나 동을 고르면 가까운 장례식장을 직선거리 순으로 보여 드립니다. 가입·로그인 없음, 위치는 저장하지 않습니다.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<meta name="theme-color" content="#1c2840">
+<title>장례 지도 — 서울 구별 장례식장 위치 | 마을장의사</title>
+<link rel="canonical" href="https://xn--hz2b29jx3fkcys.com/funeral-map">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="마을장의사">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="장례 지도 — 마을장의사">
+<meta property="og:description" content="서울의 구 경계와 장례식장 위치만 그린 지도. 구·동을 고르면 가까운 순으로.">
+<meta property="og:url" content="https://xn--hz2b29jx3fkcys.com/funeral-map">
+<meta property="og:image" content="https://xn--hz2b29jx3fkcys.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+
+:root{--navy:#1c2840;--navy-deep:#0e1824;--gold:#a8895a;--gold-light:#c8a870;--paper:#f7f5f0;--line:rgba(28,40,64,0.14);--gray:#6b7280;--soft:#8a8f98;--text:#252832;--base:17px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:var(--base);}
+body{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;color:var(--text);background:var(--paper);line-height:1.7;-webkit-font-smoothing:antialiased;word-break:keep-all;}
+.num{font-family:Georgia,'Times New Roman',serif;font-feature-settings:'lnum';}
+
+/* 상단바 — 사이트 공통 */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(10,18,35,0.97);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid rgba(168,137,90,0.15);}
+.topbar-brand{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-size:1rem;font-weight:700;color:#fff;letter-spacing:0.08em;text-decoration:none;}
+.topbar-brand em{color:var(--gold-light);font-style:normal;}
+.topbar-call{display:flex;align-items:center;gap:8px;border:1px solid rgba(168,137,90,0.5);color:var(--gold-light);text-decoration:none;padding:7px 14px;border-radius:50px;font-size:0.88rem;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;white-space:nowrap;}
+.topbar-call:hover{background:rgba(168,137,90,0.12);border-color:var(--gold-light);color:#fff;}
+.topbar-call svg{width:12px;height:12px;flex-shrink:0;}
+.nav-hamburger{background:none;border:none;color:rgba(255,255,255,0.65);width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:7px;-webkit-tap-highlight-color:transparent;flex-shrink:0;}
+.nav-hamburger svg{width:18px;height:18px;}
+.topbar-right{display:flex;align-items:center;gap:6px;}
+.nav-dropdown{position:fixed;top:53px;left:0;right:0;background:rgba(10,18,35,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(168,137,90,0.15);flex-direction:column;display:none;z-index:997;}
+.nav-dropdown.open{display:flex;}
+.nav-dropdown a{color:rgba(255,255,255,0.6);text-decoration:none;padding:15px 24px;font-size:0.88rem;letter-spacing:0.04em;border-bottom:1px solid rgba(255,255,255,0.04);}
+.nav-dropdown a:last-child{border-bottom:none;}
+.nav-dropdown a:hover{color:var(--gold-light);}
+.nav-inline{display:none;}
+@media(min-width:900px){
+  .nav-hamburger{display:none;}
+  .nav-inline{display:flex;align-items:center;gap:20px;}
+  .nav-inline a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.8rem;letter-spacing:0.05em;transition:color 0.2s;white-space:nowrap;}
+  .nav-inline a:hover{color:rgba(255,255,255,0.9);}
+}
+
+/* 지면 */
+.page{max-width:820px;margin:0 auto;padding:96px 28px 110px;min-height:88vh;}
+.page-meta{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--line);}
+.meta-link{display:inline-flex;align-items:center;gap:6px;color:var(--soft);text-decoration:none;font-size:0.78rem;letter-spacing:0.04em;transition:color 0.2s;background:none;border:0;cursor:pointer;font-family:inherit;}
+.meta-link:hover{color:var(--navy);}
+.meta-link svg{width:13px;height:13px;}
+.textsize{display:flex;align-items:center;gap:2px;color:var(--soft);font-size:0.74rem;letter-spacing:0.04em;}
+.textsize span.ts-label{margin-right:8px;}
+.textsize button{width:30px;height:30px;border:1px solid var(--line);background:none;color:var(--navy);font-size:0.95rem;cursor:pointer;font-family:inherit;line-height:1;transition:border-color 0.2s;-webkit-tap-highlight-color:transparent;}
+.textsize button:hover{border-color:var(--gold);}
+.textsize .ts-val{min-width:46px;text-align:center;font-size:0.95rem;color:var(--navy);}
+
+.eyebrow{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.34em;color:var(--gold);}
+.rule{width:40px;height:1px;background:var(--gold);margin:30px 0;}
+
+.screen{animation:rise 0.55s cubic-bezier(.2,.6,.2,1) both;}
+@keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+/* 하단 문의 */
+.band{background:var(--navy-deep);text-align:center;padding:84px 24px 76px;}
+.band .eyebrow{color:var(--gold-light);}
+.band-num{display:inline-block;margin-top:22px;font-size:clamp(2.3rem,7vw,3.2rem);font-weight:400;letter-spacing:0.07em;color:#f1e6d2;text-decoration:none;line-height:1.1;transition:color 0.2s;}
+.band-num:hover{color:var(--gold-light);}
+.band-sub{margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.4);letter-spacing:0.06em;}
+.band-links{display:flex;justify-content:center;gap:26px;margin-top:34px;flex-wrap:wrap;}
+.band-links a{color:rgba(255,255,255,0.72);font-size:0.86rem;text-decoration:none;padding-bottom:3px;border-bottom:1px solid rgba(200,168,112,0.45);letter-spacing:0.03em;transition:all 0.2s;}
+.band-links a:hover{color:#fff;border-color:var(--gold-light);}
+.band-note{max-width:30em;margin:30px auto 0;font-size:0.78rem;color:rgba(255,255,255,0.38);line-height:1.95;}
+.band-note strong{color:rgba(255,255,255,0.66);font-weight:500;}
+
+footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;border-top:1px solid rgba(168,137,90,0.1);}
+.footer-brand{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-size:1rem;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:0.1em;margin-bottom:10px;}
+.footer-links{display:flex;justify-content:center;gap:20px;margin-bottom:18px;flex-wrap:wrap;}
+.footer-links a{color:rgba(255,255,255,0.28);text-decoration:none;font-size:0.78rem;transition:color 0.2s;letter-spacing:0.03em;}
+.footer-links a:hover{color:var(--gold-light);}
+.footer-info{font-size:0.7rem;color:rgba(255,255,255,0.15);line-height:2;}
+
+.feedback{margin-top:44px;padding:18px 20px 20px;border:1px solid var(--line);border-left:2px solid var(--gold);}
+.feedback p{margin:8px 0 0;font-size:0.95rem;line-height:1.85;color:var(--navy);}
+.feedback small{display:block;margin-top:10px;font-size:0.84rem;color:#555b66;line-height:1.7;}
+.fb-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.fb-links a{display:inline-block;padding:11px 16px;border:1px solid var(--navy);color:var(--navy);text-decoration:none;font-size:0.95rem;}
+.fb-links a:hover{border-color:var(--gold);color:var(--gold-text);}
+.fb-form{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:grid;gap:10px;}
+.fb-form label{display:grid;gap:5px;font-size:0.88rem;font-weight:700;color:var(--navy);}
+.fb-form textarea,.fb-form input[type=text]{width:100%;padding:10px 12px;border:1px solid rgba(28,40,64,0.3);background:#fff;color:var(--text);font-family:inherit;font-size:0.95rem;line-height:1.6;font-weight:400;}
+.fb-form textarea{min-height:96px;resize:vertical;}
+.fb-form textarea:focus,.fb-form input[type=text]:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.fb-trap{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+.fb-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;}
+.fb-actions button{min-height:44px;padding:8px 20px;border:1px solid var(--navy);background:var(--navy);color:#fff;font-family:inherit;font-size:0.95rem;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.fb-actions button:disabled{opacity:0.6;cursor:default;}
+.fb-note{font-size:0.86rem;font-weight:700;color:#555b66;}
+.fb-note.sent{color:#2f5a8a;}
+.fb-note.error{color:#a33a2f;}
+
+:root{--gold-text:#7d6337;--warn:#a33a2f;}
+.intro{padding-top:56px;}
+.intro h1{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-weight:600;color:var(--navy);font-size:clamp(1.7rem,5.4vw,2.6rem);line-height:1.42;letter-spacing:-0.015em;margin:20px 0 22px;}
+.dday{margin-top:44px;padding:20px 20px 16px;border:1px solid var(--line);border-left:2px solid var(--gold);background:#fff;}
+.dday label{display:block;font-weight:700;color:var(--navy);font-size:0.95rem;}
+.dday-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:center;}
+.dday input[type=date]{min-height:44px;padding:8px 12px;border:1px solid rgba(28,40,64,0.3);font-family:inherit;font-size:1rem;color:var(--text);background:#fff;}
+.ghost-btn{min-height:44px;padding:8px 16px;border:1px solid var(--line);background:none;color:var(--navy);font-family:inherit;font-size:0.9rem;cursor:pointer;}
+.ghost-btn:hover{border-color:var(--gold);}
+.dday-note{margin-top:10px;font-size:0.86rem;color:#555b66;}
+.progress{margin-top:4px;font-size:0.86rem;color:var(--gold-text);font-weight:700;}
+.group{margin-top:56px;}
+.group h2{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-weight:600;color:var(--navy);font-size:1.35rem;}
+.group-sub{font-size:0.86rem;color:var(--gray);margin-top:2px;}
+.items{list-style:none;margin-top:16px;border-top:1px solid var(--line);}
+.item{padding:18px 4px 18px;border-bottom:1px solid var(--line);}
+.check{display:grid;grid-template-columns:30px 1fr;align-items:start;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.check input{position:absolute;opacity:0;width:1px;height:1px;}
+.box{width:20px;height:20px;border:1.5px solid rgba(28,40,64,0.5);margin-top:4px;position:relative;background:#fff;}
+.check input:checked+.box{background:var(--navy);border-color:var(--navy);}
+.check input:checked+.box::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+.check input:focus-visible+.box{outline:2px solid var(--gold);outline-offset:2px;}
+.item-title{font-size:1.08rem;font-weight:700;color:var(--navy);line-height:1.6;}
+.item.done .item-title{color:var(--soft);text-decoration:line-through;}
+.item p{margin:6px 0 0 30px;font-size:0.93rem;line-height:1.8;}
+.due{font-weight:700;color:var(--navy);}
+.due.soon{color:var(--gold-text);}
+.due.over{color:var(--warn);}
+.base{color:#555b66;font-size:0.86rem!important;}
+.what{color:var(--text);}
+.late{color:#555b66;}
+.tip{color:var(--gold-text);}
+.notes,.consult,.sources{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);}
+.notes ul,.sources ul{margin:12px 0 0 18px;}
+.notes li,.sources li{font-size:0.9rem;line-height:1.85;color:#555b66;margin-bottom:6px;}
+.consult p,.sources p{margin-top:10px;font-size:0.93rem;line-height:1.85;color:#555b66;}
+.call-btn{display:inline-block;margin-top:16px;padding:14px 24px;background:var(--navy);color:#fff;text-decoration:none;font-weight:700;}
+@media(max-width:480px){.page{padding-left:20px;padding-right:20px;}.item p{margin-left:30px;}}
+@media print{
+  .topbar,.nav-dropdown,.page-meta,.band,footer,.dday-row,.consult,.feedback,.dday-note{display:none!important;}
+  body{background:#fff;}
+  .page{padding:0;min-height:0;}
+  .item{break-inside:avoid;}
+  .dday{border:0;padding:0;margin-top:16px;}
+}
+/* 찾기·지도 화면이 함께 쓰는 모양. page_common.py가 after.html의 모양 뒤에 붙인다. */
+.pick{margin-top:44px;padding:20px 20px 16px;border:1px solid var(--line);border-left:2px solid var(--gold);background:#fff;}
+.pick label{display:block;font-weight:700;color:var(--navy);font-size:0.95rem;}
+.pick-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:center;}
+.pick select{min-height:46px;min-width:210px;padding:8px 12px;border:1px solid rgba(28,40,64,0.3);font-family:inherit;font-size:1.02rem;color:var(--text);background:#fff;}
+.pick-note{margin-top:10px;font-size:0.9rem;color:var(--gold-text);font-weight:700;min-height:1.6em;}
+.promise{margin-top:26px;font-size:0.93rem;line-height:1.9;color:#555b66;}
+.gu-head{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-weight:600;color:var(--navy);font-size:1.25rem;margin-top:44px;}
+.halls{list-style:none;margin-top:14px;border-top:1px solid var(--line);}
+.hall{padding:20px 4px;border-bottom:1px solid var(--line);}
+.hall h3{font-size:1.1rem;font-weight:700;color:var(--navy);line-height:1.5;}
+.chips{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}
+.chip{display:inline-block;padding:2px 9px;border:1px solid var(--line);font-size:0.78rem;color:#555b66;background:#fff;}
+.addr{margin-top:8px;font-size:0.93rem;line-height:1.75;color:var(--text);overflow-wrap:anywhere;}
+.facts{margin-top:4px;font-size:0.9rem;color:#555b66;}
+.acts{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;}
+.act{display:inline-block;min-height:44px;line-height:26px;padding:8px 16px;border:1px solid var(--line);color:var(--navy);text-decoration:none;font-size:0.92rem;background:#fff;}
+.act.tel{border-color:var(--navy);font-weight:700;}
+.act:hover{border-color:var(--gold);}
+.empty{margin-top:24px;padding:22px 20px;border:1px solid var(--line);background:#fff;}
+.empty p{font-size:0.95rem;line-height:1.85;color:var(--text);}
+.near{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.first-call{margin-top:64px;padding:26px 22px;background:#fff;border:1px solid var(--line);border-left:2px solid var(--gold);}
+.first-call h2{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-weight:600;color:var(--navy);font-size:1.25rem;margin-top:10px;}
+.first-call p{margin-top:10px;font-size:0.95rem;line-height:1.9;color:#555b66;}
+.call-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px;}
+.ghost-link{display:inline-block;margin-top:16px;padding:13px 20px;border:1px solid var(--line);color:var(--navy);text-decoration:none;font-size:0.92rem;}
+.chip.chip-check{border-color:var(--gold);color:var(--gold-text);font-weight:700;}
+.promise a{color:var(--navy);font-weight:700;white-space:nowrap;}
+.hall.picked{border-left:2px solid var(--gold);padding-left:14px;}
+.region-post{margin-top:18px;font-size:0.93rem;}
+.region-post a{color:var(--navy);}
+.more{margin-top:12px;}
+.more summary{display:inline-block;min-height:44px;line-height:26px;padding:8px 16px 8px 14px;border:1px solid var(--line);background:#fff;color:var(--navy);font-size:0.92rem;cursor:pointer;list-style:none;}
+.more summary::-webkit-details-marker{display:none;}
+.more summary::before{content:'+';display:inline-block;width:1.1em;font-weight:700;color:var(--gold-text);}
+.more[open] summary::before{content:'−';}
+.more summary:hover{border-color:var(--gold);}
+.more summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.more-body{margin-top:10px;padding:16px 18px 18px;border:1px solid var(--line);background:#fff;}
+.more-body h4{margin-top:14px;font-size:0.86rem;font-weight:700;color:var(--gold-text);letter-spacing:0.02em;}
+.more-body h4:first-child{margin-top:0;}
+.more-text{margin-top:4px;font-size:0.93rem;line-height:1.8;color:var(--text);overflow-wrap:anywhere;}
+.more-text a{color:var(--navy);font-weight:700;}
+.fac{list-style:none;margin-top:6px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 14px;}
+.fac li{font-size:0.93rem;line-height:1.8;color:var(--text);}
+.fac li strong{font-weight:700;color:var(--navy);}
+.fac li.off,.fac li.off strong{color:#6b7280;font-weight:400;}
+.fac .mark{display:inline-block;width:1.3em;color:var(--gold-text);}
+.fac li.off .mark{color:#9aa0aa;}
+.more-call{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:0.93rem;line-height:1.85;color:#555b66;}
+.more-call a{display:inline-block;color:var(--navy);font-weight:700;white-space:nowrap;}
+.more-src{margin-top:10px;font-size:0.82rem;line-height:1.7;color:#6b7280;}
+.pick-date{margin-top:8px;font-size:0.82rem;color:#6b7280;}
+.pick-note{font-size:1rem;scroll-margin-top:76px;}
+.no-js{margin-top:16px;padding:14px 16px;border:1px solid var(--warn);color:var(--warn);font-weight:700;background:#fff;line-height:1.8;}
+.empty.load-fail{border-color:var(--warn);}
+.near{align-items:center;}
+.hall.unsure h3{color:#555b66;font-weight:500;}
+.gu-index{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.gu-index a{display:inline-flex;align-items:center;min-height:44px;padding:6px 12px;border:1px solid var(--line);background:#fff;color:var(--navy);text-decoration:none;font-size:0.9rem;}
+.gu-index a:hover{border-color:var(--gold);}
+.gu-head{scroll-margin-top:76px;}
+.gu-n{font-size:0.85rem;color:var(--gold-text);font-weight:700;margin-left:4px;}
+.pick{scroll-margin-top:76px;}
+.to-top{margin-top:8px;}
+.to-top a{display:inline-flex;align-items:center;min-height:44px;color:var(--navy);font-size:0.9rem;}
+.tap{display:inline-flex;align-items:center;min-height:44px;}
+/* 누르는 곳 크기(휴대폰 44px 안팎)와 작은 금색 글씨의 대비 — 이 화면에서만 덮어쓴다 */
+.meta-link{min-height:44px;font-size:0.86rem;color:#555b66;}
+.textsize button{width:44px;height:44px;font-size:1.15rem;}
+.nav-hamburger{width:44px;height:44px;}
+.eyebrow{color:var(--gold-text);font-size:0.78rem;letter-spacing:0.2em;}
+.fb-links a{min-height:44px;display:inline-flex;align-items:center;}
+@media print{
+  .more summary,.more-call,.gu-index,.to-top,.pick-date{display:none!important;}
+  .more-body{border:0;padding:4px 0 0;}
+  .pick-row,.first-call,.acts,.promise{display:none!important;}
+  .hall{break-inside:avoid;padding:10px 0;}
+  .pick{border:0;padding:0;margin-top:16px;}
+}
+
+/* 장례 지도 화면에만 쓰는 모양. build_map.py가 공통 모양 뒤에 붙인다. */
+.pick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 16px;}
+.pick-grid label{display:grid;gap:6px;}
+.pick-grid select{min-width:0;width:100%;}
+.pick .soft{font-weight:400;color:#6b7280;font-size:0.84rem;}
+.pick select:disabled{background:#f1efea;color:#6b7280;}
+.pick .pick-row{margin-top:14px;}
+.skip{margin-top:10px;font-size:0.9rem;}
+.skip a{color:var(--navy);}
+.map-box{margin-top:6px;}
+.legend{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:0.88rem;color:var(--text);}
+.legend li{display:inline-flex;align-items:center;gap:6px;min-height:30px;}
+.legend svg{width:20px;height:20px;flex:none;}
+.map-wrap{margin-top:8px;border:1px solid var(--line);background:#fff;}
+#map{display:block;width:100%;height:320px;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+.gu{fill:#f4f0e7;stroke:#1c2840;stroke-width:1.1;vector-effect:non-scaling-stroke;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.gu.zero{fill:#e9e7e2;}
+.gu.on{fill:#fffdf8;stroke-width:2;}
+.gu.dim{fill:#ebe8e1;}
+.gu:hover{fill:#fbf6e9;}
+.gu:focus{outline:none;}
+.gu:focus-visible{stroke:#a33a2f;stroke-width:3;}
+.dong{fill:none;stroke:#8a8f98;stroke-width:0.9;stroke-dasharray:4 3;vector-effect:non-scaling-stroke;pointer-events:none;}
+.dong.on{stroke:#a33a2f;stroke-width:1.8;stroke-dasharray:none;}
+.gu-label,.dong-label{text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-linejoin:round;}
+.gu-label{fill:#1c2840;font-weight:700;}
+.dong-label{fill:#555b66;}
+.pt{pointer-events:none;}
+.pt.live{pointer-events:auto;cursor:pointer;}
+.pt .hit{fill:transparent;}
+.pt .mk{stroke:#fff;}
+.pt .hosp{fill:#1c2840;}
+.pt .spec{fill:#7d6337;}
+.pt .ring{fill:none;stroke:#a33a2f;}
+.pt:focus{outline:none;}
+.pt:focus-visible .mk{stroke:#a33a2f;}
+.me-out{fill:none;stroke:#a33a2f;}
+.me-in{fill:#a33a2f;}
+.map-ctrl{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.ghost-btn.sq{min-width:44px;padding:8px 0;font-size:1.1rem;}
+.ghost-btn{background:#fff;}
+.ghost-btn:disabled{opacity:0.55;cursor:default;}
+.map-note{margin-top:10px;font-size:0.86rem;line-height:1.75;color:#555b66;}
+.pt-card{margin-top:14px;padding:18px 18px 16px;border:1px solid var(--navy);border-left:3px solid var(--gold);background:#fff;}
+.pt-card h3{font-size:1.1rem;font-weight:700;color:var(--navy);line-height:1.5;}
+.pt-many{font-size:0.95rem;color:var(--text);line-height:1.8;}
+.dist{margin-top:6px;font-size:0.92rem;font-weight:700;color:var(--gold-text);}
+.list-head{margin-top:48px;font-weight:700;color:var(--navy);font-size:1.25rem;scroll-margin-top:76px;}
+.list-head:focus{outline:none;}
+.list-note{margin-top:6px;font-size:0.92rem;line-height:1.8;color:#555b66;}
+.more-row{margin-top:14px;}
+.call-sub{margin-top:8px;font-size:0.9rem;color:#555b66;}
+.call-sub a{color:var(--navy);font-weight:700;}
+/* 넓은 화면: 왼쪽 지도(따라 내려옴), 오른쪽 목록 */
+@media (min-width:1000px){
+  .page{max-width:1120px;}
+  .intro,.pick,.promise,.first-call,.notes,.sources,.feedback,.skip{max-width:820px;}
+  .map-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:36px;align-items:start;margin-top:10px;}
+  .map-box{position:sticky;top:84px;}
+  .list-head{margin-top:0;}
+  .skip{display:none;}
+}
+@media print{
+  .map-ctrl,.skip,.more-row,#btnLocate,.pick-grid{display:none!important;}
+  .gu{fill:#fff!important;}
+  .map-wrap{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="topbar-brand">마을<em>장의사</em></a>
+  <nav class="nav-inline">
+    <a href="sangjo.html">후불상조서비스</a>
+    <a href="jangji.html">화장장지서비스</a>
+    <a href="ijang.html">개장·이장서비스</a>
+    <a href="process.html">진행 절차</a>
+    <a href="prepare.html">미리 준비</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="nav-hamburger" id="hamburger" aria-label="메뉴 열기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="tel:18771852" class="topbar-call">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      1877-1852
+    </a>
+  </div>
+</header>
+<nav class="nav-dropdown" id="navDropdown">
+  <a href="sangjo.html">후불상조서비스</a>
+  <a href="jangji.html">화장장지서비스</a>
+  <a href="ijang.html">개장·이장서비스</a>
+  <a href="process.html">진행 절차</a>
+  <a href="prepare.html">미리 준비</a>
+</nav>
+
+<main class="page">
+  <div class="page-meta">
+    <a href="index.html" class="meta-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      메인으로
+    </a>
+    <div class="textsize" aria-label="글자 크기">
+      <span class="ts-label">글자 크기</span>
+      <button id="btnMinus" aria-label="글자 작게">−</button>
+      <span class="ts-val num" id="fontLabel">100%</span>
+      <button id="btnPlus" aria-label="글자 크게">+</button>
+    </div>
+  </div>
+
+  <header class="intro">
+    <span class="eyebrow">장례 지도 · 서울</span>
+    <h1>우리 동네에서 가까운<br>장례식장은 어디일까요</h1>
+    <p class="lead">서울의 구 경계와 장례식장 위치만 그린 지도입니다. 구를 누르면 그 구가 크게 보이고, 아래 목록에도 같은 내용이 나옵니다. 순위나 추천은 넣지 않았습니다.</p>
+    <p class="fineprint">가입도 로그인도 없습니다. 고른 동과 현재 위치는 저장하거나 보내지 않습니다. 거리는 이 화면 안에서만 계산합니다.</p>
+  </header>
+
+  <section class="pick" id="pickBox" aria-label="찾는 방법">
+    <div class="pick-grid">
+      <label for="guSelect">구 고르기
+        <select id="guSelect" autocomplete="off"><option value="">목록을 준비하고 있습니다</option></select>
+      </label>
+      <label for="dongSelect">동 고르기 <span class="soft">(가까운 순으로 보기)</span>
+        <select id="dongSelect" autocomplete="off" disabled><option value="">먼저 구를 골라 주세요</option></select>
+      </label>
+    </div>
+    <div class="pick-row">
+      <button type="button" class="ghost-btn" id="btnLocate">지금 있는 곳에서 찾기</button>
+      <button type="button" class="ghost-btn" id="btnPrint">인쇄하기</button>
+    </div>
+    <p class="pick-date">장례식장은 보건복지부 2026년 4월 기준, 경계선은 2025년 6월 기준 자료입니다.</p>
+    <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
+  </section>
+  <noscript><p class="no-js">이 화면은 스크립트가 켜져 있어야 지도와 목록이 나옵니다. 급하시면 전화 1877-1852로 문의해 주세요.</p></noscript>
+
+  <p class="skip"><a class="tap" href="#listTop" id="skipMap">지도를 건너뛰고 목록으로</a></p>
+
+  <div class="map-layout">
+  <section class="map-box" aria-label="지도">
+    <ul class="legend" id="legend" aria-label="지도 표시 설명">
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="#1c2840" stroke="#fff" stroke-width="1.5"/></svg>병원 장례식장</li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="4" width="12" height="12" fill="#7d6337" stroke="#fff" stroke-width="1.5"/></svg>전문 장례식장</li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="#a33a2f" stroke-width="2"/><circle cx="10" cy="10" r="2.5" fill="#a33a2f"/></svg>고른 동 · 지금 있는 곳</li>
+    </ul>
+    <div class="map-wrap">
+      <svg id="map" role="group" aria-label="서울 구 경계 지도. 구를 누르면 그 구로 확대됩니다. 같은 내용이 아래 목록에도 있습니다." xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="map-ctrl">
+      <button type="button" class="ghost-btn" id="btnAll">서울 전체로</button>
+      <button type="button" class="ghost-btn sq" id="btnZoomIn" aria-label="지도 크게">＋</button>
+      <button type="button" class="ghost-btn sq" id="btnZoomOut" aria-label="지도 작게">－</button>
+    </div>
+    <p class="map-note" id="mapNote">점은 주소의 동 중심에 찍혀 있어 실제 위치와 다를 수 있습니다. 정확한 위치는 "자세히 보기"의 지도에서 확인해 주세요.</p>
+    <div id="pointCard" aria-live="polite"></div>
+  </section>
+
+  <div class="list-col">
+  <h2 class="list-head" id="listTop" tabindex="-1">목록</h2>
+  <p class="list-note" id="listNote"></p>
+  <div id="list"></div>
+  </div>
+  </div>
+
+  <p class="promise">장례식장은 가족이 정하십니다. 마을장의사는 장례식장이 아니라, 장례지도사가 직접 장례를 맡아 드리는 후불 장례 서비스입니다. 장례식장마다 시설 사용료와 조건이 달라 한 번 정하면 바꾸기 어렵습니다. 어느 곳이 맞을지 고민되시면 정하시기 전에 먼저 전화로 상의해 주세요. <a class="tap" href="tel:18771852">1877-1852</a></p>
+
+  <section class="first-call">
+    <span class="eyebrow">장례식장을 정하기 전에</span>
+    <h2>먼저 상담해 두시면 좋습니다</h2>
+    <p>급할 때는 이웃 구까지 비교할 여유가 없습니다. 미리 상담하시면 사시는 동을 기준으로 가까운 두세 곳의 빈소 크기와 빈소·안치실 사용료를 같이 봐 두고, 가족에게 맞는 구성을 의논해 둘 수 있습니다. 상담하셨다고 꼭 이용하셔야 하는 것은 아닙니다.</p>
+    <div class="call-row">
+      <a class="call-btn" href="tel:18771852">전화 상담 1877-1852</a>
+      <a class="ghost-link" href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">카카오톡 상담</a>
+    </div>
+    <p class="call-sub">휴대전화 <a class="tap" href="tel:01044947896">010-4494-7896</a> (전화만 가능)</p>
+  </section>
+
+  <section class="notes">
+    <span class="eyebrow">보실 때 알아 두실 것</span>
+    <ul>
+      <li><strong>점은 주소의 동 중심에 찍혀 있어 실제 위치와 다를 수 있습니다.</strong> 같은 동에 두 곳이 있으면 나란히 찍었습니다. 가까운 순서도 그만큼 실제와 다를 수 있습니다.</li>
+      <li>거리는 <strong>직선거리</strong>입니다. 실제 이동 거리·시간과 다릅니다.</li>
+      <li>빈소 수는 등록된 시설 규모입니다. <strong>지금 비어 있는지는 장례식장에 전화로 확인</strong>하셔야 합니다.</li>
+      <li>장례식장 가격(빈소 사용료, 안치료, 음식 등)은 이 쪽에 싣지 않았습니다. 시설별 공개 가격은 보건복지부 e하늘 장사정보시스템의 "장사시설·장례용품 가격"에서 확인하실 수 있습니다.</li>
+      <li>문을 닫았거나 이름이 바뀐 곳이 있을 수 있습니다. 다른 점을 보시면 아래 의견 칸으로 알려 주세요.</li>
+    </ul>
+  </section>
+
+  <section class="sources">
+    <span class="eyebrow">자료 출처</span>
+    <p><strong>장례식장</strong>: 보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 원자료 61곳 가운데 운영이 확인되지 않은 1곳은 제외했습니다. 전화번호 1곳, 홈페이지 주소 1곳은 시설 공식 홈페이지 기준으로 바로잡았습니다.</p>
+    <p><strong>구·동 경계선</strong>: 국가데이터처 통계지리정보서비스(SGIS) 행정구역 경계(공공데이터포털), <strong>2025년 6월 30일 기준</strong>. 화면에 맞게 선을 단순하게 다듬었습니다. 동 경계와 동 이름은 행정동 기준입니다.</p>
+  </section>
+
+  <div class="feedback" id="feedback">
+    <span class="eyebrow">의견 보내기</span>
+    <p>틀린 위치나 빠진 장례식장, 더 있었으면 하는 내용을 알려 주세요. 확인해서 고쳐 갑니다.</p>
+    <div class="fb-links"><a href="https://talk.naver.com/WC91MB" target="_blank" rel="noopener noreferrer">네이버 톡톡으로 보내기</a><a href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">카카오톡 채널로 보내기</a></div>
+    <form class="fb-form" id="fbForm" novalidate>
+      <label>이 자리에서 바로 적어 보내기<textarea id="fbMessage" maxlength="1000" rows="4" placeholder="예: ○○장례식장의 점 위치가 실제와 다릅니다."></textarea></label>
+      <label>답장이 필요하면 연락처 (선택)<input type="text" id="fbContact" maxlength="120" autocomplete="off" placeholder="전화번호나 이메일. 비워 두셔도 됩니다."></label>
+      <input class="fb-trap" type="text" name="website" id="fbTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="fb-actions"><button type="submit" id="fbSend">의견 보내기</button><span class="fb-note" id="fbNote" role="status" aria-live="polite"></span></div>
+    </form>
+    <small>로그인이나 개인정보 입력 없이 보낼 수 있습니다. 위 칸에 적은 의견과 보낸 시각만 남습니다. 연락처를 적으시면 답장을 위해 함께 남습니다. 이 페이지는 "장례 지도"입니다.</small>
+  </div>
+</main>
+
+<section class="band">
+  <span class="eyebrow">문의</span><br>
+  <a href="tel:18771852" class="band-num num">1877-1852</a>
+  <p class="band-sub">24시간 전화 상담 · 방문 상담은 사전 예약</p>
+  <div class="band-links">
+    <a href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">카카오톡 상담</a>
+    <a href="https://talk.naver.com/WC91MB" target="_blank" rel="noopener noreferrer">네이버 톡톡 자동안내</a>
+    <a href="tel:01044947896">010-4494-7896</a>
+  </div>
+  <p class="band-note">장례지도사가 직접 운영하여 채팅·문자 답변은 늦을 수 있습니다.<br><strong>급하신 경우에는 꼭 전화로 문의해 주세요.</strong></p>
+</section>
+
+<footer>
+  <div class="footer-brand">마을장의사</div>
+  <div class="footer-links"><a href="process.html">진행 절차</a><a href="prepare.html">미리 준비</a><a href="faq.html">자주 묻는 질문</a><a href="way.html">일하는 방식</a><a href="bugo.html">부고 문자 만들기</a><a href="after.html">장례 후 할 일</a><a href="funeral-halls.html">서울 장례식장 찾기</a>
+    <a href="https://maulj24.com" target="_blank" rel="noopener">장례 정보 블로그</a>
+    <a href="https://blog.naver.com/maulj4" target="_blank" rel="noopener">네이버 블로그</a>
+    <a href="https://www.youtube.com/@마을장의사" target="_blank" rel="noopener">유튜브</a>
+  </div>
+  <div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br>사업자등록번호: 209-90-98193<br>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
+</footer>
+
+<script src="funeral-data.js"></script>
+<script src="funeral-map-geo.js"></script>
+<script>
+
+
+const hamburger=document.getElementById('hamburger');const navDropdown=document.getElementById('navDropdown');
+hamburger.addEventListener('click',function(e){e.stopPropagation();navDropdown.classList.toggle('open');});
+document.addEventListener('click',function(e){if(!e.target.closest('#navDropdown')&&!e.target.closest('#hamburger')){navDropdown.classList.remove('open');}});
+
+let scale=100;const steps=[80,90,100,110,120,130,140];
+const lbl=document.getElementById('fontLabel');
+function applyScale(){document.documentElement.style.fontSize=(17*scale/100)+'px';lbl.textContent=scale+'%';try{localStorage.setItem('mj_font',scale);}catch(e){}}
+document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(i<steps.length-1){scale=steps[i+1];applyScale();}};
+document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
+try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
+
+(function(){
+  var D=window.MJ_FUNERAL,G=window.MJ_GEO;
+  var LOADED=!!(D&&D.halls&&D.halls.length&&G&&G.gu&&G.pt);
+  function $(id){return document.getElementById(id);}
+  var selGu=$('guSelect'),selDong=$('dongSelect'),btnLoc=$('btnLocate'),note=$('pickNote'),svg=$('map'),
+      cardBox=$('pointCard'),list=$('list'),listNote=$('listNote'),listTop=$('listTop');
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  // 자료 파일을 읽지 못한 경우: "장례식장이 없다"로 보이지 않게 따로 알린다.
+  if(!LOADED){
+    selGu.innerHTML='<option value="">자료를 불러오지 못했습니다</option>';selGu.disabled=true;btnLoc.disabled=true;$('btnPrint').disabled=true;
+    note.textContent='자료를 불러오지 못했습니다.';
+    document.querySelector('.map-box').style.display='none';
+    list.innerHTML='<div class="empty load-fail"><p><strong>지도와 장례식장 목록을 불러오지 못했습니다.</strong></p>'
+      +'<p>장례식장이 없다는 뜻이 아닙니다. 통신이 잠시 끊겼을 수 있으니 새로 고쳐 주세요. 급하시면 전화로 문의해 주세요.</p>'
+      +'<p class="near"><button type="button" class="ghost-btn" id="btnReload">새로 고침</button><a class="act tel" href="tel:18771852">전화 1877-1852</a></p></div>';
+    $('btnReload').addEventListener('click',function(){location.reload();});
+    return;
+  }
+
+  var BUILDING=G.pointSource==='building';
+  var HALLS=D.halls.filter(function(h){return !!G.pt[h.n];});
+  var REGION_POSTS=D.regionPosts||{};
+  var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
+  var NEAR={'마포구':['서대문구','은평구','용산구','영등포구']};
+  var SVGNS='http://www.w3.org/2000/svg';
+  var calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function count(g){return HALLS.filter(function(h){return h.g===g;}).length;}
+
+  // ── 좌표: 경위도 → 화면 좌표(서울 넓이에서는 단순 비례로 충분하다) ──
+  var LAT0=37.56,KX=Math.cos(LAT0*Math.PI/180),SC=3000;
+  function px(lon){return (lon-126.7)*KX*SC;}
+  function py(lat){return (37.75-lat)*SC;}
+  function decode(a){var out=[],x=0,y=0,i;for(i=0;i<a.length;i+=2){x+=a[i];y+=a[i+1];out.push([x/1e5,y/1e5]);}return out;}
+  function pathOf(rings){
+    var d='',i,j,r;
+    for(i=0;i<rings.length;i++){r=rings[i];for(j=0;j<r.length;j++)d+=(j?'L':'M')+px(r[j][0]).toFixed(1)+' '+py(r[j][1]).toFixed(1);d+='Z';}
+    return d;
+  }
+  function bboxOf(rings){
+    var b=[1e9,1e9,-1e9,-1e9],i,j,x,y;
+    for(i=0;i<rings.length;i++)for(j=0;j<rings[i].length;j++){x=px(rings[i][j][0]);y=py(rings[i][j][1]);if(x<b[0])b[0]=x;if(y<b[1])b[1]=y;if(x>b[2])b[2]=x;if(y>b[3])b[3]=y;}
+    return b;
+  }
+  function inRings(lon,lat,rings){
+    var c=false,i,j,r,a,b;
+    for(i=0;i<rings.length;i++){r=rings[i];for(j=0;j<r.length-1;j++){a=r[j];b=r[j+1];
+      if((a[1]>lat)!==(b[1]>lat)&&lon<(b[0]-a[0])*(lat-a[1])/(b[1]-a[1])+a[0])c=!c;}}
+    return c;
+  }
+  function km(a,b){
+    var R=6371,p=Math.PI/180,dla=(b[1]-a[1])*p,dlo=(b[0]-a[0])*p;
+    var s=Math.sin(dla/2)*Math.sin(dla/2)+Math.cos(a[1]*p)*Math.cos(b[1]*p)*Math.sin(dlo/2)*Math.sin(dlo/2);
+    return 2*R*Math.asin(Math.sqrt(s));
+  }
+  // 점이 동 중심인 동안에는 1km 단위로만 적는다(건물 좌표가 되면 0.1km 단위).
+  function kmKey(d){return BUILDING?Math.round(d*10)/10:(d<1?0:Math.round(d));}
+  function kmText(d){
+    if(BUILDING)return '직선거리 약 '+(Math.round(d*10)/10).toFixed(1)+'km';
+    return d<1?'직선거리 1km 안쪽':'직선거리 약 '+Math.round(d)+'km';
+  }
+
+  var GU={},ALL=[1e9,1e9,-1e9,-1e9];
+  GUS.forEach(function(g){
+    var rings=G.gu[g].r.map(decode),b=bboxOf(rings);
+    GU[g]={rings:rings,bbox:b,c:G.gu[g].c,n:count(g)};
+    if(b[0]<ALL[0])ALL[0]=b[0];if(b[1]<ALL[1])ALL[1]=b[1];if(b[2]>ALL[2])ALL[2]=b[2];if(b[3]>ALL[3])ALL[3]=b[3];
+  });
+
+  // ── 상태 ──
+  var RATIO=0.85;                       // 지도 세로/가로
+  var state={gu:'',dong:'',origin:null,originLabel:'',picked:'',more:false};
+  var view=null,fullView=null,anim=0;
+  function fit(b,pad){
+    var w=b[2]-b[0],h=b[3]-b[1],cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2;
+    w*=1+pad;h*=1+pad;
+    if(h/w>RATIO)w=h/RATIO;else h=w*RATIO;
+    return {x:cx-w/2,y:cy-h/2,w:w,h:h};
+  }
+  fullView=fit(ALL,0.06);
+
+  // ── SVG 뼈대 ──
+  function el(name,attrs,parent){var e=document.createElementNS(SVGNS,name),k;for(k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+  var gGu=el('g',{},svg),gDong=el('g',{},svg),gDongLabel=el('g',{'aria-hidden':'true'},svg),gMe=el('g',{'aria-hidden':'true'},svg),gPt=el('g',{},svg),gLabel=el('g',{'aria-hidden':'true'},svg);   // 구 이름은 점 위에 그려 글자가 가려지지 않게 한다
+  GUS.forEach(function(g){
+    var p=el('path',{d:pathOf(GU[g].rings),'class':'gu'+(GU[g].n?'':' zero'),'data-gu':g,tabindex:'0',role:'button',
+      'aria-label':g+', 장례식장 '+GU[g].n+'곳'+(GU[g].n?'':' (등록된 곳 없음)')},gGu);
+    GU[g].path=p;
+    GU[g].label=el('text',{'class':'gu-label'},gLabel);
+  });
+
+  // 같은 동에 여러 곳이 있으면 좌우로 나란히 벌려 찍는다.
+  var groups={};
+  HALLS.forEach(function(h){var k=h.g+'|'+h.d;(groups[k]=groups[k]||[]).push(h);});
+  HALLS.forEach(function(h){
+    var grp=groups[h.g+'|'+h.d];
+    h._i=grp.indexOf(h);h._n=grp.length;h._p=G.pt[h.n];
+    h._g=el('g',{'class':'pt','data-name':h.n},gPt);
+  });
+
+  function unit(){var w=svg.getBoundingClientRect().width||340;return view.w/w;}   // 화면 1px이 지도에서 얼마인가
+  // 구 하나쯤으로 커진 상태인가(점을 누를 수 있는 상태). 서울 전체 보기에서는 구를 먼저 누르게 한다.
+  function isZoomed(){return view.w<fullView.w*0.7;}
+  function ptXY(h,u){
+    var off=h._n>1?(h._i-(h._n-1)/2)*(isZoomed()?17:7)*u:0;
+    return [px(h._p[0])+off,py(h._p[1])];
+  }
+  function draw(){
+    var u=unit(),zoomed=isZoomed(),k;
+    svg.setAttribute('viewBox',view.x.toFixed(1)+' '+view.y.toFixed(1)+' '+view.w.toFixed(1)+' '+view.h.toFixed(1));
+    // 구 이름
+    GUS.forEach(function(g){
+      var t=GU[g].label,on=(g===state.gu);
+      t.setAttribute('x',px(GU[g].c[0]).toFixed(1));t.setAttribute('y',py(GU[g].c[1]).toFixed(1));
+      t.setAttribute('font-size',((zoomed?13:11)*u).toFixed(2));t.setAttribute('stroke-width',(3*u).toFixed(2));
+      t.textContent=zoomed?(on?'':g):(g==='중구'?g:g.replace(/구$/,''))+' '+GU[g].n;
+      GU[g].path.setAttribute('class','gu'+(GU[g].n?'':' zero')+(on?' on':'')+(state.gu&&state.gu!=='*'&&!on?' dim':''));
+    });
+    // 동 이름: 점에 가려지면 아래로 내리고, 이름끼리 겹치면 뒤에 나온 것은 숨긴다
+    var pts=HALLS.map(function(h){return ptXY(h,u);}),placed=[],fs=10.5*u;
+    for(k=0;k<gDongLabel.childNodes.length;k++){
+      var dl=gDongLabel.childNodes[k],lx=+dl.getAttribute('data-x'),ly=+dl.getAttribute('data-y'),q,hit=false,w=dl.textContent.length*fs*0.98,bx;
+      for(q=0;q<pts.length;q++){if(Math.abs(pts[q][0]-lx)<w/2+9*u&&Math.abs(pts[q][1]-ly)<13*u){ly=pts[q][1]+19*u;break;}}
+      bx=[lx-w/2,ly-fs*0.7,lx+w/2,ly+fs*0.7];
+      for(q=0;q<placed.length;q++){if(bx[0]<placed[q][2]&&bx[2]>placed[q][0]&&bx[1]<placed[q][3]&&bx[3]>placed[q][1]){hit=true;break;}}
+      if(hit){dl.setAttribute('display','none');continue;}
+      placed.push(bx);dl.removeAttribute('display');
+      dl.setAttribute('x',lx.toFixed(1));dl.setAttribute('y',ly.toFixed(1));
+      dl.setAttribute('font-size',fs.toFixed(2));dl.setAttribute('stroke-width',(2.5*u).toFixed(2));
+    }
+    // 점
+    HALLS.forEach(function(h){
+      var g=h._g,xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),s=(zoomed?(on?9:7):3)*u,html='';
+      if(zoomed)html+='<circle class="hit" cx="'+xy[0].toFixed(1)+'" cy="'+xy[1].toFixed(1)+'" r="'+(22*u).toFixed(1)+'"/>';
+      if(on)html+='<circle class="ring" cx="'+xy[0].toFixed(1)+'" cy="'+xy[1].toFixed(1)+'" r="'+(14*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>';
+      if(hosp)html+='<circle class="mk hosp" cx="'+xy[0].toFixed(1)+'" cy="'+xy[1].toFixed(1)+'" r="'+s.toFixed(1)+'" stroke-width="'+(1.5*u).toFixed(2)+'"/>';
+      else html+='<rect class="mk spec" x="'+(xy[0]-s*0.92).toFixed(1)+'" y="'+(xy[1]-s*0.92).toFixed(1)+'" width="'+(s*1.84).toFixed(1)+'" height="'+(s*1.84).toFixed(1)+'" stroke-width="'+(1.5*u).toFixed(2)+'"/>';
+      g.innerHTML=html;
+      if(zoomed){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.setAttribute('aria-label',h.n+', '+h.g+' '+h.d+', '+(hosp?'병원 장례식장':'전문 장례식장'));g.setAttribute('class','pt live');}
+      else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');}
+      if(zoomed)g.removeAttribute('aria-hidden');
+    });
+    // 고른 동·지금 있는 곳
+    if(state.origin){
+      var ox=px(state.origin[0]),oy=py(state.origin[1]);
+      gMe.innerHTML='<circle class="me-out" cx="'+ox.toFixed(1)+'" cy="'+oy.toFixed(1)+'" r="'+(11*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>'
+        +'<circle class="me-in" cx="'+ox.toFixed(1)+'" cy="'+oy.toFixed(1)+'" r="'+(4*u).toFixed(1)+'"/>';
+    }else gMe.innerHTML='';
+  }
+  function setView(v,now){
+    if(anim){cancelAnimationFrame(anim);anim=0;}
+    if(now||calm||!view||document.visibilityState==='hidden'){view=v;draw();return;}
+    var a={x:view.x,y:view.y,w:view.w,h:view.h},t0=null,dur=320;
+    function step(ts){
+      if(t0===null)t0=ts;
+      var t=Math.min(1,(ts-t0)/dur),e=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+      view={x:a.x+(v.x-a.x)*e,y:a.y+(v.y-a.y)*e,w:a.w+(v.w-a.w)*e,h:a.h+(v.h-a.h)*e};draw();
+      anim=t<1?requestAnimationFrame(step):0;
+    }
+    anim=requestAnimationFrame(step);
+  }
+  function sizeMap(){var w=svg.getBoundingClientRect().width;if(w)svg.style.height=Math.round(w*RATIO)+'px';if(view)draw();}
+
+  // ── 동 경계(고른 구만) ──
+  function drawDongs(){
+    gDong.innerHTML='';gDongLabel.innerHTML='';
+    if(!state.gu||state.gu==='*')return;
+    var dongs=G.dong[state.gu],n;
+    for(n in dongs){
+      el('path',{d:pathOf(dongs[n].r.map(decode)),'class':'dong'+(n===state.dong?' on':'')},gDong);
+      var t=el('text',{'class':'dong-label','data-x':px(dongs[n].c[0]).toFixed(1),'data-y':py(dongs[n].c[1]).toFixed(1)},gDongLabel);
+      t.textContent=n;
+    }
+  }
+
+  // ── 목록·카드 ──
+  function chips(h){return '<span class="chip">'+esc(h.p)+'</span><span class="chip">'+(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>';}
+  function distLine(h,full){
+    if(!state.origin)return '';
+    var t=kmText(km(state.origin,h._p));
+    return '<p class="dist">'+esc(state.originLabel)+'에서 '+t+(full?' (실제 이동 거리와 다릅니다)':'')+'</p>';
+  }
+  function acts(h){
+    var tel=h.tel?'<a class="act tel" href="tel:'+esc(h.tel.replace(/[^0-9]/g,''))+'">전화 '+esc(h.tel)+'</a>':'';
+    return '<p class="acts">'+tel+'<a class="act" href="funeral-halls.html?hall='+encodeURIComponent(h.n)+'">자세히 보기</a></p>';
+  }
+  function row(h){
+    return '<li class="hall'+(h.n===state.picked?' picked':'')+'" data-name="'+esc(h.n)+'"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips(h)+'</p>'
+      +'<p class="addr">'+esc(h.a)+'</p>'+distLine(h,false)+acts(h)+'</li>';
+  }
+  function showCard(names){
+    if(!names||!names.length){cardBox.innerHTML='';return;}
+    if(names.length>1){
+      cardBox.innerHTML='<div class="pt-card"><p class="pt-many">이 자리에 '+names.length+'곳이 가까이 있습니다. 보실 곳을 골라 주세요.</p><p class="near">'
+        +names.map(function(n){return '<button type="button" class="ghost-btn" data-pick="'+esc(n)+'">'+esc(n)+'</button>';}).join('')+'</p></div>';
+      return;
+    }
+    var h=byName(names[0]);
+    cardBox.innerHTML='<div class="pt-card"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips(h)+'</p><p class="addr">'+esc(h.a)+'</p>'
+      +distLine(h,true)+acts(h)
+      +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a class="tap" href="tel:18771852">전화 상담 1877-1852</a></p></div>';
+  }
+  function byName(n){for(var i=0;i<HALLS.length;i++)if(HALLS[i].n===n)return HALLS[i];return null;}
+  function pick(name){
+    state.picked=name;showCard([name]);draw();
+    var lis=list.querySelectorAll('.hall'),i;for(i=0;i<lis.length;i++)lis[i].classList.toggle('picked',lis[i].getAttribute('data-name')===name);
+  }
+  function renderList(){
+    var g=state.gu,html='',items,rest=0;
+    if(state.origin){
+      items=HALLS.map(function(h){return {h:h,d:km(state.origin,h._p)};});
+      items.sort(function(a,b){var ka=kmKey(a.d),kb=kmKey(b.d);return ka!==kb?ka-kb:a.h.n.localeCompare(b.h.n,'ko');});
+      listNote.textContent=state.originLabel+'에서 가까운 순 (직선거리, 실제 이동 거리와 다릅니다)'+(BUILDING?'':' · 점이 동 중심에 찍혀 있어 순서가 실제와 다를 수 있습니다');
+      if(!state.more&&items.length>10){rest=items.length-10;items=items.slice(0,10);}
+      html='<ul class="halls">'+items.map(function(x){return row(x.h);}).join('')+'</ul>'
+        +(rest?'<p class="more-row"><button type="button" class="ghost-btn" id="btnMore">나머지 '+rest+'곳도 보기</button></p>':'');
+    }else if(g==='*'){
+      listNote.textContent='서울 전체 '+HALLS.length+'곳 (구별, 이름순)';
+      GUS.forEach(function(x){
+        var its=HALLS.filter(function(h){return h.g===x;}).sort(function(a,b){return a.n.localeCompare(b.n,'ko');});
+        if(its.length)html+='<h3 class="gu-head">'+x+' <span class="gu-n">'+its.length+'곳</span></h3><ul class="halls">'+its.map(row).join('')+'</ul>';
+      });
+    }else if(g){
+      items=HALLS.filter(function(h){return h.g===g;}).sort(function(a,b){return a.n.localeCompare(b.n,'ko');});
+      if(!items.length){
+        var near=NEAR[g]||[];
+        listNote.textContent='';
+        html='<div class="empty"><p>이 구에는 등록된 장례식장이 없습니다.'+(near.length?' 이웃 구 '+near.join('·')+'를 보시겠습니까?':'')+'</p>'
+          +(near.length?'<p class="near">'+near.map(function(n){return '<button type="button" class="ghost-btn" data-gu="'+n+'">'+n+' ('+count(n)+'곳)</button>';}).join('')+'</p>':'')+'</div>';
+      }else{
+        listNote.textContent=g+' '+items.length+'곳 (이름순)';
+        html='<ul class="halls">'+items.map(row).join('')+'</ul>';
+      }
+      if(REGION_POSTS[g])html='<p class="region-post"><a class="tap" href="'+esc(REGION_POSTS[g])+'" target="_blank" rel="noopener noreferrer">'+esc(g)+' 장례 안내 글 읽기</a></p>'+html;
+    }else{
+      listNote.textContent='지도에서 구를 누르거나 위에서 구를 고르시면 그 구의 장례식장이 여기에 나옵니다.';
+    }
+    list.innerHTML=html;
+  }
+  function summary(){
+    var g=state.gu;
+    if(state.origin)note.textContent=state.originLabel+'에서 가까운 순으로 아래 목록에 나옵니다';
+    else if(g==='*')note.textContent='서울 전체 '+HALLS.length+'곳 · 아래 목록에 구별로 나옵니다';
+    else if(g)note.textContent=GU[g].n?g+' '+GU[g].n+'곳 · 지도가 '+g+'로 커졌고, 아래 목록에도 나옵니다':g+' 0곳 · 아래에서 이웃 구를 골라 주세요';
+    else note.textContent='서울 25개 구 가운데 '+GUS.filter(function(x){return GU[x].n>0;}).length+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.';
+  }
+
+  // ── 고르기 ──
+  function fillDong(){
+    var g=state.gu,opts;
+    if(!g||g==='*'){selDong.innerHTML='<option value="">먼저 구를 골라 주세요</option>';selDong.disabled=true;return;}
+    opts='<option value="">동을 고르면 가까운 순으로 보여 드립니다</option>';
+    Object.keys(G.dong[g]).sort(function(a,b){return a.localeCompare(b,'ko',{numeric:true});}).forEach(function(n){opts+='<option value="'+esc(n)+'"'+(n===state.dong?' selected':'')+'>'+esc(n)+'</option>';});
+    selDong.innerHTML=opts;selDong.disabled=false;
+  }
+  function setUrl(){
+    try{if(history.replaceState)history.replaceState(null,'',location.pathname+(state.gu&&state.gu!=='*'?'?gu='+encodeURIComponent(state.gu):''));}catch(e){}
+  }
+  function chooseGu(g,opt){
+    opt=opt||{};
+    state.gu=g;state.dong='';state.picked='';state.more=false;
+    if(!opt.keepOrigin){state.origin=null;state.originLabel='';}
+    selGu.value=g;fillDong();drawDongs();showCard(null);
+    setView(g&&g!=='*'?fit(GU[g].bbox,0.16):fullView,opt.now);
+    renderList();summary();setUrl();
+  }
+  function chooseDong(n){
+    var g=state.gu;if(!g||g==='*')return;
+    state.dong=n;state.more=false;state.picked='';showCard(null);
+    if(n){state.origin=G.dong[g][n].c.slice();state.originLabel=g+' '+n;}
+    else{state.origin=null;state.originLabel='';}
+    drawDongs();draw();renderList();summary();
+  }
+  function go(elm){if(elm&&elm.scrollIntoView)elm.scrollIntoView({behavior:calm?'auto':'smooth',block:'start'});}
+
+  selGu.innerHTML='<option value="">구를 골라 주세요</option>'+GUS.map(function(g){return '<option value="'+g+'">'+g+' ('+GU[g].n+'곳)</option>';}).join('')+'<option value="*">서울 전체 ('+HALLS.length+'곳)</option>';
+  selGu.addEventListener('change',function(){
+    var g=selGu.value;
+    chooseGu(g);if(g)go(note);
+  });
+  selDong.addEventListener('change',function(){chooseDong(selDong.value);if(selDong.value)go(note);});
+
+  gGu.addEventListener('click',function(e){var p=e.target.closest('[data-gu]');if(p)chooseGu(p.getAttribute('data-gu'));});
+  gGu.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var p=e.target.closest('[data-gu]');if(p){e.preventDefault();chooseGu(p.getAttribute('data-gu'));}}});
+  function tapPoint(name){
+    // 누른 점 가까이(화면 28px 안)에 다른 점이 있으면 먼저 고르게 한다
+    var u=unit(),h=byName(name),a=ptXY(h,u),near=HALLS.filter(function(o){var b=ptXY(o,u);return Math.hypot(a[0]-b[0],a[1]-b[1])<=28*u;}).map(function(o){return o.n;});
+    if(near.length>1){state.picked='';draw();showCard(near);}
+    else pick(name);
+  }
+  gPt.addEventListener('click',function(e){var p=e.target.closest('[data-name]');if(p&&isZoomed())tapPoint(p.getAttribute('data-name'));});
+  gPt.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var p=e.target.closest('[data-name]');if(p&&isZoomed()){e.preventDefault();tapPoint(p.getAttribute('data-name'));}}});
+  cardBox.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)pick(b.getAttribute('data-pick'));});
+  list.addEventListener('click',function(e){
+    var b=e.target.closest('[data-gu]');
+    if(b){chooseGu(b.getAttribute('data-gu'));go(note);return;}
+    if(e.target.id==='btnMore'){state.more=true;renderList();}
+  });
+
+  $('btnAll').addEventListener('click',function(){chooseGu('');});
+  function zoom(f){
+    var c=state.picked?(function(){var h=byName(state.picked),xy=ptXY(h,unit());return xy;})():[view.x+view.w/2,view.y+view.h/2];
+    var w=Math.max(fullView.w/14,Math.min(fullView.w,view.w*f)),h=w*RATIO;
+    if(w>=fullView.w-0.5){setView(fullView);return;}
+    setView({x:c[0]-w/2,y:c[1]-h/2,w:w,h:h});
+  }
+  $('btnZoomIn').addEventListener('click',function(){zoom(1/1.5);});
+  $('btnZoomOut').addEventListener('click',function(){zoom(1.5);});
+  $('skipMap').addEventListener('click',function(e){e.preventDefault();go(listTop);try{listTop.focus({preventScroll:true});}catch(x){}});
+
+  // ── 지금 있는 곳(브라우저 안에서만 쓰고, 저장하거나 보내지 않는다) ──
+  btnLoc.addEventListener('click',function(){
+    if(!navigator.geolocation){note.textContent='이 기기에서는 현재 위치를 쓸 수 없습니다. 구와 동을 골라 주세요.';return;}
+    btnLoc.disabled=true;note.textContent='현재 위치를 확인하고 있습니다…';
+    navigator.geolocation.getCurrentPosition(function(pos){
+      btnLoc.disabled=false;
+      var lon=pos.coords.longitude,lat=pos.coords.latitude,g='';
+      GUS.forEach(function(x){if(!g&&inRings(lon,lat,GU[x].rings))g=x;});
+      chooseGu(g,{keepOrigin:true});
+      state.origin=[lon,lat];state.originLabel='지금 있는 곳';state.dong='';
+      draw();renderList();summary();
+      if(!g)note.textContent='서울 밖에 계신 것으로 보입니다. 서울 장례식장까지의 직선거리 순으로 아래 목록에 나옵니다.';
+      go(note);
+    },function(){
+      btnLoc.disabled=false;
+      note.textContent='현재 위치를 확인하지 못했습니다. 위치 사용을 허용하지 않으셔도 구와 동을 골라 찾으실 수 있습니다.';
+    },{enableHighAccuracy:false,timeout:10000,maximumAge:60000});
+  });
+
+  window.addEventListener('beforeprint',function(){state.more=true;renderList();});
+  $('btnPrint').addEventListener('click',function(){state.more=true;renderList();window.print();});
+  window.addEventListener('resize',sizeMap);
+
+  // 주소의 ?gu=구이름 이면 그 구를 먼저 보여 준다(글에서 연결할 때). 저장은 하지 않는다.
+  var want='';
+  try{var m=/[?&]gu=([^&#]+)/.exec(location.search);if(m)want=decodeURIComponent(m[1].replace(/[+]/g,' '));}catch(e){}
+  sizeMap();
+  view=fullView;
+  chooseGu(GUS.indexOf(want)>=0?want:'',{now:true});
+})();
+</script>
+<script>
+(function(){
+  var form=document.getElementById('fbForm'),msg=document.getElementById('fbMessage'),contact=document.getElementById('fbContact'),trap=document.getElementById('fbTrap'),btn=document.getElementById('fbSend'),note=document.getElementById('fbNote');
+  if(!form)return;
+  function say(text,kind){note.textContent=text;note.className='fb-note'+(kind?' '+kind:'');}
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var text=msg.value.trim();
+    if(text.length<5){say('의견을 다섯 글자 이상 적어 주세요.','error');msg.focus();return;}
+    btn.disabled=true;btn.textContent='보내는 중…';say('');
+    fetch('https://feedback.xn--hz2b29jx3fkcys.com/api/feedback',{method:'POST',headers:{'content-type':'text/plain;charset=UTF-8'},body:JSON.stringify({source:'halls',message:'[지도] '+text,contact:contact.value.trim(),website:trap.value})})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok,error:j.error};}).catch(function(){return {ok:false};});})
+      .then(function(res){
+        if(res.ok){say('잘 받았습니다. 고맙습니다.','sent');msg.value='';contact.value='';}
+        else{say(res.error||'지금은 보낼 수 없습니다. 톡톡이나 카카오톡으로 보내 주세요.','error');}
+      })
+      .catch(function(){say('연결이 되지 않았습니다. 톡톡이나 카카오톡으로 보내 주세요.','error');})
+      .then(function(){btn.disabled=false;btn.textContent='의견 보내기';});
+  });
+})();
+</script>
+</body>
+</html>
