@@ -306,7 +306,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <label class="name-search" for="nameSearch">장례식장 이름으로 찾기 <span class="soft">(옛 이름·번호로도 찾습니다)</span>
       <input type="search" id="nameSearch" autocomplete="off" placeholder="예: 성모, 보라매, 서울23">
     </label>
-    <p class="pick-date">보건복지부 2026년 4월 기준 자료입니다. 이름 앞의 서울01~서울60은 순위가 아니라 구·이름순으로 붙인 고유 번호입니다.</p>
+    <p class="pick-date">보건복지부 2026년 4월 기준 자료입니다. 이름 앞의 서울01~서울60은 장례 지도의 점 번호와 같습니다. 구·이름순으로 붙인 번호이며 순위가 아닙니다.</p>
     <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
   </section>
   <noscript><p class="no-js">이 화면은 스크립트가 켜져 있어야 목록이 나옵니다. 급하시면 전화 1877-1852로 문의해 주세요.</p></noscript>
@@ -446,6 +446,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     scale.push(has(h.k)?'주차 '+esc(h.k)+'대':'주차 대수 미등록');
     var home=h.h?'<a class="tap" href="'+esc(h.h)+'" target="_blank" rel="noopener noreferrer">'+(h.hk==='b'?'병원 홈페이지 열기':'장례식장 홈페이지 열기')+'</a>':'확인된 홈페이지 주소가 없습니다.';
     return '<details class="more"><summary>자세히 보기</summary><div class="more-body">'
+      +'<h4>기본 정보</h4><p class="more-text">'+esc(h.p)+' · '+(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</p>'
       +'<h4>규모</h4><p class="more-text">'+scale.join(' · ')+'</p>'
       +'<h4>편의시설</h4>'+fac
       +'<h4>홈페이지</h4><p class="more-text">'+home+'</p>'
@@ -455,7 +456,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       +'</div></details>';
   }
   function card(h){
-    var chips='<span class="chip">'+esc(h.p)+'</span>'+(h.t?'<span class="chip">'+esc(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>':'')
+    var chips=(h.t?'<span class="chip">'+esc(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>':'')
       +(h.s==='c'?'<span class="chip chip-check">운영 여부 확인 중</span>':'');
     var facts=[];
     if(has(h.b))facts.push('빈소 '+esc(h.b)+'개');
