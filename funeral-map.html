@@ -672,7 +672,8 @@ function mjMapCore(D,G){
       waiting.push(it);
     });
     // 지시선(마지막 수단): 번호에 붙일 자리가 없는 곳만. 이름표를 근처 빈 자리로 빼고 번호 원에서 가는 선으로 잇는다.
-    // 헷갈리지 않게 이름표 안에도 번호를 적고, 선은 짧게(상한 58px), 선이 다른 번호 원·이름표·다른 선과 엇갈리지 않게 한다.
+    // 대표님 뜻(10/1): 번호는 장례식장 위치 가까이에 두고, 번호가 너무 붙어 있으면 선으로 이어 이름을 적는다 — 그래서 되도록 번호만 남기지 않고 선으로 이름을 낸다.
+    // 헷갈리지 않게 이름표 안에도 번호를 적고, 선은 짧은 것부터(상한 186px), 선이 다른 번호 원·이름표·다른 선과 엇갈리지 않게 한다.
     function segBox(x1,y1,x2,y2,b){
       var k,t,x,y;
       for(k=1;k<10;k++){t=k/10;x=x1+(x2-x1)*t;y=y1+(y2-y1)*t;if(x>b[0]&&x<b[2]&&y>b[1]&&y<b[3])return true;}
@@ -686,12 +687,12 @@ function mjMapCore(D,G){
     var leads=[],leaderCount=0;
     waiting.forEach(function(it){
       var p=it[0],h=p.h,x=p.x,y=p.y,hint=h.lh||{},w=(h.sn.length+2.3)*nfs*1.0,hh=nfs*0.78,
-          cx0=0,cy0=0,n0=0,pref,angs=[],a,k,len,ex,ey,bx,ok,q,m,lens=[26,36,46,58],seg;
+          cx0=0,cy0=0,n0=0,pref,angs=[],a,k,len,ex,ey,bx,ok,q,m,lens=[24,34,46,60,76,94,114,136,160,186],seg;
       if(hint.hide&&!zoomed){only.push(h.no);return;}
       // 선호 방향: 가까이 몰린 점들의 가운데에서 바깥쪽(몰린 곳을 벗어나는 쪽)
       pts.forEach(function(o2){if(o2!==p&&Math.abs(o2.x-x)<near&&Math.abs(o2.y-y)<near){cx0+=o2.x;cy0+=o2.y;n0++;}});
       pref=n0?Math.atan2(y-cy0/n0,x-cx0/n0):0;
-      for(k=0;k<12;k++)angs.push(k*Math.PI/6);
+      for(k=0;k<24;k++)angs.push(k*Math.PI/12);
       angs.sort(function(a1,a2){function df(t){var d2=Math.abs(t-pref)%(2*Math.PI);return d2>Math.PI?2*Math.PI-d2:d2;}return df(a1)-df(a2);});
       if(hint.leader&&typeof hint.leader.deg==='number'){angs.unshift(hint.leader.deg*Math.PI/180);if(hint.leader.len)lens.unshift(hint.leader.len);}
       for(m=0;m<lens.length&&!ok;m++){
