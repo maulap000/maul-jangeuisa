@@ -359,8 +359,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
   var NEAR={'마포구':['서대문구','은평구','용산구','영등포구']};
   var FAC=['식당','매점','주차장','유족대기실','장애인 편의시설'];
-  // 구별 지역 편 글(공개된 것만). 편집실 순서표에 따라 공개될 때마다 주소를 채운다.
-  var REGION_POSTS={};
+  // 구별 지역 편 글(공개된 것만). funeral-data.js에 들어 있고, 목록에 없는 구는 링크 줄을 보이지 않는다.
+  var REGION_POSTS=DATA.regionPosts||{};
   var sel=document.getElementById('guSelect'),list=document.getElementById('list'),note=document.getElementById('pickNote');
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function count(g){return HALLS.filter(function(h){return h.g===g;}).length;}
