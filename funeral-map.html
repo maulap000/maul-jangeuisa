@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src https://feedback.xn--hz2b29jx3fkcys.com; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<meta name="description" content="장례 지도 - 서울의 구 경계와 장례식장 위치만 그린 지도. 구를 누르거나 동을 고르면 가까운 장례식장을 직선거리 순으로 보여 드립니다. 가입·로그인 없음, 위치는 저장하지 않습니다.">
+<meta name="description" content="장례 지도 - 서울의 구 경계와 장례식장이 있는 동네만 그린 지도. 구를 누르면 그 구의 장례식장과 전화번호를 보여 드립니다. 가입·로그인 없음.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
 <meta name="theme-color" content="#1c2840">
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="마을장의사">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="장례 지도 — 마을장의사">
-<meta property="og:description" content="서울의 구 경계와 장례식장 위치만 그린 지도. 구·동을 고르면 가까운 순으로.">
+<meta property="og:description" content="서울의 구 경계와 장례식장이 있는 동네만 그린 지도. 구를 누르면 그 구의 장례식장을.">
 <meta property="og:url" content="https://xn--hz2b29jx3fkcys.com/funeral-map">
 <meta property="og:image" content="https://xn--hz2b29jx3fkcys.com/images/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,6 +225,12 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .nav-hamburger{width:44px;height:44px;}
 .eyebrow{color:var(--gold-text);font-size:0.78rem;letter-spacing:0.2em;}
 .fb-links a{min-height:44px;display:inline-flex;align-items:center;}
+.topbar-brand{display:inline-flex;align-items:center;min-height:44px;}
+.gu-index-head{margin-top:20px;font-size:0.9rem;font-weight:700;color:var(--navy);}
+.gu-index-head+.gu-index{margin-top:8px;}
+.src-head{margin-top:14px;font-size:0.9rem;font-weight:700;color:var(--navy);}
+.src-list{margin:6px 0 0 1.1em;font-size:0.9rem;line-height:1.85;color:#555b66;}
+.src-list li{margin-top:2px;}
 @media print{
   .more summary,.more-call,.gu-index,.to-top,.pick-date{display:none!important;}
   .more-body{border:0;padding:4px 0 0;}
@@ -347,9 +353,9 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <header class="intro">
     <span class="eyebrow">장례 지도 · 서울</span>
-    <h1>우리 동네에서 가까운<br>장례식장은 어디일까요</h1>
-    <p class="lead">서울의 구 경계와 장례식장 위치만 그린 지도입니다. 구를 누르면 그 구가 크게 보이고, 아래 목록에도 같은 내용이 나옵니다. 순위나 추천은 넣지 않았습니다.</p>
-    <p class="fineprint">가입도 로그인도 없습니다. 고른 동과 현재 위치는 저장하거나 보내지 않습니다. 거리는 이 화면 안에서만 계산합니다.</p>
+    <h1>서울 장례식장은<br>어느 동네에 있을까요</h1>
+    <p class="lead">서울의 구 경계와 장례식장이 있는 동네만 그린 지도입니다. 구를 누르면 그 구가 크게 보이고, 아래 목록에도 같은 내용이 나옵니다. 크게 본 상태에서 옆의 구를 누르면 그 구로 옮겨 갑니다. 순위나 추천은 넣지 않았습니다.</p>
+    <p class="fineprint">가입도 로그인도 없습니다. 고르신 구와 동은 저장하거나 보내지 않습니다.</p>
   </header>
 
   <section class="pick" id="pickBox" aria-label="찾는 방법">
@@ -357,14 +363,14 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
       <label for="guSelect">구 고르기
         <select id="guSelect" autocomplete="off"><option value="">목록을 준비하고 있습니다</option></select>
       </label>
-      <label for="dongSelect">동 고르기 <span class="soft">(가까운 순으로 보기)</span>
+      <label for="dongSelect">동 고르기 <span class="soft">(지도에 그 동을 표시)</span>
         <select id="dongSelect" autocomplete="off" disabled><option value="">먼저 구를 골라 주세요</option></select>
       </label>
     </div>
     <div class="pick-row">
-      <button type="button" class="ghost-btn" id="btnLocate">지금 있는 곳에서 찾기</button>
       <button type="button" class="ghost-btn" id="btnPrint">인쇄하기</button>
     </div>
+    <p class="pick-date">동 고르기의 동 이름은 행정동이라 주소의 동 이름과 다를 수 있습니다(예: 여의도동 → 여의동).</p>
     <p class="pick-date">장례식장은 보건복지부 2026년 4월 기준, 경계선은 2025년 6월 기준 자료입니다.</p>
     <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
   </section>
@@ -377,7 +383,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <ul class="legend" id="legend" aria-label="지도 표시 설명">
       <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="#1c2840" stroke="#fff" stroke-width="1.5"/></svg>병원 장례식장</li>
       <li><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="4" width="12" height="12" fill="#7d6337" stroke="#fff" stroke-width="1.5"/></svg>전문 장례식장</li>
-      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="#a33a2f" stroke-width="2"/><circle cx="10" cy="10" r="2.5" fill="#a33a2f"/></svg>고른 동 · 지금 있는 곳</li>
+      <li><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="5" width="14" height="10" fill="none" stroke="#a33a2f" stroke-width="2"/></svg>고른 동</li>
     </ul>
     <div class="map-wrap">
       <svg id="map" role="group" aria-label="서울 구 경계 지도. 구를 누르면 그 구로 확대됩니다. 같은 내용이 아래 목록에도 있습니다." xmlns="http://www.w3.org/2000/svg"></svg>
@@ -387,7 +393,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
       <button type="button" class="ghost-btn sq" id="btnZoomIn" aria-label="지도 크게">＋</button>
       <button type="button" class="ghost-btn sq" id="btnZoomOut" aria-label="지도 작게">－</button>
     </div>
-    <p class="map-note" id="mapNote">점은 주소의 동 중심에 찍혀 있어 실제 위치와 다를 수 있습니다. 정확한 위치는 "자세히 보기"의 지도에서 확인해 주세요.</p>
+    <p class="map-note" id="mapNote">점은 그 장례식장이 있는 동의 위치를 나타냅니다. 건물의 정확한 위치는 "자세히 보기"의 지도에서 확인해 주세요.</p>
     <div id="pointCard" aria-live="polite"></div>
   </section>
 
@@ -414,8 +420,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <section class="notes">
     <span class="eyebrow">보실 때 알아 두실 것</span>
     <ul>
-      <li><strong>점은 주소의 동 중심에 찍혀 있어 실제 위치와 다를 수 있습니다.</strong> 같은 동에 두 곳이 있으면 나란히 찍었습니다. 가까운 순서도 그만큼 실제와 다를 수 있습니다.</li>
-      <li>거리는 <strong>직선거리</strong>입니다. 실제 이동 거리·시간과 다릅니다.</li>
+      <li><strong>점은 그 장례식장이 있는 동의 위치를 나타냅니다.</strong> 건물이 있는 자리가 아니라 주소의 동 가운데에 찍었고, 같은 동에 두 곳이 있으면 나란히 찍었습니다.</li>
       <li>빈소 수는 등록된 시설 규모입니다. <strong>지금 비어 있는지는 장례식장에 전화로 확인</strong>하셔야 합니다.</li>
       <li>장례식장 가격(빈소 사용료, 안치료, 음식 등)은 이 쪽에 싣지 않았습니다. 시설별 공개 가격은 보건복지부 e하늘 장사정보시스템의 "장사시설·장례용품 가격"에서 확인하실 수 있습니다.</li>
       <li>문을 닫았거나 이름이 바뀐 곳이 있을 수 있습니다. 다른 점을 보시면 아래 의견 칸으로 알려 주세요.</li>
@@ -424,7 +429,8 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <section class="sources">
     <span class="eyebrow">자료 출처</span>
-    <p><strong>장례식장</strong>: 보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 원자료 61곳 가운데 운영이 확인되지 않은 1곳은 제외했습니다. 전화번호 1곳, 홈페이지 주소 1곳은 시설 공식 홈페이지 기준으로 바로잡았습니다.</p>
+    <p><strong>장례식장</strong>: 보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳.</p>
+    <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
     <p><strong>구·동 경계선</strong>: 국가데이터처 통계지리정보서비스(SGIS) 행정구역 경계(공공데이터포털), <strong>2025년 6월 30일 기준</strong>. 화면에 맞게 선을 단순하게 다듬었습니다. 동 경계와 동 이름은 행정동 기준입니다.</p>
   </section>
 
@@ -490,7 +496,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
 
   // 자료 파일을 읽지 못한 경우: "장례식장이 없다"로 보이지 않게 따로 알린다.
   if(!LOADED){
-    selGu.innerHTML='<option value="">자료를 불러오지 못했습니다</option>';selGu.disabled=true;btnLoc.disabled=true;$('btnPrint').disabled=true;
+    selGu.innerHTML='<option value="">자료를 불러오지 못했습니다</option>';selGu.disabled=true;if(btnLoc)btnLoc.disabled=true;$('btnPrint').disabled=true;
     note.textContent='자료를 불러오지 못했습니다.';
     document.querySelector('.map-box').style.display='none';
     list.innerHTML='<div class="empty load-fail"><p><strong>지도와 장례식장 목록을 불러오지 못했습니다.</strong></p>'
@@ -501,6 +507,9 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   }
 
   var BUILDING=G.pointSource==='building';
+  // 거리 숫자·가까운 순·현재 위치 찾기는 점이 건물 좌표일 때만 켠다(기획실 결정 10/1).
+  // 점이 동 중심인 동안에는 거리가 실제와 크게 달라 틀린 순서를 줄 수 있어서다. geo_build.py의 POINT_SOURCE가 스위치다.
+  var DIST=BUILDING;
   var HALLS=D.halls.filter(function(h){return !!G.pt[h.n];});
   var REGION_POSTS=D.regionPosts||{};
   var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
@@ -722,6 +731,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function summary(){
     var g=state.gu;
     if(state.origin)note.textContent=state.originLabel+'에서 가까운 순으로 아래 목록에 나옵니다';
+    else if(g&&g!=='*'&&state.dong)note.textContent=g+' '+state.dong+'을 지도에 붉은 선으로 표시했습니다 · '+g+' '+GU[g].n+'곳은 아래 목록에 나옵니다';
     else if(g==='*')note.textContent='서울 전체 '+HALLS.length+'곳 · 아래 목록에 구별로 나옵니다';
     else if(g)note.textContent=GU[g].n?g+' '+GU[g].n+'곳 · 지도가 '+g+'로 커졌고, 아래 목록에도 나옵니다':g+' 0곳 · 아래에서 이웃 구를 골라 주세요';
     else note.textContent='서울 25개 구 가운데 '+GUS.filter(function(x){return GU[x].n>0;}).length+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.';
@@ -731,7 +741,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function fillDong(){
     var g=state.gu,opts;
     if(!g||g==='*'){selDong.innerHTML='<option value="">먼저 구를 골라 주세요</option>';selDong.disabled=true;return;}
-    opts='<option value="">동을 고르면 가까운 순으로 보여 드립니다</option>';
+    opts='<option value="">'+(DIST?'동을 고르면 가까운 순으로 보여 드립니다':'동을 고르면 지도에 표시합니다')+'</option>';
     Object.keys(G.dong[g]).sort(function(a,b){return a.localeCompare(b,'ko',{numeric:true});}).forEach(function(n){opts+='<option value="'+esc(n)+'"'+(n===state.dong?' selected':'')+'>'+esc(n)+'</option>';});
     selDong.innerHTML=opts;selDong.disabled=false;
   }
@@ -749,11 +759,11 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function chooseDong(n){
     var g=state.gu;if(!g||g==='*')return;
     state.dong=n;state.more=false;state.picked='';showCard(null);
-    if(n){state.origin=G.dong[g][n].c.slice();state.originLabel=g+' '+n;}
+    if(n&&DIST){state.origin=G.dong[g][n].c.slice();state.originLabel=g+' '+n;}
     else{state.origin=null;state.originLabel='';}
     drawDongs();draw();renderList();summary();
   }
-  function go(elm){if(elm&&elm.scrollIntoView)elm.scrollIntoView({behavior:calm?'auto':'smooth',block:'start'});}
+  function go(elm){if(elm&&elm.scrollIntoView)elm.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:'start'});}
 
   selGu.innerHTML='<option value="">구를 골라 주세요</option>'+GUS.map(function(g){return '<option value="'+g+'">'+g+' ('+GU[g].n+'곳)</option>';}).join('')+'<option value="*">서울 전체 ('+HALLS.length+'곳)</option>';
   selGu.addEventListener('change',function(){
@@ -791,7 +801,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   $('skipMap').addEventListener('click',function(e){e.preventDefault();go(listTop);try{listTop.focus({preventScroll:true});}catch(x){}});
 
   // ── 지금 있는 곳(브라우저 안에서만 쓰고, 저장하거나 보내지 않는다) ──
-  btnLoc.addEventListener('click',function(){
+  if(btnLoc&&DIST)btnLoc.addEventListener('click',function(){
     if(!navigator.geolocation){note.textContent='이 기기에서는 현재 위치를 쓸 수 없습니다. 구와 동을 골라 주세요.';return;}
     btnLoc.disabled=true;note.textContent='현재 위치를 확인하고 있습니다…';
     navigator.geolocation.getCurrentPosition(function(pos){

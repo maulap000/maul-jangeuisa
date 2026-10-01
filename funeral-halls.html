@@ -225,6 +225,12 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .nav-hamburger{width:44px;height:44px;}
 .eyebrow{color:var(--gold-text);font-size:0.78rem;letter-spacing:0.2em;}
 .fb-links a{min-height:44px;display:inline-flex;align-items:center;}
+.topbar-brand{display:inline-flex;align-items:center;min-height:44px;}
+.gu-index-head{margin-top:20px;font-size:0.9rem;font-weight:700;color:var(--navy);}
+.gu-index-head+.gu-index{margin-top:8px;}
+.src-head{margin-top:14px;font-size:0.9rem;font-weight:700;color:var(--navy);}
+.src-list{margin:6px 0 0 1.1em;font-size:0.9rem;line-height:1.85;color:#555b66;}
+.src-list li{margin-top:2px;}
 @media print{
   .more summary,.more-call,.gu-index,.to-top,.pick-date{display:none!important;}
   .more-body{border:0;padding:4px 0 0;}
@@ -280,7 +286,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <header class="intro">
     <span class="eyebrow">서울 장례식장 찾기</span>
     <h1>우리 구에는<br>어떤 장례식장이 있을까요</h1>
-    <p class="lead">구를 고르면 그 구에 있는 장례식장을 이름순으로 보여 드립니다. 보건복지부가 공개한 자료를 그대로 옮겼고, 순위나 추천은 넣지 않았습니다.</p>
+    <p class="lead">구를 고르면 그 구에 있는 장례식장을 이름순으로 보여 드립니다. 보건복지부가 공개한 자료를 바탕으로 했고, 바로잡은 곳은 아래 출처에 적었습니다. 순위나 추천은 넣지 않았습니다.</p>
     <p class="fineprint">가입도 로그인도 없습니다. 고르신 구는 어디에도 저장하거나 보내지 않습니다.</p>
   </header>
 
@@ -321,7 +327,8 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <section class="sources">
     <span class="eyebrow">자료 출처</span>
-    <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 원자료 61곳 가운데 운영이 확인되지 않은 1곳은 제외했습니다. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 그대로 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다. 전화번호 1곳, 홈페이지 주소 1곳은 시설 공식 홈페이지 기준으로 바로잡았습니다.</p>
+    <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다.</p>
+    <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
   </section>
 
   <div class="feedback" id="feedback">
@@ -424,7 +431,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     scale.push(has(h.b)?'빈소 '+esc(h.b)+'개':'빈소 수 미등록');
     scale.push(has(h.m)?'안치 가능 '+esc(h.m)+'구':'안치 구수 미등록');
     scale.push(has(h.k)?'주차 '+esc(h.k)+'대':'주차 대수 미등록');
-    var home=h.h?'<a class="tap" href="'+esc(h.h)+'" target="_blank" rel="noopener noreferrer">장례식장 홈페이지 열기</a>':'확인된 홈페이지 주소가 없습니다.';
+    var home=h.h?'<a class="tap" href="'+esc(h.h)+'" target="_blank" rel="noopener noreferrer">'+(h.hk==='b'?'병원 홈페이지 열기':'장례식장 홈페이지 열기')+'</a>':'확인된 홈페이지 주소가 없습니다.';
     return '<details class="more"><summary>자세히 보기</summary><div class="more-body">'
       +'<h4>규모</h4><p class="more-text">'+scale.join(' · ')+'</p>'
       +'<h4>편의시설</h4>'+fac
@@ -470,7 +477,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     if(g!=='*'&&REGION_POSTS[g])html+='<p class="region-post"><a class="tap" href="'+esc(REGION_POSTS[g])+'" target="_blank" rel="noopener noreferrer">'+esc(g)+' 장례 안내 글 읽기</a></p>';
     if(g==='*'){
       // 서울 전체는 길어서 구 이름 바로가기를 맨 위에 둔다
-      var seen={},idx='<nav class="gu-index" aria-label="구 바로가기">';
+      var seen={},idx='<p class="gu-index-head">구 바로가기 — 누르면 그 구로 내려갑니다</p><nav class="gu-index" aria-label="구 바로가기">';
       items.forEach(function(h){if(!seen[h.g]){seen[h.g]=1;idx+='<a href="#gu-'+esc(h.g)+'" data-jump="gu-'+esc(h.g)+'">'+esc(h.g)+'</a>';}});
       html+=idx+'</nav>';
     }
@@ -485,7 +492,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     list.innerHTML=html+'</ul>'+(g==='*'?'<p class="to-top"><a href="#guSelect" data-jump="pickBox">구 고르기로 올라가기</a></p>':'');
   }
   var calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function go(el,block){if(el&&el.scrollIntoView)el.scrollIntoView({behavior:calm?'auto':'smooth',block:block||'start'});}
+  function go(el,block){if(el&&el.scrollIntoView)el.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:block||'start'});}
   // 구를 고른 뒤 결과 요약 줄이 화면 위쪽에 오게 옮긴다(요약 바로 아래가 목록).
   function showResult(){go(note,'start');}
   // 고른 구를 주소에 남겨, 가족에게 그 구 목록을 링크로 보낼 수 있게 한다(서버로 보내거나 저장하지 않는다).
