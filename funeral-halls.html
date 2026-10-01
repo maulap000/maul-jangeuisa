@@ -181,6 +181,8 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .first-call p{margin-top:10px;font-size:0.95rem;line-height:1.9;color:#555b66;}
 .call-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px;}
 .ghost-link{display:inline-block;margin-top:16px;padding:13px 20px;border:1px solid var(--line);color:var(--navy);text-decoration:none;font-size:0.92rem;}
+.chip.chip-check{border-color:var(--gold);color:var(--gold-text);font-weight:700;}
+.promise a{color:var(--navy);font-weight:700;white-space:nowrap;}
 .hall.picked{border-left:2px solid var(--gold);padding-left:14px;}
 .region-post{margin-top:18px;font-size:0.93rem;}
 .region-post a{color:var(--navy);}
@@ -273,14 +275,14 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <p class="pick-note" id="pickNote"></p>
   </section>
 
-  <p class="promise">장례식장은 가족이 정하십니다. 마을장의사는 장례식장이 아니라, 정하신 장례식장에서 장례를 진행해 드리는 후불 장례 서비스입니다.</p>
+  <p class="promise">장례식장은 가족이 정하십니다. 마을장의사는 장례식장이 아니라, 장례지도사가 직접 장례를 맡아 드리는 후불 장례 서비스입니다. 장례식장마다 시설 사용료와 조건이 달라 한 번 정하면 바꾸기 어렵습니다. 어느 곳이 맞을지 고민되시면 정하시기 전에 먼저 전화로 상의해 주세요. <a href="tel:18771852">1877-1852</a></p>
 
   <div id="list" aria-live="polite"></div>
 
   <section class="first-call">
     <span class="eyebrow">장례식장을 정하기 전에</span>
     <h2>먼저 상담해 두시면 좋습니다</h2>
-    <p>급할 때는 이웃 구까지 비교할 여유가 없습니다. 미리 상담하시면 사시는 동을 기준으로 가까운 두세 곳의 빈소·안치실·식사 비용을 함께 살펴보고, 가족에게 맞는 구성을 의논해 둘 수 있습니다. 상담하셨다고 꼭 이용하셔야 하는 것은 아닙니다.</p>
+    <p>급할 때는 이웃 구까지 비교할 여유가 없습니다. 미리 상담하시면 사시는 동을 기준으로 가까운 두세 곳의 빈소 크기와 빈소·안치실 사용료를 같이 봐 두고, 가족에게 맞는 구성을 의논해 둘 수 있습니다. 상담하셨다고 꼭 이용하셔야 하는 것은 아닙니다.</p>
     <div class="call-row">
       <a class="call-btn" href="tel:18771852">전화 상담 1877-1852</a>
       <a class="ghost-link" href="https://pf.kakao.com/_unwJX/chat" target="_blank" rel="noopener noreferrer">카카오톡 상담</a>
@@ -394,12 +396,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       +'<h4>편의시설</h4>'+fac
       +'<h4>홈페이지</h4><p class="more-text">'+home+'</p>'
       +'<h4>가격</h4><p class="more-text">빈소 사용료·안치료·음식 값은 이 쪽에 싣지 않았습니다. 보건복지부 e하늘 장사정보시스템의 "장사시설·장례용품 가격"에서 확인하실 수 있습니다.</p>'
-      +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 식사 비용을 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a href="tel:18771852">전화 상담 1877-1852</a></p>'
-      +'<p class="more-src">보건복지부 등록 자료, '+esc(DATA.asOf||'')+' 기준. 지금 빈소가 비어 있는지는 장례식장에 전화로 확인해 주세요.</p>'
+      +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a href="tel:18771852">전화 상담 1877-1852</a></p>'
+      +'<p class="more-src">보건복지부 등록 자료, '+esc(DATA.asOf||'')+' 기준. '+(h.s==='c'?'지금 운영 중인지 확인되지 않았습니다. 가시기 전에 전화로 확인해 주세요.':'지금 빈소가 비어 있는지는 장례식장에 전화로 확인해 주세요.')+'</p>'
       +'</div></details>';
   }
   function card(h){
-    var chips='<span class="chip">'+esc(h.p)+'</span>'+(h.t?'<span class="chip">'+esc(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>':'');
+    var chips='<span class="chip">'+esc(h.p)+'</span>'+(h.t?'<span class="chip">'+esc(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>':'')
+      +(h.s==='c'?'<span class="chip chip-check">운영 여부 확인 필요</span>':'');
     var facts=[];
     if(has(h.b))facts.push('빈소 '+esc(h.b)+'개');
     if(has(h.m))facts.push('안치 '+esc(h.m)+'구');
