@@ -321,7 +321,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <section class="sources">
     <span class="eyebrow">자료 출처</span>
-    <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 61곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 그대로 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다.</p>
+    <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 원자료 61곳 가운데 운영이 확인되지 않은 1곳은 제외했습니다. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 그대로 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다. 전화번호 1곳, 홈페이지 주소 1곳은 시설 공식 홈페이지 기준으로 바로잡았습니다.</p>
   </section>
 
   <div class="feedback" id="feedback">
@@ -456,7 +456,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   }
   function render(){
     var g=sel.value;
-    if(!g){list.innerHTML='';note.textContent='서울 25개 구 가운데 24개 구에 장례식장 '+HALLS.length+'곳이 등록되어 있습니다.';return;}
+    if(!g){list.innerHTML='';note.textContent='서울 25개 구 가운데 '+GUS.filter(function(x){return count(x)>0;}).length+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.';return;}
     var items=(g==='*'?HALLS.slice():HALLS.filter(function(h){return h.g===g;}));
     items.sort(function(a,b){return (g==='*'&&a.g!==b.g)?a.g.localeCompare(b.g,'ko'):order(a,b);});
     if(!items.length){
