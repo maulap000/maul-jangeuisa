@@ -1470,13 +1470,14 @@ function mjMapCore(D,G){
     // 동 이름: 키운 정도에 따라 글씨가 커진다(구를 눌러 들어간 화면 14.5px, 더 키우면 16.5px — 대표님 2026-10-02).
     // 자리 우선순위는 장례식장 이름표 > 구 이름 > 동 이름. 동 이름은 글자 양 끝이 그 동 안에 들어가고, 점·이름표·구 이름·지시선·다른 동 이름과 겹치지 않을 때만 적는다.
     // 안 들어가면 그 배율에서는 숨기고, 더 키우면 나온다. 고른 구의 동부터 자리를 잡는다.
-    var fs=(L.lvl>=2?16.5:14.5)*fsc*u,dongN=0,pass2,dls=gDongLabel.childNodes;
+    // 좁은 화면(휴대폰)은 조금 작게(13.5px·15.5px), 글자 양 끝이 동 밖으로 한 자쯤(폭의 20%) 나가는 것까지 받아 준다 — 넓은 화면 기준 그대로면 동 이름이 너무 많이 사라진다(성북구 27 → 7, 기획실 2026-10-02)
+    var fs=(big?(L.lvl>=2?16.5:14.5):(L.lvl>=2?15.5:13.5))*fsc*u,inset=big?0.06:0.2,dongN=0,pass2,dls=gDongLabel.childNodes;
     for(pass2=0;pass2<2;pass2++)for(k=0;k<dls.length;k++){
       var dl=dls[k],mine=(oneGu&&dl.getAttribute('data-gu')===oneGu);
       if((pass2===0)!==!!mine)continue;
       var lx=+dl.getAttribute('data-x'),ly=+dl.getAttribute('data-y'),w=dl.textContent.length*fs*1.0,
           bx=[lx-w/2,ly-fs*0.7,lx+w/2,ly+fs*0.7],okD=zoomed&&!(bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h)&&!overlaps(bx,boxes),zi2;
-      if(okD&&dl._pr&&!(inP(bx[0]+w*0.06,ly,dl._pr)&&inP(bx[2]-w*0.06,ly,dl._pr)&&inP(lx,ly,dl._pr)))okD=false;
+      if(okD&&dl._pr&&!(inP(bx[0]+w*inset,ly,dl._pr)&&inP(bx[2]-w*inset,ly,dl._pr)&&inP(lx,ly,dl._pr)))okD=false;
       for(zi2=0;okD&&zi2<L.leads.length;zi2++)if(L.segRect(L.leads[zi2][0],L.leads[zi2][1],L.leads[zi2][2],L.leads[zi2][3],bx))okD=false;
       if(!okD){dl.setAttribute('display','none');continue;}
       boxes.push(bx);dl.removeAttribute('display');dongN++;
