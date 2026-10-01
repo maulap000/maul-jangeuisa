@@ -291,7 +291,7 @@ html.map-full,html.map-full body{overflow:hidden;}
 .gu{fill:#f4f0e7;stroke:#1c2840;stroke-width:1.1;vector-effect:non-scaling-stroke;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .gu.zero{fill:#e9e7e2;}
 .gu.on{fill:#fffdf8;stroke-width:2;}
-.gu.dim{fill:#ebe8e1;}
+.gu.dim{fill:#efece4;}
 .gu:hover{fill:#fbf6e9;}
 .gu:focus{outline:none;}
 .gu:focus-visible{stroke:#a33a2f;stroke-width:3;}
@@ -306,7 +306,6 @@ html.map-full,html.map-full body{overflow:hidden;}
 .card-no{font-size:1.5rem;font-weight:700;color:var(--gold-text);line-height:1.3;}
 .dong-label{fill:#555b66;}
 .pt{pointer-events:none;}
-.pt.far{opacity:0.38;}
 .pt .halo{fill:rgba(28,40,64,0.12);}
 /* 대략의 위치(동 가운데)일 때: 속이 빈 테두리 표시로, 정확한 자리가 아님을 보인다 */
 .approx .pt .hosp{fill:#fff;stroke:#1c2840;}
@@ -442,7 +441,7 @@ html.map-full,html.map-full body{overflow:hidden;}
       <button type="button" class="ghost-btn" id="btnZoomOut">지도 축소</button>
       <button type="button" class="ghost-btn strong" id="btnFull" aria-pressed="false">지도 크게 보기</button>
     </div>
-    <p class="map-note">두 손가락으로 지도를 옮기거나 키울 수 있습니다(PC에서는 끌어서 옮기기). 옆의 구를 누르면 그 구가 가운데로 옵니다. 지도를 쓰지 않아도 위의 구 고르기와 아래 목록으로 같은 내용을 볼 수 있습니다.</p>
+    <p class="map-note">두 손가락으로 지도를 옮기거나 키울 수 있습니다(PC에서는 끌어서 옮기기). 크게 보면 옆 구의 동 이름과 장례식장도 함께 보이고, 옆 구의 점도 바로 누를 수 있습니다. 옆 구의 빈 곳을 누르면 그 구가 가운데로 옵니다. 지도를 쓰지 않아도 위의 구 고르기와 아래 목록으로 같은 내용을 볼 수 있습니다.</p>
   </section>
 
   <div class="list-col">
@@ -667,12 +666,16 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       t.textContent=(zoomed&&on)?'':g;
       GU[g].path.setAttribute('class','gu'+(GU[g].n?'':' zero')+(on?' on':'')+(oneGu&&!on?' dim':''));
     });
-    // 점: 서울 전체 보기에서도 모두 그린다(번호는 늘 보인다). 구를 고르면 이웃 구의 점은 옅게 하고 누를 수 없게 한다.
+    // 점: 어느 배율에서나 모두 그린다(번호는 늘 보인다). 이웃 구의 점도 바로 누를 수 있다. 화면 밖의 점은 건너뛴다.
+    gDong.setAttribute('display',zoomed?'inline':'none');
     var boxes=[],names=[],R=zoomed?11:(big?10:8),NF=zoomed?12:(big?11:9.5);
     HALLS.forEach(function(h){
-      var g=h._g,html='',xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),mine=(!oneGu||h.g===oneGu),
-          s=R*(on?1.15:1)*u,cx=xy[0].toFixed(1),cy=xy[1].toFixed(1);
+      var g=h._g,html='',xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),mine=true,
+          s=R*(on?1.15:1)*u,cx=xy[0].toFixed(1),cy=xy[1].toFixed(1),m=30*u;
       h._t.setAttribute('display','none');h._l.setAttribute('display','none');
+      if(xy[0]<view.x-m||xy[0]>view.x+view.w+m||xy[1]<view.y-m||xy[1]>view.y+view.h+m){
+        g.innerHTML='';g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');return;
+      }
       if(live&&mine)html+='<circle class="hit" cx="'+cx+'" cy="'+cy+'" r="'+(22*u).toFixed(1)+'"/>';
       if(!BUILDING&&zoomed)html+='<circle class="halo" cx="'+cx+'" cy="'+cy+'" r="'+(19*u).toFixed(1)+'"/>';
       if(on)html+='<circle class="ring" cx="'+cx+'" cy="'+cy+'" r="'+((R+8)*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>';
@@ -683,7 +686,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       boxes.push([xy[0]-(R+2)*u,xy[1]-(R+2)*u,xy[0]+(R+2)*u,xy[1]+(R+2)*u]);
       if(live&&mine){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.removeAttribute('aria-hidden');
         g.setAttribute('aria-label',noName(h)+'번, '+h.n+', '+h.g+' '+h.d+', '+(h.p==='공설'?'공설, ':'')+(hosp?'병원 장례식장':'전문 장례식장'));g.setAttribute('class','pt live');}
-      else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt'+(mine?'':' far'));}
+      else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');}
       if(mine)names.push([h,xy,0]);
     });
     // 점 옆 짧은 이름: 둘레 여덟 자리 가운데 안 겹치는 곳에 놓고, 자리가 없으면 이름은 숨긴다(번호는 남는다).
@@ -727,7 +730,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     for(k=0;k<gDongLabel.childNodes.length;k++){
       var dl=gDongLabel.childNodes[k],lx=+dl.getAttribute('data-x'),ly=+dl.getAttribute('data-y'),w=dl.textContent.length*fs*0.98,
           bx=[lx-w/2,ly-fs*0.7,lx+w/2,ly+fs*0.7];
-      if(!zoomed||overlaps(bx,boxes)){dl.setAttribute('display','none');continue;}
+      if(!zoomed||bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h||overlaps(bx,boxes)){dl.setAttribute('display','none');continue;}
       boxes.push(bx);dl.removeAttribute('display');
       dl.setAttribute('x',lx.toFixed(1));dl.setAttribute('y',ly.toFixed(1));
       dl.setAttribute('font-size',fs.toFixed(2));dl.setAttribute('stroke-width',(2.5*u).toFixed(2));
@@ -764,16 +767,19 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     draw();
   }
 
-  // ── 동 경계(고른 구만) ──
-  function drawDongs(){
-    gDong.innerHTML='';gDongLabel.innerHTML='';
-    if(!state.gu||state.gu==='*')return;
-    var dongs=G.dong[state.gu],n;
+  // ── 동 경계·동 이름(모든 구) ── 한 번 만들어 두고, 가까이 볼 때만 보인다. 고른 동은 붉은 선.
+  var DONG={};
+  GUS.forEach(function(g){
+    var dongs=G.dong[g],n;DONG[g]={};
     for(n in dongs){
-      el('path',{d:pathOf(dongs[n].r.map(decode)),'class':'dong'+(n===state.dong?' on':'')},gDong);
-      var t=el('text',{'class':'dong-label','data-x':px(dongs[n].c[0]).toFixed(1),'data-y':py(dongs[n].c[1]).toFixed(1)},gDongLabel);
-      t.textContent=n;
+      var pth=el('path',{d:pathOf(dongs[n].r.map(decode)),'class':'dong'},gDong);
+      var t=el('text',{'class':'dong-label','data-x':px(dongs[n].c[0]).toFixed(1),'data-y':py(dongs[n].c[1]).toFixed(1),display:'none'},gDongLabel);
+      t.textContent=n;DONG[g][n]=pth;
     }
+  });
+  function drawDongs(){
+    var g,n;
+    for(g in DONG)for(n in DONG[g])DONG[g][n].setAttribute('class','dong'+(g===state.gu&&n===state.dong?' on':''));
   }
 
   // ── 목록·카드 ──
@@ -796,7 +802,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
         +names.map(function(n){var h=byName(n);return '<button type="button" class="ghost-btn" data-pick="'+esc(n)+'">'+noName(h)+' '+esc(h.sn)+'</button>';}).join('')+'</p></div>';
     }else{
       var h=byName(names[0]);
-      cardBox.innerHTML='<div class="pt-card">'+close+'<p class="card-no">'+noName(h)+'번</p><h3>'+esc(h.n)+'</h3>'+oldLine(h)+'<p class="chips">'+chips(h)+'</p><p class="addr">'+esc(h.a)+'</p>'
+      cardBox.innerHTML='<div class="pt-card">'+close+'<p class="card-no">'+noName(h)+'번</p><h3>'+esc(h.n)+'</h3>'+oldLine(h)+'<p class="in-gu">'+h.g+' '+esc(h.d)+'</p><p class="chips">'+chips(h)+'</p><p class="addr">'+esc(h.a)+'</p>'
         +X.rowExtra(h,true)+acts(h)
         +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a class="tap" href="tel:18771852">전화 상담 1877-1852</a></p></div>';
     }
@@ -868,6 +874,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     opt=opt||{};
     state.gu=g;state.dong='';state.picked='';state.more=false;
     if(!opt.keepOrigin){state.origin=null;state.originLabel='';}
+    // 키보드로 옮겨 다니는 순서: 고른 구의 점이 먼저, 그다음 화면에 보이는 이웃 구의 점
+    HALLS.slice().sort(function(a,b){return ((a.g===g?0:1)-(b.g===g?0:1))||(a.no-b.no);}).forEach(function(h){gPt.appendChild(h._g);});
     selGu.value=g;fillDong();drawDongs();showCard(null);
     setView(g&&g!=='*'?fit(GU[g].bbox,0.16):fullView,opt.now);
     renderList();summary();setUrl();
@@ -947,7 +955,6 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function tapPoint(name){
     // 누르는 범위(지름 44px)가 겹치는 점이 있으면 어느 곳인지 먼저 고르게 한다
     var u=unit(),h=byName(name),a=ptXY(h,u),near=HALLS.filter(function(o){
-      if(state.gu&&state.gu!=='*'&&o.g!==state.gu)return false;
       var b=ptXY(o,u);return Math.hypot(a[0]-b[0],a[1]-b[1])<=44*u;}).map(function(o){return o.n;});
     if(near.length>1){state.picked='';draw();showCard(near);}
     else pick(name);
