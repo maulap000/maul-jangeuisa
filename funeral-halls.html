@@ -325,7 +325,10 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .full-bar{display:none;}
 .card-x{float:right;margin:-6px -6px 6px 10px;min-height:44px;padding:4px 12px;border:1px solid var(--line);background:#fff;color:var(--navy);font-family:inherit;font-size:0.84rem;cursor:pointer;}
 /* 휴대폰: 지도를 화면 폭 가득 */
+/* 화면 폭 1000px 미만(휴대폰·태블릿·좁은 창)에서는 지도를 화면 폭 가득: 지도가 넓어야 이름표 자리가 난다 */
 @media (max-width:699px){.map-box:not(.full) .map-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:0;border-left:0;border-right:0;}}
+/* 700~999px(태블릿·좁은 창): PC 브라우저는 세로 스크롤 막대가 폭을 차지하므로 그만큼(16px) 덜 넓힌다 — 가로 스크롤이 생기지 않게 */
+@media (min-width:700px) and (max-width:999px){.map-box:not(.full) .map-wrap{width:calc(100vw - 16px);margin-left:calc(50% - 50vw + 8px);margin-right:0;}}
 /* 지도 크게 보기(화면 가득) */
 html.map-full,html.map-full body{overflow:hidden;}
 .map-box.full{position:fixed;left:0;top:0;right:0;bottom:0;z-index:1000;margin:0;padding:0 12px 10px;background:var(--paper);display:flex;flex-direction:column;}
@@ -424,6 +427,15 @@ button.act{font-family:inherit;cursor:pointer;}
 /* 자료를 받는 동안 지도 칸에 보이는 글(그려지면 지운다) */
 .map-wait{position:absolute;left:0;right:0;top:42%;margin:0;text-align:center;font-size:0.95rem;color:#6b7280;}
 #pointCard:focus{outline:none;}
+/* 지도에 이름을 다 적지 못한 곳의 번호·이름(지도 바로 아래) */
+.map-rest{margin-top:10px;padding:10px 12px;border:1px solid var(--line);background:#fff;}
+.map-rest[hidden]{display:none;}
+.rest-head{font-size:0.9rem;color:#555b66;line-height:1.7;}
+.rest-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.rest-chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:4px 12px 4px 6px;border:1px solid rgba(28,40,64,0.35);border-radius:999px;background:#fff;color:var(--navy);font-family:inherit;font-size:0.95rem;font-weight:700;cursor:pointer;}
+.rest-chip b{display:inline-block;min-width:26px;padding:2px 5px;border:1.5px solid var(--navy);border-radius:999px;font-size:0.84rem;text-align:center;}
+.map-box.full .map-rest{max-height:108px;overflow:auto;margin:6px 0 0;}
+
 </style>
 <link rel="preload" as="script" href="funeral-data.js?v=c43be085">
 <link rel="preload" as="script" href="funeral-map-geo.js?v=553656bf">
@@ -505,6 +517,7 @@ button.act{font-family:inherit;cursor:pointer;}
       <div class="map-cur" id="mapCur" aria-hidden="true" style="display:none"></div>
       <button type="button" class="ghost-btn strong map-full-top" id="btnFull2">지도 크게 보기</button>
     </div>
+    <div class="map-rest" id="mapRest" hidden></div>
     <div id="pointCard" aria-live="polite" tabindex="-1"></div>
     <div class="map-ctrl">
       <button type="button" class="ghost-btn" id="btnAll">서울 전체로</button>
@@ -512,7 +525,7 @@ button.act{font-family:inherit;cursor:pointer;}
       <button type="button" class="ghost-btn" id="btnZoomOut">지도 축소</button>
       <button type="button" class="ghost-btn strong" id="btnFull" aria-pressed="false">지도 크게 보기</button>
     </div>
-    <p class="legend-sub">점 안의 숫자는 아래 목록의 번호와 같습니다(구·이름순, 순위 아님). 자리가 좁으면 번호에서 선을 그어 옆에 이름표를 놓았고, 이름표 안에도 같은 번호가 있습니다. 구 이름 옆 돋보기 표시는 번호만 보이는 곳이 있다는 뜻이며, 그 구를 누르면 커집니다. 그래도 이름이 다 나오지 않으면 한 번 더 키워 주세요.</p>
+    <p class="legend-sub">점 안의 숫자는 아래 목록의 번호와 같습니다(구·이름순, 순위 아님). 자리가 좁으면 번호에서 선을 그어 옆에 이름표를 놓았고, 이름표 안에도 같은 번호가 있습니다. 이름표가 멀리 놓인 곳은 번호에서 이름표까지 꺾은 선으로 이었습니다. 화면이 좁아 지도에 이름을 다 적지 못하면 지도 바로 아래에 그 번호와 이름을 따로 적고, 구 이름 옆에 돋보기 표시를 붙입니다. 그 구를 누르면 커집니다.</p>
     <p class="map-note">휴대폰에서는 두 손가락으로 지도를 옮기거나 키울 수 있습니다. 노트북 터치패드에서는 지도 위에서 두 손가락을 벌리거나 오므리면 커지고 작아집니다. 마우스로는 끌어서 옮기고, Ctrl 키를 누른 채 휠을 돌려 키웁니다. 크게 보면 옆 구의 동 이름과 장례식장도 함께 보이고, 옆 구의 점도 바로 누를 수 있습니다. 옆 구의 빈 곳을 누르면 그 구가 가운데로 옵니다. 지도를 쓰지 않아도 아래의 구 선택과 목록으로 같은 내용을 볼 수 있습니다.</p>
   </section>
 
@@ -670,7 +683,7 @@ function mjMapCore(D,G){
     return {x:x,y:y,w:w,h:h};
   };
   // 지도 크기(화면 px)를 알려 주면 세로/가로 비율과 서울 전체 범위를 다시 잰다
-  C.size=function(W,H){C.W=W;C.ratio=H/W;C.fullView=C.fit(ALL,0.06);C._zoom={};};
+  C.size=function(W,H){C.W=W;C.ratio=H/W;C.fullView=C.fit(ALL,0.06);C._zoom={};C._cache={};C._keys=[];};
   C.isZoomed=function(v){return v.w<C.fullView.w*(C.W>=700?0.7:0.86);};
   C.xy=function(h,zoomed,big,u){
     var off=h._n>1?(h._i-(h._n-1)/2)*(zoomed?25:(big?21:17))*u:0;
@@ -679,7 +692,10 @@ function mjMapCore(D,G){
 
   // 한 화면(view)의 자리 잡기. 돌려주는 것: 점 자리, 구 이름 자리, 장례식장 이름 자리, 품질 숫자.
   // focus: 고른 구 이름. 그 구의 장례식장 이름표가 먼저 자리를 잡고, 이웃 구는 남은 자리에 놓인다.
-  C.layout=function(view,fsc,focus){
+  // quick: 지도가 움직이는 동안이나 배율을 고르는 계산에서는 길 찾기 지시선을 건너뛴다(느리다). 멈춘 뒤에 다시 부른다.
+  // pri: 먼저 자리를 잡을 곳(번호 → 1). 앞선 바퀴에서 끝내 자리를 못 잡은 곳을 다음 바퀴에서 맨 먼저 놓는다(C.layout이 되풀이한다).
+  function layoutOnce(view,fsc,focus,quick,pri,mode){
+    mode=mode||{pen:30,order:'out'};
     fsc=fsc||1;
     var u=view.w/C.W,zoomed=C.isZoomed(view),big=C.W>=700,compact=!zoomed&&!big,
         R=zoomed?13:(big?10:4.5),NF=zoomed?14:11,boxes=[],own={},pts=[],names=[],resv=[],out={u:u,zoomed:zoomed,big:big,compact:compact,R:R,NF:NF};
@@ -732,6 +748,8 @@ function mjMapCore(D,G){
     order.forEach(function(a){order.forEach(function(b){if(a!==b&&Math.abs(a[0].x-b[0].x)<near&&Math.abs(a[0].y-b[0].y)<near)a[1]++;});});
     order.sort(function(a,b){return b[1]-a[1]||a[0].h.no-b[0].h.no;});
     var attached=0,only=[],waiting=[];
+    // 먼저 놓인 지시선(앞선 바퀴에서 못 놓아 먼저 놓은 곳의 선) 위에 이름표를 얹지 않는다
+    function onLead(b){var bb=[b[0]-2*u,b[1]-1.5*u,b[2]+2*u,b[3]+1.5*u],z;for(z=0;z<leads.length;z++)if(segRect(leads[z][0],leads[z][1],leads[z][2],leads[z][3],bb))return true;return false;}
     function attachAll(items){items.forEach(function(it){
       var p=it[0],h=p.h,x=p.x,y=p.y,w=h.sn.length*nfs*1.0,hh=nfs*0.72,up=(R+2)*u,hint=h.lh||{},T={
         R:['start',x+Rr+g3,y,[x+Rr+g3,y-hh,x+Rr+g3+w,y+hh]],
@@ -750,6 +768,7 @@ function mjMapCore(D,G){
         tb=[t[3][0]-6*u,t[3][1],t[3][2]+6*u,t[3][3]];
         if(overlaps(t[3],boxes)||overlaps(tb,boxes.filter(function(q){return q!==own[h.no];})))continue;
         if(focus&&GU[focus]&&h.g!==focus&&inP((t[3][0]+t[3][2])/2,(t[3][1]+t[3][3])/2,GU[focus].pr))continue;
+        if(onLead(t[3]))continue;
         boxes.push(t[3]);attached++;
         names.push({h:h,dir:d,anchor:t[0],x:t[1],y:t[2],box:t[3],fs:nfs,px:x,py:y});
         return;
@@ -771,6 +790,7 @@ function mjMapCore(D,G){
           tb=[t[3][0]-6*u,t[3][1],t[3][2]+6*u,t[3][3]];
           if(overlaps(t[3],boxes)||overlaps(tb,boxes.filter(function(q){return q!==own[h.no];})))continue;
           if(focus&&GU[focus]&&h.g!==focus&&inP((t[3][0]+t[3][2])/2,(t[3][1]+t[3][3])/2,GU[focus].pr))continue;
+          if(onLead(t[3]))continue;
           boxes.push(t[3]);attached++;
           names.push({h:h,dir:d,anchor:t[0],x:t[1],y:t[2],box:t[3],fs:nfs,px:x,py:y,lines:ln,lh:nfs*1.2});
           return;
@@ -825,12 +845,12 @@ function mjMapCore(D,G){
       if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)return null;
       if(overlaps(bx,boxes))return null;
       if(focus&&GU[focus]&&h.g!==focus&&inP((bx[0]+bx[2])/2,(bx[1]+bx[3])/2,GU[focus].pr))return null;
-      for(z=0;z<leads.length;z++)if(segBox(leads[z][0],leads[z][1],leads[z][2],leads[z][3],bx))return null;   // 먼저 놓인 선 위에 이름표를 얹지 않는다
+      for(z=0;z<leads.length;z++)if(segRect(leads[z][0],leads[z][1],leads[z][2],leads[z][3],[bx[0]-1.5*u,bx[1]-1.5*u,bx[2]+1.5*u,bx[3]+1.5*u]))return null;   // 먼저 놓인 선 위에 이름표를 얹지 않는다
       for(i=1;i<lp.P.length;i++){
         sg2=[lp.P[i-1][0],lp.P[i-1][1],lp.P[i][0],lp.P[i][1]];
         for(z in own)if(+z!==h.no&&segBox(sg2[0],sg2[1],sg2[2],sg2[3],own[z]))return null;
-        for(z=0;z<names.length;z++)if(segBox(sg2[0],sg2[1],sg2[2],sg2[3],names[z].box))return null;
-        for(z=0;z<gus.length;z++)if(!gus[z].over&&segBox(sg2[0],sg2[1],sg2[2],sg2[3],gus[z].box))return null;
+        for(z=0;z<names.length;z++)if(segRect(sg2[0],sg2[1],sg2[2],sg2[3],[names[z].box[0]-1.5*u,names[z].box[1]-1.5*u,names[z].box[2]+1.5*u,names[z].box[3]+1.5*u]))return null;
+        for(z=0;z<gus.length;z++)if(!gus[z].over&&segRect(sg2[0],sg2[1],sg2[2],sg2[3],gus[z].box))return null;
         for(z=0;z<leads.length;z++)if(segSeg(sg2,leads[z]))return null;
         for(z=0;z<resv.length;z++)if(segBox(sg2[0],sg2[1],sg2[2],sg2[3],resv[z]))return null;
       }
@@ -885,10 +905,159 @@ function mjMapCore(D,G){
     });
     waiting=[];
     }
+    // ── 길을 찾아 잇는 지시선(대표님 2026-10-02: "이름이 여백 쪽으로 빠지더라도 모든 장례식장 이름을 표시") ──
+    // 번호 옆에도, 바로 옆 지시선 자리에도 못 놓은 곳은 이름표를 빈 자리(서울 경계 밖 여백, 한강 위, 구 사이 빈 곳)로 빼고,
+    // 번호 원에서 그 이름표까지 다른 번호 원·이름표·구 이름·선을 피해 가는 꺾은 선(수평·수직·45도)으로 잇는다. 선 길이 상한은 없다.
+    // 격자(5px) 위에서 가장 짧고 덜 꺾이는 길을 찾는다. 이름표에는 수평으로 닿는다.
+    function segRect(x1,y1,x2,y2,b){
+      if(Math.max(x1,x2)<b[0]||Math.min(x1,x2)>b[2]||Math.max(y1,y2)<b[1]||Math.min(y1,y2)>b[3])return false;
+      var t0=0,t1=1,dx=x2-x1,dy=y2-y1,pp=[-dx,dx,-dy,dy],qq=[x1-b[0],b[2]-x1,y1-b[1],b[3]-y1],i,r;
+      for(i=0;i<4;i++){
+        if(pp[i]===0){if(qq[i]<0)return false;}
+        else{r=qq[i]/pp[i];if(pp[i]<0){if(r>t1)return false;if(r>t0)t0=r;}else{if(r<t0)return false;if(r<t1)t1=r;}}
+      }
+      return true;
+    }
+    var DX=[1,1,0,-1,-1,-1,0,1],DY=[0,1,1,1,0,-1,-1,-1],routed=0;
+    function onLand(x,y){for(var gi=0;gi<GUS.length;gi++){var o=GU[GUS[gi]],b=o.bbox;if(x>=b[0]&&x<=b[2]&&y>=b[1]&&y<=b[3]&&inP(x,y,o.pr))return true;}return false;}
+    // outer: 서울 안쪽 자리에 얹는 벌점(칸 수). 0이면 길이 가장 짧은 빈 자리.
+    function routeOne(p,outer){
+      var h=p.h,gs=4*u,w=labelW(h),x0=p.x-Math.ceil((p.x-view.x)/gs)*gs,y0=p.y-Math.ceil((p.y-view.y)/gs)*gs,
+          cols=Math.floor((view.x+view.w-x0)/gs)+1,rows=Math.floor((view.y+view.h-y0)/gs)+1,blk=new Uint8Array(cols*rows),i,j,z,
+          si=Math.round((p.x-x0)/gs),sj=Math.round((p.y-y0)/gs),start=sj*cols+si,edge=3*u;
+      function markBox(b,m){
+        var i0=Math.max(0,Math.ceil((b[0]-m-x0)/gs)),i1=Math.min(cols-1,Math.floor((b[2]+m-x0)/gs)),j0=Math.max(0,Math.ceil((b[1]-m-y0)/gs)),j1=Math.min(rows-1,Math.floor((b[3]+m-y0)/gs)),a,c;
+        for(c=j0;c<=j1;c++)for(a=i0;a<=i1;a++)blk[c*cols+a]=1;
+      }
+      function markDisc(cx,cy,rd){
+        var i0=Math.max(0,Math.ceil((cx-rd-x0)/gs)),i1=Math.min(cols-1,Math.floor((cx+rd-x0)/gs)),j0=Math.max(0,Math.ceil((cy-rd-y0)/gs)),j1=Math.min(rows-1,Math.floor((cy+rd-y0)/gs)),a,c;
+        for(c=j0;c<=j1;c++)for(a=i0;a<=i1;a++)if(Math.hypot(x0+a*gs-cx,y0+c*gs-cy)<=rd)blk[c*cols+a]=1;
+      }
+      for(j=0;j<rows;j++)for(i=0;i<cols;i++){var nx=x0+i*gs,ny=y0+j*gs;if(nx<view.x+edge||nx>view.x+view.w-edge||ny<view.y+edge||ny>view.y+view.h-edge)blk[j*cols+i]=1;}
+      names.forEach(function(n){markBox(n.box,3*u);});
+      gus.forEach(function(q){markBox(q.box,2*u);});
+      resv.forEach(function(b){markBox(b,2*u);});
+      pts.forEach(function(o){if(o!==p)markDisc(o.x,o.y,(R+2)*u);});
+      leads.forEach(function(s){
+        var n=Math.max(1,Math.ceil(Math.hypot(s[2]-s[0],s[3]-s[1])/(gs*0.5))),k;
+        for(k=0;k<=n;k++)markDisc(s[0]+(s[2]-s[0])*k/n,s[1]+(s[3]-s[1])*k/n,gs*0.8);
+      });
+      // 제 번호 원 안쪽은 지나갈 수 있게 한다(동 가운데 좌표라 원끼리 겹친 곳이 있다 — 겹치지 않은 쪽 테두리로 나간다)
+      (function(){var rd=Rr,i0=Math.max(0,Math.ceil((p.x-rd-x0)/gs)),i1=Math.min(cols-1,Math.floor((p.x+rd-x0)/gs)),j0=Math.max(0,Math.ceil((p.y-rd-y0)/gs)),j1=Math.min(rows-1,Math.floor((p.y+rd-y0)/gs)),a,c;
+        for(c=j0;c<=j1;c++)for(a=i0;a<=i1;a++)if(Math.hypot(x0+a*gs-p.x,y0+c*gs-p.y)<=rd)blk[c*cols+a]=0;})();
+      blk[start]=0;
+      // 가장 싼 길부터 넓혀 간다(상태 = 칸 × 들어온 방향). 꺾을 때마다 값을 더해 덜 꺾이는 길을 고른다. 135도 넘게 꺾지 않는다.
+      var NS=cols*rows*8,dist=new Float32Array(NS),prev=new Int32Array(NS),hc=[],hs=[],d,st,c,n,nd,k,turn,ni,nj,nn,nc,ns,found=-1,fb=null,fside=0;
+      for(i=0;i<NS;i++){dist[i]=1e9;prev[i]=-1;}
+      function push(cost,s){var a=hc.length,b;hc.push(cost);hs.push(s);while(a>0){b=(a-1)>>1;if(hc[b]<=cost)break;hc[a]=hc[b];hs[a]=hs[b];a=b;}hc[a]=cost;hs[a]=s;}
+      function pop(){
+        var top=hs[0],lc=hc.pop(),ls=hs.pop(),a=0,b,len=hc.length;
+        if(len){while((b=2*a+1)<len){if(b+1<len&&hc[b+1]<hc[b])b++;if(hc[b]>=lc)break;hc[a]=hc[b];hs[a]=hs[b];a=b;}hc[a]=lc;hs[a]=ls;}
+        return top;
+      }
+      for(d=0;d<8;d++){dist[start*8+d]=0;push(0,start*8+d);}
+      var best=null,popN=0,maxRoute=(C.W>=900&&!zoomed)?1e9:150/4;   // 칸 수(한 칸 4px)
+      while(hc.length){
+        c=hc[0];st=pop();
+        if(c>dist[st])continue;
+        if(++popN>70000)break;
+        n=st>>3;d=st&7;i=n%cols;j=(n-i)/cols;
+        if(best&&c>=best.total)break;
+        if(c>maxRoute)break;          // 좁은 지도에서는 멀리 빼지 않는다(긴 선이 얽혀 알아보기 어렵다). 못 놓은 곳은 지도 아래 목록에 적힌다.
+        // 이름표 자리: 수평으로 두 칸 넘게 들어온 곳에서, 가는 쪽으로 이름표를 놓을 수 있는가
+        if((d===0||d===4)&&prev[st]>=0&&(prev[st]&7)===d){
+          var side=d===0?1:-1,tx=x0+i*gs,ty=y0+j*gs,bx=side>0?[tx,ty-LH,tx+w,ty+LH]:[tx-w,ty-LH,tx,ty+LH],bi=[bx[0]-2*u,bx[1]-1.5*u,bx[2]+2*u,bx[3]+1.5*u],ok=true,tot;
+          if(Math.hypot(tx-p.x,ty-p.y)<Rr+9*u||bx[0]<view.x+2*u||bx[2]>view.x+view.w-2*u||bx[1]<view.y+2*u||bx[3]>view.y+view.h-2*u||overlaps(bi,boxes))ok=false;
+          if(ok&&focus&&GU[focus]&&h.g!==focus&&inP((bx[0]+bx[2])/2,(bx[1]+bx[3])/2,GU[focus].pr))ok=false;
+          for(z=0;ok&&z<leads.length;z++)if(segRect(leads[z][0],leads[z][1],leads[z][2],leads[z][3],bi))ok=false;
+          // 먼저 놓는 곳(앞선 바퀴에서 자리를 못 잡은 곳)은 서울 안쪽 빈 곳보다 바깥 여백을 먼저 쓴다: 안쪽 자리에는 벌점을 얹는다
+          tot=c+((ok&&outer&&onLand((bx[0]+bx[2])/2,(bx[1]+bx[3])/2))?outer:0);
+          if(ok&&(!best||tot<best.total)){
+            // 온 길을 되짚어 꺾이는 곳만 남긴다. 길의 앞부분이 이름표 자리를 지나오지 않았는지도 본다.
+            var nodes=[],s2=st,P=[],q,pd=-1;
+            while(s2>=0){nodes.push(s2);s2=prev[s2];}
+            nodes.reverse();
+            for(q=0;q<nodes.length;q++){
+              var nq=nodes[q]>>3,dq=q+1<nodes.length?(nodes[q+1]&7):-2,xi=nq%cols;
+              if(q===0||q===nodes.length-1||dq!==pd)P.push([x0+xi*gs,y0+((nq-xi)/cols)*gs]);
+              pd=dq;
+            }
+            P[0]=[p.x,p.y];P[P.length-1]=[tx,ty];
+            for(q=1;ok&&q<P.length-1;q++)if(segRect(P[q-1][0],P[q-1][1],P[q][0],P[q][1],bi))ok=false;
+            for(q=1;ok&&q<P.length;q++)for(z=0;ok&&z<names.length;z++)if(segRect(P[q-1][0],P[q-1][1],P[q][0],P[q][1],names[z].box))ok=false;
+            if(ok){
+              // 번호 원 안쪽 부분은 잘라 낸다: 길이 원 테두리를 지나는 자리에서 선이 시작한다(원 안에서 꺾였어도 나가는 방향 그대로)
+              for(q=1;q<P.length;q++){
+                if(Math.hypot(P[q][0]-p.x,P[q][1]-p.y)>Rr){
+                  var A=P[q-1],B=P[q],ddx=B[0]-A[0],ddy=B[1]-A[1],fx=A[0]-p.x,fy=A[1]-p.y,qa=ddx*ddx+ddy*ddy,qb=2*(fx*ddx+fy*ddy),qc=fx*fx+fy*fy-Rr*Rr,tt=(-qb+Math.sqrt(Math.max(0,qb*qb-4*qa*qc)))/(2*qa);
+                  P=[[A[0]+ddx*tt,A[1]+ddy*tt]].concat(P.slice(q));break;
+                }
+              }
+              // 정확한 검사: 선이 다른 번호 원·구 이름·지도 위 단추 자리를 지나지 않는가
+              for(q=1;ok&&q<P.length;q++){
+                var sx1=P[q-1][0],sy1=P[q-1][1],sx2=P[q][0],sy2=P[q][1],sdx=sx2-sx1,sdy=sy2-sy1,sl=(sdx*sdx+sdy*sdy)||1;
+                for(z=0;ok&&z<pts.length;z++){
+                  if(pts[z]===p)continue;
+                  var st2=Math.max(0,Math.min(1,((pts[z].x-sx1)*sdx+(pts[z].y-sy1)*sdy)/sl));
+                  if(Math.hypot(sx1+st2*sdx-pts[z].x,sy1+st2*sdy-pts[z].y)<(R+1)*u)ok=false;
+                }
+                for(z=0;ok&&z<gus.length;z++)if(!gus[z].over&&segRect(sx1,sy1,sx2,sy2,gus[z].box))ok=false;
+                for(z=0;ok&&z<resv.length;z++)if(segRect(sx1,sy1,sx2,sy2,resv[z]))ok=false;
+              }
+            }
+            if(ok){
+              best={total:tot,bx:bx,side:side,P:P};
+            }
+          }
+        }
+        for(k=-2;k<=2;k++){
+          nd=(d+k+8)&7;turn=k<0?-k:k;
+          if(n===start&&k!==0)continue;          // 시작 칸에서는 여덟 방향이 모두 따로 들어 있다
+          ni=i+DX[nd];nj=j+DY[nd];
+          if(ni<0||nj<0||ni>=cols||nj>=rows)continue;
+          nn=nj*cols+ni;
+          if(blk[nn])continue;
+          if((nd&1)&&(blk[j*cols+ni]||blk[nj*cols+i]))continue;     // 대각선으로 모서리를 스치지 않는다
+          nc=c+((nd&1)?1.4142:1)+(turn===0?0:(turn===1?3:7));
+          ns=nn*8+nd;
+          if(nc<dist[ns]-1e-6){dist[ns]=nc;prev[ns]=st;push(nc,ns);}
+        }
+      }
+      if(best){
+        boxes.push(best.bx);leaderCount++;routed++;
+        for(i=1;i<best.P.length;i++)leads.push([best.P[i-1][0],best.P[i-1][1],best.P[i][0],best.P[i][1]]);
+        names.push({h:h,dir:'LEAD',routed:true,side:best.side,anchor:'start',x:best.bx[0]+4*u+2*CR+4*u,y:(best.bx[1]+best.bx[3])/2,box:best.bx,fs:nfs,px:p.x,py:p.y,path:best.P,cr:CR,cx:best.bx[0]+4*u+CR});
+        return true;
+      }
+      return false;
+    }
+    function routeAll(){
+      if(compact||quick||!only.length)return;
+      var byNo={},rest=[],todo;
+      pts.forEach(function(p){byNo[p.h.no]=p;});
+      todo=only.filter(function(no){var p=byNo[no];return p&&p.inView&&!((p.h.lh||{}).hide&&!zoomed);}).map(function(no){return byNo[no];});
+      if(!todo.length)return;
+      // 고른 구가 있으면 그 구부터. 그다음은 화면 가장자리 쪽에 있는 곳부터(바깥쪽 여백을 먼저 쓰고, 안쪽은 남은 빈 곳으로).
+      var cxv=view.x+view.w/2,cyv=view.y+view.h/2;
+      todo.sort(function(a,b){
+        var fa=(focus&&a.h.g===focus)?0:1,fbk=(focus&&b.h.g===focus)?0:1;
+        return fa-fbk||(Math.abs(b.x-cxv)/view.w+Math.abs(b.y-cyv)/view.h)-(Math.abs(a.x-cxv)/view.w+Math.abs(a.y-cyv)/view.h)||a.h.no-b.h.no;
+      });
+      todo.forEach(function(p){if(routeOne(p,0))only.splice(only.indexOf(p.h.no),1);});
+    }
+    if(pri&&!compact&&!quick){
+      // 앞선 바퀴에서 자리를 못 잡은 곳부터: 아직 이름표가 하나도 없을 때 빈 자리를 먼저 차지한다
+      var mx=(ALL[0]+ALL[2])/2,my=(ALL[1]+ALL[3])/2;
+      order.filter(function(it){return pri[it[0].h.no];}).map(function(it){return it[0];})
+        .sort(function(a,b){var fa=(focus&&a.h.g===focus)?0:1,fb2=(focus&&b.h.g===focus)?0:1;return fa-fb2||(mode.order==='in'?-1:1)*(Math.hypot(b.x-mx,b.y-my)-Math.hypot(a.x-mx,a.y-my))||a.h.no-b.h.no;})
+        .forEach(function(p){if(!routeOne(p,mode.pen))only.push(p.h.no);});
+      order=order.filter(function(it){return !pri[it[0].h.no];});
+    }
     if(focus&&GU[focus]){
       attachAll(order.filter(function(it){return it[0].h.g===focus;}));leadAll();
       attachAll(order.filter(function(it){return it[0].h.g!==focus;}));leadAll();
     }else{attachAll(order);leadAll();}
+    routeAll();
     // 번호만 남은 점이 있는 구에는 구 이름 옆에 돋보기 표시(키우면 이름이 나온다는 뜻)를 붙인다
     if(!compact)gus.forEach(function(q){
       q.plus=GU[q.g].halls.some(function(h){return only.indexOf(h.no)>=0;});
@@ -912,9 +1081,58 @@ function mjMapCore(D,G){
     // 지시선끼리 엇갈림 검사(합격 기준 0건)
     var cross=0;
     for(k2=0;k2<leads.length;k2++)for(m2=k2+1;m2<leads.length;m2++)if(segSeg(leads[k2],leads[m2]))cross++;
-    out.stats={inView:order.length,attached:attached,leader:leaderCount,numberOnly:only,guShown:gus.length,guOverlap:guOver,
+    var lineHit=0,hitList=[];
+    names.forEach(function(n){
+      if(!n.path)return;
+      for(k2=1;k2<n.path.length;k2++){
+        var x1=n.path[k2-1][0],y1=n.path[k2-1][1],x2=n.path[k2][0],y2=n.path[k2][1];
+        names.forEach(function(o){if(o!==n&&segRect(x1,y1,x2,y2,o.box)){lineHit++;hitList.push(n.h.no+'선-'+o.h.no+'이름표');}});
+        gus.forEach(function(q){if(!q.over&&segRect(x1,y1,x2,y2,q.box)){lineHit++;hitList.push(n.h.no+'선-'+q.g);}});
+        pts.forEach(function(o){
+          if(o.h===n.h)return;
+          var dx=x2-x1,dy=y2-y1,t=Math.max(0,Math.min(1,((o.x-x1)*dx+(o.y-y1)*dy)/((dx*dx+dy*dy)||1)));
+          if(Math.hypot(x1+t*dx-o.x,y1+t*dy-o.y)<R*u){lineHit++;hitList.push(n.h.no+(n.routed?'길':'선')+'-'+o.h.no+'원');}
+        });
+      }
+    });
+    var leadLen=0;leads.forEach(function(sg){leadLen+=Math.hypot(sg[2]-sg[0],sg[3]-sg[1])/u;});
+    out.stats={leadLen:Math.round(leadLen),inView:pts.filter(function(p){return p.inView;}).length,lineHit:lineHit,hitList:hitList,attached:attached,leader:leaderCount,routed:routed,numberOnly:only,guShown:gus.length,guOverlap:guOver,
       guOutside:gus.filter(function(q){return !q.inside;}).length,guOutsideList:gus.filter(function(q){return !q.inside;}).map(function(q){return q.g;}),overlap:ov,cross:cross};
     return out;
+  }
+  // 한 화면의 자리 잡기. 번호만 남는 곳이 있으면 그곳을 먼저 놓는 순서로 다시 돌려(여러 바퀴) 가장 적게 남는 결과를 쓴다.
+  // 같은 화면을 다시 물으면 앞의 결과를 그대로 돌려준다.
+  function keyOf(view,fsc,focus){var rs=C.resv||{};return [view.x.toFixed(2),view.y.toFixed(2),view.w.toFixed(2),view.h.toFixed(2),fsc||1,focus||'',C.W,C.ratio.toFixed(4),(rs.right||[]).join('_'),(rs.left||[]).join('_')].join('|');}
+  // 이 화면의 (길 찾기까지 마친) 결과가 이미 있는가. 없으면 지도 화면은 먼저 빠른 계산으로 그리고, 곧이어 다시 그린다.
+  C.peek=function(view,fsc,focus){return !!(C._cache&&C._cache[keyOf(view,fsc,focus)]);};
+  C.layout=function(view,fsc,focus,quick){
+    if(quick)return layoutOnce(view,fsc,focus,true,null);
+    var key=keyOf(view,fsc,focus);
+    C._cache=C._cache||{};C._keys=C._keys||[];
+    if(C._cache[key])return C._cache[key];
+    var best,cur,pri={},i,added,MODES=[{pen:0,order:'out'},{pen:0,order:'in'},{pen:12,order:'out'},{pen:30,order:'out'},{pen:30,order:'in'},{pen:60,order:'out'}],t0=Date.now(),m;
+    // 고른 구가 있으면 그 구의 이름이 먼저다(이웃 구 이름을 더 내려고 그 구 이름을 잃지 않는다)
+    function score(L){var f=0;if(focus&&GU[focus])L.stats.numberOnly.forEach(function(no){if(GU[focus].halls.some(function(h){return h.no===no;}))f++;});return f*1e8+L.stats.numberOnly.length*1e6+(L.stats.overlap+L.stats.cross+L.stats.lineHit)*1e5+L.stats.leadLen;}
+    best=layoutOnce(view,fsc,focus,quick,null);var base=best;
+    // 되풀이는 넓은 화면(지도 폭 900px 이상)의 서울 전체 보기에서만: 좁은 지도는 자리가 모자라 되풀이해도 다 못 놓고, 키운 화면은 손을 뗄 때마다 다시 계산하므로 한 번만 한다
+    if(!quick&&!best.compact&&!best.zoomed&&C.W>=900&&best.stats.numberOnly.length){
+      // 방식을 바꿔 가며(바깥 여백 우선 정도, 먼저 놓는 순서) 번호만 남는 곳이 없어질 때까지. 시간 한도 안에서 가장 좋은 결과를 쓴다.
+      // 번호만 남는 곳이 없어진 뒤에도 남은 방식을 마저 해 보고, 선 길이 합이 가장 짧은 결과를 쓴다(긴 선이 지도를 가로지르지 않게)
+      for(m=0;m<MODES.length&&Date.now()-t0<(C.budget||700);m++){
+        pri={};cur=base;
+        for(i=0;i<8&&cur.stats.numberOnly.length&&Date.now()-t0<(C.budget||700);i++){
+          added=0;
+          cur.stats.numberOnly.forEach(function(no){if(!pri[no]){pri[no]=1;added++;}});
+          if(!added)break;
+          cur=layoutOnce(view,fsc,focus,quick,pri,MODES[m]);
+          if(score(cur)<score(best))best=cur;
+        }
+      }
+      best.stats.rounds=m;
+    }
+    C._cache[key]=best;C._keys.push(key);
+    if(C._keys.length>16)delete C._cache[C._keys.shift()];
+    return best;
   };
 
   // 구를 눌렀을 때 들어갈 배율: 그 구의 모든 이름이 큰 글씨로 번호 옆에 붙어 나오는 가장 작은 배율(몰린 구는 더 크게 들어간다).
@@ -941,7 +1159,7 @@ function mjMapCore(D,G){
           if(rs2.left&&x-rr<vv.x+rs2.left[0]*u2&&y-rr<vv.y+rs2.left[1]*u2)return false;              // 왼쪽 위 표시 밑
           return true;
         })&&i)continue;
-        L=C.layout(vv,fsc,g);
+        L=C.layout(vv,fsc,g,true);
         att=o.halls.filter(function(h){return L.names.some(function(q){return q.h===h&&q.dir!=='LEAD';});}).length;
         ld=o.halls.filter(function(h){return L.names.some(function(q){return q.h===h&&q.dir==='LEAD';});}).length;
         n=att+ld+0.3*att;
@@ -1113,6 +1331,9 @@ function mjMapCore(D,G){
     return C.xy(h,isZoomed(),wide(),u);
   }
   function overlaps(b,arr){for(var q=0;q<arr.length;q++){var a=arr[q];if(b[0]<a[2]&&b[2]>a[0]&&b[1]<a[3]&&b[3]>a[1])return true;}return false;}
+  // moving: 지도가 움직이는 동안(늘어나는 중·끄는 중)에는 길 찾기 지시선을 건너뛰고, 멈춘 뒤 한 번 더 그린다
+  var moving=false,settleT=0,fullT=0;
+  function settle(){clearTimeout(settleT);settleT=setTimeout(function(){if(moving&&!anim){moving=false;draw();}},140);}
   function draw(){
     var u=unit(),zoomed=isZoomed(),fsc=fontScale(),k,oneGu=state.gu;
     svg.setAttribute('viewBox',view.x.toFixed(1)+' '+view.y.toFixed(1)+' '+view.w.toFixed(1)+' '+view.h.toFixed(1));
@@ -1123,7 +1344,8 @@ function mjMapCore(D,G){
     });
     // 점: 어느 배율에서나 모두 그린다(번호는 늘 보인다). 이웃 구의 점도 바로 누를 수 있다. 화면 밖의 점은 건너뛴다.
     gDong.setAttribute('display',zoomed?'inline':'none');
-    var L=C.layout(view,fsc,oneGu),boxes=L.boxes,R=L.R,NF=L.NF,seen={},nameOf={},hitHtml='';
+    // 이 화면을 처음 그릴 때는 빠른 계산으로 먼저 그리고(화면이 멈추지 않게), 곧이어 길 찾기까지 한 결과로 다시 그린다
+    var fast=moving||!C.peek(view,fsc,oneGu),L=C.layout(view,fsc,oneGu,fast),boxes=L.boxes,R=L.R,NF=L.NF,seen={},nameOf={},hitHtml='';
     L.names.forEach(function(n){nameOf[n.h.no]=n;});
     L.pts.forEach(function(p){seen[p.h.no]=p;});
     HALLS.forEach(function(h){
@@ -1137,13 +1359,14 @@ function mjMapCore(D,G){
       // 인출선(마지막 수단): 번호 원 테두리에서 나와 한 번 꺾여 이름표 옆면에 닿는 선. 이름표 안 왼쪽에 같은 번호를 작은 원으로 적는다.
       if(nm&&nm.dir==='LEAD'){
         var P=nm.path,d2='M'+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1),bx2=nm.box;
-        if(P.length===3){
-          // 꺾이는 곳은 살짝 둥글게
-          var l1=Math.hypot(P[1][0]-P[0][0],P[1][1]-P[0][1]),l2=Math.hypot(P[2][0]-P[1][0],P[2][1]-P[1][1]),rr=Math.min(5*u,l1/2,l2/2);
-          d2+='L'+(P[1][0]-(P[1][0]-P[0][0])/l1*rr).toFixed(1)+' '+(P[1][1]-(P[1][1]-P[0][1])/l1*rr).toFixed(1)
-            +'Q'+P[1][0].toFixed(1)+' '+P[1][1].toFixed(1)+' '+(P[1][0]+(P[2][0]-P[1][0])/l2*rr).toFixed(1)+' '+(P[1][1]+(P[2][1]-P[1][1])/l2*rr).toFixed(1)
-            +'L'+P[2][0].toFixed(1)+' '+P[2][1].toFixed(1);
-        }else d2+='L'+P[1][0].toFixed(1)+' '+P[1][1].toFixed(1);
+        // 꺾이는 곳은 살짝 둥글게(꺾이는 곳이 여러 번인 길 찾기 지시선도 같은 모양)
+        for(var qi=1;qi<P.length;qi++){
+          if(qi<P.length-1){
+            var l1=Math.hypot(P[qi][0]-P[qi-1][0],P[qi][1]-P[qi-1][1]),l2=Math.hypot(P[qi+1][0]-P[qi][0],P[qi+1][1]-P[qi][1]),rr=Math.min(5*u,l1/2,l2/2);
+            d2+='L'+(P[qi][0]-(P[qi][0]-P[qi-1][0])/l1*rr).toFixed(1)+' '+(P[qi][1]-(P[qi][1]-P[qi-1][1])/l1*rr).toFixed(1)
+              +'Q'+P[qi][0].toFixed(1)+' '+P[qi][1].toFixed(1)+' '+(P[qi][0]+(P[qi+1][0]-P[qi][0])/l2*rr).toFixed(1)+' '+(P[qi][1]+(P[qi+1][1]-P[qi][1])/l2*rr).toFixed(1);
+          }else d2+='L'+P[qi][0].toFixed(1)+' '+P[qi][1].toFixed(1);
+        }
         html+='<path class="lead'+tc+'" d="'+d2+'"/>'
           +'<rect class="tag'+tc+'" x="'+bx2[0].toFixed(1)+'" y="'+bx2[1].toFixed(1)+'" width="'+(bx2[2]-bx2[0]).toFixed(1)+'" height="'+(bx2[3]-bx2[1]).toFixed(1)+'" rx="'+((bx2[3]-bx2[1])/2).toFixed(1)+'"/>'
           +'<circle class="tag-no'+tc+'" cx="'+nm.cx.toFixed(1)+'" cy="'+nm.y.toFixed(1)+'" r="'+nm.cr.toFixed(1)+'"/>'
@@ -1193,6 +1416,21 @@ function mjMapCore(D,G){
       }
     });
     guShown=L.stats.guShown;
+    // 지도에 이름을 다 적지 못한 곳(번호만 보이는 곳)은 지도 바로 아래에 번호와 이름을 적는다. 움직이는 동안에는 건드리지 않는다.
+    var restBox=$('mapRest');
+    if(restBox&&!fast){
+      var rest=compact?[]:L.stats.numberOnly.slice().sort(function(a,b){return a-b;}),rkey=rest.join(',');
+      if(restBox.getAttribute('data-k')!==rkey){
+        restBox.setAttribute('data-k',rkey);
+        if(!rest.length){restBox.hidden=true;restBox.innerHTML='';}
+        else{
+          restBox.hidden=false;
+          restBox.innerHTML='<p class="rest-head">지도에 이름을 적을 자리가 없어 번호만 보이는 곳 '+rest.length+'곳입니다. 누르면 지도에서 그 번호를 보여 줍니다.</p><p class="rest-list">'
+            +rest.map(function(no){var h=null,i;for(i=0;i<HALLS.length;i++)if(HALLS[i].no===no){h=HALLS[i];break;}
+              return h?'<button type="button" class="rest-chip" data-rest="'+esc(h.n)+'"><b>'+no2(h)+'</b>'+esc(h.sn)+'</button>':'';}).join('')+'</p>';
+        }
+      }
+    }
     svg.setAttribute('data-gu-shown',guShown);svg.setAttribute('data-gu-overlap',L.stats.guOverlap);
     svg.setAttribute('data-attached',L.stats.attached);svg.setAttribute('data-number-only',L.stats.numberOnly.length);svg.setAttribute('data-leader',L.stats.leader);svg.setAttribute('data-cross',L.stats.cross);svg.setAttribute('data-gu-outside',L.stats.guOutside);svg.setAttribute('data-overlap',L.stats.overlap);
     // 좁은 화면 전체 보기에서는 구 이름을 점 위에 그려, 점과 겹친 구 이름도 읽히게 한다
@@ -1221,16 +1459,18 @@ function mjMapCore(D,G){
     }
     var cur=$('mapCur');
     if(cur){cur.textContent=oneGu?'지금 보는 구: '+oneGu:'';cur.style.display=oneGu?'':'none';}
+    if(fast&&!moving){clearTimeout(fullT);fullT=setTimeout(function(){if(moving||anim||!view)return;C.layout(view,fontScale(),state.gu,false);draw();},40);}
   }
-  function setView(v,now){
+  // drag: 끌거나 두 손가락으로 키우는 중(잇달아 불린다) — 빠른 계산으로 그리고, 손을 떼면 한 번 더 그린다
+  function setView(v,now,drag){
     v=clamp(v);
     if(anim){cancelAnimationFrame(anim);anim=0;}
-    if(now||calm||!view||document.visibilityState==='hidden'){view=v;draw();return;}
+    if(now||calm||!view||document.visibilityState==='hidden'){view=v;moving=!!drag;draw();if(drag)settle();return;}
     var a={x:view.x,y:view.y,w:view.w,h:view.h},t0=null,dur=320;
     function step(ts){
       if(t0===null)t0=ts;
       var t=Math.min(1,(ts-t0)/dur),e=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-      view={x:a.x+(v.x-a.x)*e,y:a.y+(v.y-a.y)*e,w:a.w+(v.w-a.w)*e,h:a.h+(v.h-a.h)*e};draw();
+      view={x:a.x+(v.x-a.x)*e,y:a.y+(v.y-a.y)*e,w:a.w+(v.w-a.w)*e,h:a.h+(v.h-a.h)*e};moving=t<1;draw();
       anim=t<1?requestAnimationFrame(step):0;
     }
     anim=requestAnimationFrame(step);
@@ -1246,7 +1486,9 @@ function mjMapCore(D,G){
     if(state.full){svg.style.height='';}
     else{
       w=rect().width;if(!w)return;
-      h=window.innerWidth<700?Math.min(w*1.05,window.innerHeight*0.7):Math.min(w*0.8,Math.max(460,window.innerHeight-130));
+      // 넓은 화면: 세로를 800px 이상으로 잡는다(가로의 0.8배까지). 720px부터 이름이 모두 나오지만, 800px은 되어야 이름표를 멀리 빼는 긴 선이 줄어든다. 이보다 낮으면 서울이 작게 그려져 이름표 자리가 모자란다
+      // — 지도 폭 900px 이상에서 세로 720px부터 60곳 이름이 모두 나온다(2026-10-02 대표님: 모든 이름 표시). 창이 낮으면 지도가 화면보다 조금 길어진다.
+      h=window.innerWidth<700?Math.min(w*1.05,window.innerHeight*0.7):Math.min(w*0.8,Math.max(460,window.innerHeight-130,800*Math.max(1,fontScale())));   // 글자를 키우면 이름표도 커지므로 지도도 그만큼 길게
       svg.style.height=Math.round(h)+'px';
     }
     var r=rect();if(!r.width||!r.height)return;
@@ -1320,12 +1562,12 @@ function mjMapCore(D,G){
     if(hinted[key])return;hinted[key]=1;
     hint.textContent=text;hint.classList.add('on');clearTimeout(hintT);hintT=setTimeout(function(){hint.classList.remove('on');},2600);
   }
-  function panTo(v0,dx,dy,r){setView({x:v0.x-dx/r.width*v0.w,y:v0.y-dy/r.height*v0.h,w:v0.w,h:v0.h},true);}
+  function panTo(v0,dx,dy,r){setView({x:v0.x-dx/r.width*v0.w,y:v0.y-dy/r.height*v0.h,w:v0.w,h:v0.h},true,true);}
   // 가리킨 자리(화면 좌표)를 붙잡은 채 f배로 키우거나 줄인다
   function zoomAt(f,cx,cy,v0,now){
     var r=rect(),v=v0||view,w=Math.max(minW(),Math.min(fullView.w,v.w*f)),k=w/v.w,
         mx=v.x+(cx-r.left)/r.width*v.w,my=v.y+(cy-r.top)/r.height*v.h;
-    setView({x:mx-(mx-v.x)*k,y:my-(my-v.y)*k,w:w,h:w*ratio},now);
+    setView({x:mx-(mx-v.x)*k,y:my-(my-v.y)*k,w:w,h:w*ratio},now,now);   // 휠·두 손가락은 잇달아 불리므로 빠른 계산
   }
   var tg=null;
   function tInfo(e){
@@ -1345,7 +1587,7 @@ function mjMapCore(D,G){
       var f=tg.d/(i.d||1),w=Math.max(minW(),Math.min(fullView.w,tg.v.w*f)),k=w/tg.v.w,
           mx=tg.v.x+(tg.cx-r.left)/r.width*tg.v.w,my=tg.v.y+(tg.cy-r.top)/r.height*tg.v.h;
       // 처음 두 손가락 가운데가 가리키던 자리가, 지금 두 손가락 가운데 밑에 오게 한다(옮기기와 키우기를 함께)
-      setView({x:mx-(i.cx-r.left)/r.width*w,y:my-(i.cy-r.top)/r.height*w*ratio,w:w,h:w*ratio},true);
+      setView({x:mx-(i.cx-r.left)/r.width*w,y:my-(i.cy-r.top)/r.height*w*ratio,w:w,h:w*ratio},true,true);
     }else if(n===1&&!tg.two){
       var dx=i.cx-tg.cx,dy=i.cy-tg.cy;
       if(state.full){e.preventDefault();if(Math.abs(dx)+Math.abs(dy)>6)moved=true;panTo(tg.v,dx,dy,r);}
@@ -1410,6 +1652,7 @@ function mjMapCore(D,G){
     if(history.state&&history.state.mapFull){pendingDetail=name;history.back();}   // 닫힌 뒤(popstate)에 목록으로 옮긴다
     else{setFull(false,true);LIST().detail(name);}
   }
+  if($('mapRest'))$('mapRest').addEventListener('click',function(e){var b=e.target.closest('[data-rest]');if(b)pick(b.getAttribute('data-rest'));});
   cardBox.addEventListener('click',function(e){
     var b=e.target.closest('[data-pick]');if(b){pick(b.getAttribute('data-pick'));return;}
     var d=e.target.closest('[data-detail]');if(d){toDetail(d.getAttribute('data-detail'));return;}
@@ -1426,7 +1669,7 @@ function mjMapCore(D,G){
   $('btnZoomOut').addEventListener('click',function(){zoomBtn(1.5);});
   $('skipMap').addEventListener('click',function(e){e.preventDefault();go(listTop);try{listTop.focus({preventScroll:true});}catch(x){}});
   // 위쪽 글자 크기 단추를 누르면 지도 글자도 다시 그린다
-  ['btnPlus','btnMinus'].forEach(function(id){var b=$(id);if(b)b.addEventListener('click',function(){setTimeout(function(){setResv();draw();},0);});});
+  ['btnPlus','btnMinus'].forEach(function(id){var b=$(id);if(b)b.addEventListener('click',function(){setTimeout(function(){sizeMap();setResv();draw();},0);});});
 
   // ── 지도 크게 보기(화면 가득) ── 닫기 단추와 뒤로 가기로 닫힌다.
   function setFull(on,stay){
