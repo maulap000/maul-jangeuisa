@@ -1423,6 +1423,8 @@ function mjMapCore(D,G){
   // 고정 번호: 서울01~. 순위가 아니라 구·이름순으로 한 번 매긴 고유 번호다.
   function noName(h){return '서울'+(h.no<10?'0':'')+h.no;}
   var query='';
+  // 지하철역 이름(상세 정보에 적힌 것만): 이름 찾기에서 "청량리역", "청량리"로도 찾게 한다
+  function stations(h){return (h.dt&&h.dt.sub)?h.dt.sub.map(function(s){return s[0];}).join('|'):'';}
 
   // 자료 파일을 읽지 못한 경우: "장례식장이 없다"로 보이지 않게, 불러오지 못했다고 따로 알린다.
   if(!LOADED){
@@ -1532,7 +1534,7 @@ function mjMapCore(D,G){
       // 이름 찾기: 지금 이름·짧은 이름·옛 이름·번호에서 찾는다(구 선택과 상관없이 서울 전체에서)
       // 숫자만, "23번", "서울 23"처럼 넣으면 그 번호 한 곳. 그 밖에는 이름·짧은 이름·옛 이름·흔히 부르는 이름·주소의 건물 이름에서 찾는다.
       var q=query.replace(/ /g,''),mno=/^(?:서울)?0*([0-9]{1,2})번?$/.exec(q),
-          found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
+          found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')+'|'+stations(h)).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
       note.textContent='"'+query+'"(으)로 찾은 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
       sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
       list.innerHTML=found.length?'<ul class="halls">'+found.map(function(h){return card(h).replace('<p class="chips">','<p class="in-gu">'+h.g+'</p><p class="chips">');}).join('')+'</ul>'
@@ -1578,6 +1580,13 @@ function mjMapCore(D,G){
     try{if(history.replaceState)history.replaceState(history.state,'',location.pathname+(g?'?gu='+encodeURIComponent(g):''));}catch(e){}
   }
   var search=document.getElementById('nameSearch');
+  // 역이 적힌 시설이 하나라도 있으면 찾기 칸의 안내에 역 이름 찾기를 알린다
+  if(search&&HALLS.some(function(h){return !!stations(h);})){
+    var hintEl=document.querySelector('.name-search .soft');
+    if(hintEl)hintEl.textContent='(흔히 부르는 이름·옛 이름·번호·지하철역 이름으로도 찾습니다. 역 이름은 공식 홈페이지에 적힌 곳만 찾아집니다)';
+    // 예시로 드는 역은 자료에 실제로 있는 역(없는 역을 예로 들면 찾아지지 않는다)
+    search.setAttribute('placeholder','예: 성모, 세브란스, '+HALLS.filter(function(h){return !!stations(h);})[0].dt.sub[0][0]);
+  }
   // 구를 바꾼다(선택 칸·지도·목록·주소가 함께 움직인다). opt.keep: 지도에서 고른 점과 카드를 그대로 둔다.
   function chooseGu(g,opt){
     if(GUS.indexOf(g)<0)g=ALLV;
