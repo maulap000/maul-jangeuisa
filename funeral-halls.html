@@ -181,7 +181,33 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .first-call p{margin-top:10px;font-size:0.95rem;line-height:1.9;color:#555b66;}
 .call-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px;}
 .ghost-link{display:inline-block;margin-top:16px;padding:13px 20px;border:1px solid var(--line);color:var(--navy);text-decoration:none;font-size:0.92rem;}
+.hall.picked{border-left:2px solid var(--gold);padding-left:14px;}
+.region-post{margin-top:18px;font-size:0.93rem;}
+.region-post a{color:var(--navy);}
+.more{margin-top:12px;}
+.more summary{display:inline-block;min-height:44px;line-height:26px;padding:8px 16px 8px 14px;border:1px solid var(--line);background:#fff;color:var(--navy);font-size:0.92rem;cursor:pointer;list-style:none;}
+.more summary::-webkit-details-marker{display:none;}
+.more summary::before{content:'+';display:inline-block;width:1.1em;font-weight:700;color:var(--gold-text);}
+.more[open] summary::before{content:'−';}
+.more summary:hover{border-color:var(--gold);}
+.more summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.more-body{margin-top:10px;padding:16px 18px 18px;border:1px solid var(--line);background:#fff;}
+.more-body h4{margin-top:14px;font-size:0.86rem;font-weight:700;color:var(--gold-text);letter-spacing:0.02em;}
+.more-body h4:first-child{margin-top:0;}
+.more-text{margin-top:4px;font-size:0.93rem;line-height:1.8;color:var(--text);overflow-wrap:anywhere;}
+.more-text a{color:var(--navy);font-weight:700;}
+.fac{list-style:none;margin-top:6px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 14px;}
+.fac li{font-size:0.93rem;line-height:1.8;color:var(--text);}
+.fac li strong{font-weight:700;color:var(--navy);}
+.fac li.off,.fac li.off strong{color:#6b7280;font-weight:400;}
+.fac .mark{display:inline-block;width:1.3em;color:var(--gold-text);}
+.fac li.off .mark{color:#9aa0aa;}
+.more-call{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:0.93rem;line-height:1.85;color:#555b66;}
+.more-call a{display:inline-block;color:var(--navy);font-weight:700;white-space:nowrap;}
+.more-src{margin-top:10px;font-size:0.82rem;line-height:1.7;color:#6b7280;}
 @media print{
+  .more summary,.more-call{display:none!important;}
+  .more-body{border:0;padding:4px 0 0;}
   .pick-row,.first-call,.acts,.promise{display:none!important;}
   .hall{break-inside:avoid;padding:10px 0;}
   .pick{border:0;padding:0;margin-top:16px;}
@@ -273,7 +299,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <section class="sources">
     <span class="eyebrow">자료 출처</span>
-    <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 61곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수를 그대로 옮겼습니다.</p>
+    <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 61곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 그대로 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열리는 것만 실었습니다.</p>
   </section>
 
   <div class="feedback" id="feedback">
@@ -312,6 +338,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br>사업자등록번호: 209-90-98193<br>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
 </footer>
 
+<script src="funeral-data.js"></script>
 <script>
 
 
@@ -327,33 +354,66 @@ document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if
 try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
 
 (function(){
-  var HALLS=[{"n":"삼성서울병원장례식장","g":"강남구","d":"일원동","a":"서울특별시 강남구 일원로 81 (일원동, 삼성의료원)","p":"사설","t":"병원","b":"14","m":"26","k":"425","tel":"02-3410-3151"},{"n":"연세대학교 강남장례식장","g":"강남구","d":"도곡동","a":"서울특별시 강남구 언주로 211 (도곡동, 강남세브란스병원)","p":"사설","t":"병원","b":"4","m":"10","k":"0","tel":"02-2019-4000"},{"n":"강동경희대학교병원장례식장","g":"강동구","d":"상일동","a":"서울특별시 강동구 동남로 892 (상일동, 강동경희대학교병원)","p":"사설","t":"병원","b":"8","m":"14","k":"0","tel":"02-440-8800"},{"n":"강동성심병원장례식장","g":"강동구","d":"길동","a":"서울특별시 강동구 진황도로 86 (길동, 강동성심병원복합시설)","p":"사설","t":"병원","b":"8","m":"16","k":"330","tel":"02-470-1692"},{"n":"서울현대요양병원장례식장","g":"강동구","d":"천호동","a":"서울특별시 강동구 올림픽로 684 (천호동, 친구병원)","p":"사설","t":"병원","b":"4","m":"6","k":"70","tel":"02-486-4444"},{"n":"한국보훈복지의료공단중앙보훈병원","g":"강동구","d":"둔촌동","a":"서울특별시 강동구 진황도로61길 53 (둔촌동, 중앙보훈병원)","p":"공설","t":"병원","b":"13","m":"18","k":"100","tel":"02-2225-1004"},{"n":"대한병원장례식장","g":"강북구","d":"수유동","a":"서울특별시 강북구 도봉로 301 (수유동)","p":"사설","t":"병원","b":"5","m":"8","k":"50","tel":"02-992-4444"},{"n":"서울좋은병원장례식장","g":"강북구","d":"미아동","a":"서울특별시 강북구 도봉로 114 (미아동)","p":"사설","t":"병원","b":"4","m":"6","k":"30","tel":"02-984-5000"},{"n":"강서개화장례식장","g":"강서구","d":"방화동","a":"서울특별시 강서구 양천로 35 (방화동)","p":"사설","t":"병원","b":"4","m":"6","k":"100","tel":"02-2661-4444"},{"n":"강서장례식장","g":"강서구","d":"화곡동","a":"서울특별시 강서구 화곡로 163 (화곡동)","p":"사설","t":"전문","b":"3","m":"6","k":"20","tel":"02-2691-4414"},{"n":"이대서울병원장례식장","g":"강서구","d":"마곡동","a":"서울특별시 강서구 공항대로 260 (마곡동, 이화의대부속서울병원)","p":"사설","t":"병원","b":"15","m":"38","k":"1000","tel":"02-6986-4440"},{"n":"주식회사정겨운(우신장례식장)","g":"관악구","d":"신림동","a":"서울특별시 관악구 시흥대로 572 지하층 우신장례식장 (신림동, 한성빌딩)","p":"사설","t":"전문","b":"2","m":"6","k":"30","tel":"02-838-4444"},{"n":"건국대학교병원장례식장","g":"광진구","d":"화양동","a":"서울특별시 광진구 능동로 120-1 (화양동)","p":"사설","t":"병원","b":"9","m":"17","k":"680","tel":"02-2030-7900"},{"n":"혜민병원장례식장","g":"광진구","d":"자양동","a":"서울특별시 광진구 자양로 85 (자양동)","p":"사설","t":"전문","b":"4","m":"8","k":"32","tel":"02-444-1552"},{"n":"고려대구로병원장례식장","g":"구로구","d":"구로동","a":"서울특별시 구로구 구로동로 148 (구로동, 고려대부속구로병원)","p":"사설","t":"병원","b":"11","m":"20","k":"945","tel":"02-857-0444"},{"n":"구로성심병원장례식장","g":"구로구","d":"고척동","a":"서울특별시 구로구 경인로 427 (고척동)","p":"사설","t":"병원","b":"3","m":"10","k":"120","tel":"02-2067-1544"},{"n":"쉴낙원 서울제중장례식장","g":"구로구","d":"구로동","a":"서울특별시 구로구 새말로 60 (구로동, 제중요양병원)","p":"사설","t":"병원","b":"6","m":"12","k":"0","tel":"02-1480-7121"},{"n":"나눔길사회적협동조합","g":"금천구","d":"가산동","a":"서울특별시 금천구 가산디지털2로 165 (가산동, 백상스타타워2차)","p":"사설","t":"","b":"0","m":"0","k":"0","tel":"02-852-6119"},{"n":"독산장례식장","g":"금천구","d":"독산동","a":"서울특별시 금천구 시흥대로116길 5 (독산동)","p":"사설","t":"전문","b":"2","m":"4","k":"0","tel":"02-858-4444"},{"n":"쉴낙원 서울장례식장","g":"금천구","d":"가산동","a":"서울특별시 금천구 서부샛길 732 (가산동, 서울장례식장)","p":"사설","t":"전문","b":"4","m":"8","k":"60","tel":"02-2683-4444"},{"n":"노원을지대학교병원장례식장","g":"노원구","d":"하계동","a":"서울특별시 노원구 한글비석로 68 (하계동, 을지병원)","p":"사설","t":"병원","b":"9","m":"14","k":"0","tel":"02-970-8444"},{"n":"더조은장례식장","g":"노원구","d":"월계동","a":"서울특별시 노원구 화랑로 323 지하1층, 지하3층 (월계동)","p":"사설","t":"병원","b":"4","m":"27","k":"16","tel":"02-941-4444"},{"n":"원자력병원장례식장","g":"노원구","d":"공릉동","a":"서울특별시 노원구 노원로 75 (공릉동, 한국원자력의학원)","p":"공설","t":"병원","b":"8","m":"14","k":"815","tel":"02-970-1288"},{"n":"인제대학교상계백병원장례식장","g":"노원구","d":"상계동","a":"서울특별시 노원구 동일로 1342 (상계동, 상계백병원)","p":"사설","t":"병원","b":"3","m":"10","k":"250","tel":"02-938-5320"},{"n":"태릉성심장례식장","g":"노원구","d":"공릉동","a":"서울특별시 노원구 화랑로 425-8 (공릉동)","p":"사설","t":"전문","b":"7","m":"11","k":"60","tel":"02-976-8811"},{"n":"한일병원장례식장","g":"도봉구","d":"쌍문동","a":"서울특별시 도봉구 우이천로 308한일병원장례식장 (쌍문동)","p":"사설","t":"병원","b":"6","m":"8","k":"0","tel":"02-901-3440"},{"n":"경희의료원장례식장","g":"동대문구","d":"회기동","a":"서울특별시 동대문구 경희대로 23,경희의료원장례식장 (회기동, 경희의료원)","p":"사설","t":"병원","b":"8","m":"18","k":"500","tel":"02-958-9721"},{"n":"삼육서울병원 추모관(구위생병원)","g":"동대문구","d":"휘경동","a":"서울특별시 동대문구 망우로 82 (휘경동)","p":"사설","t":"병원","b":"13","m":"20","k":"0","tel":"02-2215-4444"},{"n":"서울특별시 동부병원 장례식장","g":"동대문구","d":"용두동","a":"서울특별시 동대문구 무학로 124 (용두동, 시립동부병원)","p":"공설","t":"병원","b":"5","m":"10","k":"157","tel":"02-920-9445"},{"n":"코리아병원장례식장","g":"동대문구","d":"장안동","a":"서울특별시 동대문구 장한로 143 (장안동)","p":"사설","t":"병원","b":"4","m":"6","k":"10","tel":"02-2244-0330"},{"n":"서울특별시보라매병원장례식장","g":"동작구","d":"신대방동","a":"서울특별시 동작구 보라매로5길 20 (신대방동, 서울특별시보라매병원)","p":"공설","t":"병원","b":"10","m":"22","k":"2","tel":"02-836-6900"},{"n":"중앙대학교병원장례식장","g":"동작구","d":"흑석동","a":"서울특별시 동작구 흑석로 102 (흑석동, 중앙대학교병원)","p":"사설","t":"병원","b":"7","m":"12","k":"0","tel":"02-860-3500"},{"n":"동신병원장례식장","g":"서대문구","d":"홍은동","a":"서울특별시 서대문구 연희로 272 (홍은동)","p":"사설","t":"병원","b":"3","m":"10","k":"80","tel":"02-395-1024"},{"n":"연세대학교 신촌장례식장","g":"서대문구","d":"신촌동","a":"서울특별시 서대문구 연세로 50-1 (신촌동, 연세의료원)","p":"사설","t":"병원","b":"18","m":"40","k":"0","tel":"02-2227-7500"},{"n":"서울성모장례식장","g":"서초구","d":"반포동","a":"서울특별시 서초구 반포대로 222 (반포동, 가톨릭대학교성의교정)","p":"사설","t":"병원","b":"17","m":"32","k":"0","tel":"02-2258-5940"},{"n":"한양대학병원장례식장","g":"성동구","d":"사근동","a":"서울특별시 성동구 왕십리로 222-1 (사근동, 한양대학부속병원)","p":"사설","t":"병원","b":"9","m":"20","k":"300","tel":"02-2290-9442"},{"n":"고려대학교안암병원장례식장","g":"성북구","d":"","a":"서울특별시 성북구 안암동5가  126-1 고대안암병원장례식장","p":"사설","t":"병원","b":"11","m":"22","k":"300","tel":"02-923-4442"},{"n":"뉴타운장례식장","g":"성북구","d":"하월곡동","a":"서울특별시 성북구 종암로 199 (하월곡동)","p":"사설","t":"전문","b":"10","m":"20","k":"0","tel":"02-909-4444"},{"n":"경찰병원장례식장","g":"송파구","d":"가락동","a":"서울특별시 송파구 송이로 123 (가락동, 국립경찰병원)","p":"공설","t":"병원","b":"7","m":"12","k":"130","tel":"02-431-4400"},{"n":"서울아산병원 장례식장","g":"송파구","d":"풍납동","a":"서울특별시 송파구 올림픽로43길 88 (풍납동, 서울아산병원)","p":"사설","t":"병원","b":"20","m":"38","k":"3182","tel":"02-3010-2000"},{"n":"메디힐병원장례식장","g":"양천구","d":"신월동","a":"서울특별시 양천구 남부순환로 331 (신월동)","p":"사설","t":"병원","b":"7","m":"10","k":"0","tel":"02-2601-7500"},{"n":"양천효병원장례식장","g":"양천구","d":"신정동","a":"서울특별시 양천구 오목로 121 (신정동)","p":"사설","t":"병원","b":"3","m":"6","k":"13","tel":"02-2692-4443"},{"n":"이대목동병원장례식장","g":"양천구","d":"목동","a":"서울특별시 양천구 안양천로 1071 (목동, 이화여대목동병원)","p":"사설","t":"병원","b":"10","m":"28","k":"725","tel":"02-2650-5121"},{"n":"홍익병원장례식장","g":"양천구","d":"목동","a":"서울특별시 양천구 등촌로 22 (목동)","p":"사설","t":"병원","b":"5","m":"8","k":"100","tel":"02-2600-1444"},{"n":"교원예움 서서울장례식장","g":"영등포구","d":"양평동1가","a":"서울특별시 영등포구 선유로 101,교원예움서서울장례식장 (양평동1가)","p":"사설","t":"전문","b":"6","m":"11","k":"50","tel":"02-2676-4444"},{"n":"복지장례문화원","g":"영등포구","d":"대림동","a":"서울특별시 영등포구 도림로 142 (대림동)","p":"사설","t":"전문","b":"9","m":"22","k":"40","tel":"02-846-4444"},{"n":"성애장례식장","g":"영등포구","d":"신길동","a":"서울특별시 영등포구 여의대방로53길 22 (신길동, 성애병원)","p":"사설","t":"병원","b":"4","m":"8","k":"300","tel":"02-844-4444"},{"n":"신화장례식장","g":"영등포구","d":"영등포동7가","a":"서울특별시 영등포구 영중로 100 (영등포동7가, 신화요양병원)","p":"사설","t":"전문","b":"5","m":"8","k":"100","tel":"02-2679-1122"},{"n":"여의도성모장례식장","g":"영등포구","d":"여의도동","a":"서울특별시 영등포구 63로 10 (여의도동, 여의도성모병원)","p":"사설","t":"병원","b":"6","m":"12","k":"0","tel":"02-3779-1526"},{"n":"영등포장례식장","g":"영등포구","d":"당산동3가","a":"서울특별시 영등포구 당산로31길 6 (당산동3가, 영등포병원)","p":"사설","t":"병원","b":"6","m":"17","k":"300","tel":"02-2679-4444"},{"n":"한강성심병원장례식장","g":"영등포구","d":"영등포동7가","a":"서울특별시 영등포구 국회대로56길 18,한강성심병원5별관지하1층 (영등포동7가, 한강성심병원)","p":"사설","t":"병원","b":"5","m":"12","k":"500","tel":"02-2633-4455"},{"n":"한림대 강남성심병원장례식장","g":"영등포구","d":"대림동","a":"서울특별시 영등포구 신길로 1 (대림동, 강남성심병원)","p":"사설","t":"병원","b":"2","m":"8","k":"0","tel":"02-833-3794"},{"n":"순천향서울장례식장","g":"용산구","d":"한남동","a":"서울특별시 용산구 대사관로 59 (한남동, 순천향대학병원)","p":"사설","t":"병원","b":"8","m":"14","k":"130","tel":"02-797-4444"},{"n":"가톨릭대학교 은평성모장례식장","g":"은평구","d":"진관동","a":"서울특별시 은평구 통일로 1021,은평성모장례식장 (진관동)","p":"사설","t":"병원","b":"10","m":"23","k":"300","tel":"02-2030-4444"},{"n":"은평요양병원장례식장","g":"은평구","d":"갈현동","a":"서울특별시 은평구 통일로 935,은평요양병원장례식장 (갈현동)","p":"사설","t":"병원","b":"6","m":"12","k":"80","tel":"02-351-4444"},{"n":"청구성심병원장례식장","g":"은평구","d":"갈현동","a":"서울특별시 은평구 통일로 873 (갈현동, 청구성심병원)","p":"사설","t":"병원","b":"4","m":"6","k":"60","tel":"02-352-4445"},{"n":"서울대학교병원장례식장","g":"종로구","d":"연건동","a":"서울특별시 종로구 대학로 101,서울대학교병원 (연건동)","p":"사설","t":"병원","b":"13","m":"24","k":"0","tel":"02-2072-2020"},{"n":"서울적십자병원장례식장","g":"종로구","d":"평동","a":"서울특별시 종로구 새문안로 9 (평동, 적십자병원)","p":"사설","t":"병원","b":"6","m":"12","k":"100","tel":"02-2002-8444"},{"n":"국립중앙의료원 장례식장","g":"중구","d":"을지로6가","a":"서울특별시 중구 을지로 245 (을지로6가, 국립중앙의료원)","p":"공설","t":"병원","b":"11","m":"31","k":"260","tel":"02-2262-4800"},{"n":"면목녹색병원 장례식장","g":"중랑구","d":"면목동","a":"서울특별시 중랑구 사가정로49길 53장례식장 (면목동, 원진재단부설녹색병원)","p":"사설","t":"병원","b":"4","m":"8","k":"100","tel":"02-493-4444"},{"n":"서울특별시 서울의료원 장례식장","g":"중랑구","d":"","a":"서울특별시 중랑구 신내로 156후문 (장례식장)","p":"공설","t":"병원","b":"9","m":"40","k":"0","tel":"02-2276-7671"}];
+  var DATA=window.MJ_FUNERAL||{halls:[]};
+  var HALLS=DATA.halls;
   var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
   var NEAR={'마포구':['서대문구','은평구','용산구','영등포구']};
+  var FAC=['식당','매점','주차장','유족대기실','장애인 편의시설'];
+  // 구별 지역 편 글(공개된 것만). 편집실 순서표에 따라 공개될 때마다 주소를 채운다.
+  var REGION_POSTS={};
   var sel=document.getElementById('guSelect'),list=document.getElementById('list'),note=document.getElementById('pickNote');
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function count(g){return HALLS.filter(function(h){return h.g===g;}).length;}
+  function has(v){return v!==''&&v!=='0';}
+  if(!HALLS.length){note.textContent='자료를 불러오지 못했습니다. 새로 고침해 주세요. 급하시면 1877-1852로 전화 주세요.';}
   var opts='<option value="">구를 골라 주세요</option>';
   GUS.forEach(function(g){opts+='<option value="'+g+'">'+g+' ('+count(g)+'곳)</option>';});
   opts+='<option value="*">서울 전체 ('+HALLS.length+'곳)</option>';
   sel.innerHTML=opts;
 
-  function card(h,showGu){
+  function more(h){
+    var fac;
+    if(h.f==='00000'){fac='<p class="more-text">편의시설 정보가 등록되어 있지 않습니다. 장례식장에 전화로 확인해 주세요.</p>';}
+    else{
+      fac='<ul class="fac">';
+      FAC.forEach(function(name,i){
+        var on=h.f.charAt(i)==='1';
+        // 주차장이 등록 안 됨으로 적혀 있어도 주차 대수가 있으면 대수를 따른다
+        if(i===2&&!on&&has(h.k))on=true;
+        fac+='<li class="'+(on?'on':'off')+'"><span class="mark" aria-hidden="true">'+(on?'●':'○')+'</span>'+name+' <strong>'+(on?'있음':'등록 안 됨')+'</strong></li>';
+      });
+      fac+='</ul>';
+    }
+    var scale=[];
+    scale.push(has(h.b)?'빈소 '+esc(h.b)+'개':'빈소 수 미등록');
+    scale.push(has(h.m)?'안치 가능 '+esc(h.m)+'구':'안치 구수 미등록');
+    scale.push(has(h.k)?'주차 '+esc(h.k)+'대':'주차 대수 미등록');
+    var home=h.h?'<a href="'+esc(h.h)+'" target="_blank" rel="noopener noreferrer">장례식장 홈페이지 열기</a>':'등록된 홈페이지가 없거나 열리지 않습니다.';
+    return '<details class="more"><summary>자세히 보기</summary><div class="more-body">'
+      +'<h4>규모</h4><p class="more-text">'+scale.join(' · ')+'</p>'
+      +'<h4>편의시설</h4>'+fac
+      +'<h4>홈페이지</h4><p class="more-text">'+home+'</p>'
+      +'<h4>가격</h4><p class="more-text">빈소 사용료·안치료·음식 값은 이 쪽에 싣지 않았습니다. 보건복지부 e하늘 장사정보시스템의 "장사시설·장례용품 가격"에서 확인하실 수 있습니다.</p>'
+      +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 식사 비용을 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a href="tel:18771852">전화 상담 1877-1852</a></p>'
+      +'<p class="more-src">보건복지부 등록 자료, '+esc(DATA.asOf||'')+' 기준. 지금 빈소가 비어 있는지는 장례식장에 전화로 확인해 주세요.</p>'
+      +'</div></details>';
+  }
+  function card(h){
     var chips='<span class="chip">'+esc(h.p)+'</span>'+(h.t?'<span class="chip">'+esc(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>':'');
     var facts=[];
-    if(h.b!==''&&h.b!=='0')facts.push('빈소 '+esc(h.b)+'개');
-    if(h.m!==''&&h.m!=='0')facts.push('안치 '+esc(h.m)+'구');
-    if(h.k!==''&&h.k!=='0')facts.push('주차 '+esc(h.k)+'대');
+    if(has(h.b))facts.push('빈소 '+esc(h.b)+'개');
+    if(has(h.m))facts.push('안치 '+esc(h.m)+'구');
+    if(has(h.k))facts.push('주차 '+esc(h.k)+'대');
     var tel=h.tel?'<a class="act tel" href="tel:'+esc(h.tel.replace(/[^0-9]/g,''))+'">전화 '+esc(h.tel)+'</a>':'';
     var map='<a class="act" href="https://map.naver.com/p/search/'+encodeURIComponent(h.n)+'" target="_blank" rel="noopener noreferrer">지도에서 보기</a>';
-    return '<li class="hall"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips+'</p>'
-      +'<p class="addr">'+(showGu?'':'')+esc(h.a)+'</p>'
+    return '<li class="hall" data-name="'+esc(h.n)+'"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips+'</p>'
+      +'<p class="addr">'+esc(h.a)+'</p>'
       +(facts.length?'<p class="facts">'+facts.join(' · ')+'</p>':'')
-      +'<p class="acts">'+tel+map+'</p></li>';
+      +'<p class="acts">'+tel+map+'</p>'+more(h)+'</li>';
   }
   function render(){
     var g=sel.value;
-    if(!g){list.innerHTML='';note.textContent='서울 25개 구 가운데 24개 구에 장례식장 '+HALLS.length+'곳이 등록되어 있습니다.';return;}
+    if(!g){list.innerHTML='';note.textContent=HALLS.length?'서울 25개 구 가운데 24개 구에 장례식장 '+HALLS.length+'곳이 등록되어 있습니다.':note.textContent;return;}
     var items=(g==='*'?HALLS.slice():HALLS.filter(function(h){return h.g===g;}));
     items.sort(function(a,b){return (g==='*'&&a.g!==b.g)?a.g.localeCompare(b.g,'ko'):a.n.localeCompare(b.n,'ko');});
     if(!items.length){
@@ -364,21 +424,45 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     }
     note.textContent=(g==='*'?'서울 전체':g)+' 장례식장 '+items.length+'곳 (이름순)';
     var html='',cur='';
+    if(g!=='*'&&REGION_POSTS[g])html+='<p class="region-post"><a href="'+esc(REGION_POSTS[g])+'" target="_blank" rel="noopener noreferrer">'+esc(g)+' 장례 안내 글 읽기</a></p>';
     items.forEach(function(h){
       if(g==='*'&&h.g!==cur){if(cur)html+='</ul>';cur=h.g;html+='<h2 class="gu-head">'+esc(cur)+'</h2><ul class="halls">';}
       else if(g!=='*'&&!cur){cur=g;html+='<ul class="halls">';}
-      html+=card(h,g==='*');
+      html+=card(h);
     });
     list.innerHTML=html+'</ul>';
   }
+  function openHall(name){
+    var lis=list.querySelectorAll('.hall'),i;
+    for(i=0;i<lis.length;i++){
+      if(lis[i].getAttribute('data-name')===name){
+        var d=lis[i].querySelector('details');if(d)d.open=true;
+        lis[i].classList.add('picked');lis[i].scrollIntoView({block:'start'});return;
+      }
+    }
+  }
   sel.addEventListener('change',render);
   list.addEventListener('click',function(e){var b=e.target.closest('[data-gu]');if(b){sel.value=b.getAttribute('data-gu');render();sel.scrollIntoView({block:'center'});}});
-  document.getElementById('btnPrint').addEventListener('click',function(){window.print();});
-  // 주소에 #구이름 이 있으면 그 구를 먼저 보여 준다(글에서 연결할 때 쓰는 용도). 저장은 하지 않는다.
+  // 인쇄할 때는 접힌 상세를 모두 펼친다
+  function openAll(){var ds=list.querySelectorAll('details'),i;for(i=0;i<ds.length;i++)ds[i].open=true;}
+  window.addEventListener('beforeprint',openAll);
+  document.getElementById('btnPrint').addEventListener('click',function(){openAll();window.print();});
+  // 주소에 #구이름 이 있으면 그 구를, ?hall=시설이름 이 있으면 그 시설 카드를 먼저 보여 준다
+  // (글·장례 지도에서 연결할 때 쓰는 용도). 저장은 하지 않는다.
   function fromHash(){try{var h=decodeURIComponent(location.hash.replace('#',''));if(GUS.indexOf(h)>=0){sel.value=h;return true;}}catch(e){}return false;}
-  fromHash();
+  function fromQuery(){
+    try{
+      var m=/[?&]hall=([^&#]+)/.exec(location.search);if(!m)return '';
+      var name=decodeURIComponent(m[1].replace(/[+]/g,' ')),i;
+      for(i=0;i<HALLS.length;i++){if(HALLS[i].n===name){sel.value=HALLS[i].g;return name;}}
+    }catch(e){}
+    return '';
+  }
+  var picked=fromQuery();
+  if(!picked)fromHash();
   window.addEventListener('hashchange',function(){if(fromHash())render();});
   render();
+  if(picked)openHall(picked);
 })();
 </script>
 <script>
