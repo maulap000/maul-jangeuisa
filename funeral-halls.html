@@ -160,7 +160,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .promise{margin-top:26px;font-size:0.93rem;line-height:1.9;color:#555b66;}
 .gu-head{font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR','Noto Sans CJK KR',sans-serif;font-weight:600;color:var(--navy);font-size:1.25rem;margin-top:44px;}
 .halls{list-style:none;margin-top:14px;border-top:1px solid var(--line);}
-.hall{padding:20px 4px;border-bottom:1px solid var(--line);}
+.hall{padding:20px 4px;border-bottom:1px solid var(--line);scroll-margin-top:84px;}   /* 위쪽 고정 띠에 이름 줄이 가려지지 않게 */
 .hall h3{font-size:1.1rem;font-weight:700;color:var(--navy);line-height:1.5;}
 .chips{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}
 .chip{display:inline-block;padding:2px 9px;border:1px solid var(--line);font-size:0.78rem;color:#555b66;background:#fff;}
@@ -303,10 +303,10 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
       <select id="guSelect" autocomplete="off"><option value="">목록을 준비하고 있습니다</option></select>
       <button type="button" class="ghost-btn" id="btnPrint">인쇄하기</button>
     </div>
-    <label class="name-search" for="nameSearch">장례식장 이름으로 찾기 <span class="soft">(옛 이름·번호로도 찾습니다)</span>
-      <input type="search" id="nameSearch" autocomplete="off" placeholder="예: 성모, 보라매, 서울23">
+    <label class="name-search" for="nameSearch">장례식장 이름으로 찾기 <span class="soft">(흔히 부르는 이름·옛 이름·번호로도 찾습니다)</span>
+      <input type="search" id="nameSearch" autocomplete="off" placeholder="예: 성모, 세브란스">
     </label>
-    <p class="pick-date">보건복지부 2026년 4월 기준 자료입니다. 이름 앞의 서울01~서울60은 장례 지도의 점 번호와 같습니다. 구·이름순으로 붙인 번호이며 순위가 아닙니다.</p>
+    <p class="pick-date">보건복지부 2026년 4월 기준 자료입니다. 이름 앞의 서울01~서울60은 구·이름순으로 붙인 번호이며 순위가 아닙니다.</p>
     <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
   </section>
   <noscript><p class="no-js">이 화면은 스크립트가 켜져 있어야 목록이 나옵니다. 급하시면 전화 1877-1852로 문의해 주세요.</p></noscript>
@@ -405,7 +405,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function count(g){return HALLS.filter(function(h){return h.g===g;}).length;}
   function has(v){return v!==''&&v!=='0';}
-  // 고정 번호: 서울01~. 순위가 아니라 구·이름순으로 한 번 매긴 고유 번호다(장례 지도의 점 번호와 같다).
+  // 고정 번호: 서울01~. 순위가 아니라 구·이름순으로 한 번 매긴 고유 번호다.
   function noName(h){return '서울'+(h.no<10?'0':'')+h.no;}
   var query='';
 
@@ -480,10 +480,12 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var g=sel.value;
     if(query){
       // 이름 찾기: 지금 이름·짧은 이름·옛 이름·번호에서 찾는다(구 선택과 상관없이 서울 전체에서)
-      var q=query.replace(/ /g,''),found=HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+noName(h)).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
-      note.textContent='이름에 "'+query+'"이(가) 들어간 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
+      // 숫자만, "23번", "서울 23"처럼 넣으면 그 번호 한 곳. 그 밖에는 이름·짧은 이름·옛 이름·흔히 부르는 이름·주소의 건물 이름에서 찾는다.
+      var q=query.replace(/ /g,''),mno=/^(?:서울)?0*([0-9]{1,2})번?$/.exec(q),
+          found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
+      note.textContent='"'+query+'"(으)로 찾은 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
       list.innerHTML=found.length?'<ul class="halls">'+found.map(function(h){return card(h).replace('<p class="chips">','<p class="in-gu">'+h.g+'</p><p class="chips">');}).join('')+'</ul>'
-        :'<div class="empty"><p>찾으시는 이름의 장례식장이 목록에 없습니다. 이름이 바뀌었을 수 있으니 구를 골라 찾아보시거나 전화로 문의해 주세요.</p><p class="near"><a class="act tel" href="tel:18771852">전화 1877-1852</a></p></div>';
+        :'<div class="empty"><p>찾는 이름이 없습니다. 목록의 이름과 다르게 부르는 곳일 수 있으니 구를 골라 보시거나 전화로 문의해 주세요.</p><p class="near"><a class="act tel" href="tel:18771852">전화 1877-1852</a></p></div>';
       return;
     }
     if(!g){list.innerHTML='';note.textContent='서울 25개 구 가운데 '+GUS.filter(function(x){return count(x)>0;}).length+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.';return;}
@@ -545,7 +547,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   window.addEventListener('beforeprint',openAll);
   document.getElementById('btnPrint').addEventListener('click',function(){openAll();window.print();});
   // 주소의 ?gu=구이름(또는 옛 방식 #구이름)이면 그 구를, ?hall=시설이름이면 그 시설 카드를 먼저 보여 준다
-  // (글·장례 지도에서 연결할 때 쓰는 용도). 저장은 하지 않는다.
+  // (글에서 연결할 때 쓰는 용도). 저장은 하지 않는다.
   function param(key){
     try{var m=new RegExp('[?&]'+key+'=([^&#]+)').exec(location.search);return m?decodeURIComponent(m[1].replace(/[+]/g,' ')):'';}catch(e){return '';}
   }
