@@ -386,7 +386,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br>사업자등록번호: 209-90-98193<br>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
 </footer>
 
-<script src="funeral-data.js?v=56d61181"></script>
+<script src="funeral-data.js?v=56031708"></script>
 <script>
 
 
@@ -475,7 +475,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       if(dt.td&&!same(dt.td))ln.push('<li><span class="dk">장례식장</span><span>'+tl(dt.td)+'</span></li>');
       if(dt.tm&&!same(dt.tm))ln.push('<li><span class="dk">병원 대표</span><span>'+tl(dt.tm)+'</span></li>');
       // 24시간: 장례식장(운영사무실·상담·접수·장례지도사)이 24시간이라고 공식 홈페이지에 적힌 경우만(기획실 결정 2026-10-02)
-      if(dt.t24)ln.push('<li><span class="dk">운영</span><span>24시간 운영(공식 홈페이지 표기)</span></li>');
+      // 홈페이지에 적힌 대상(상담·운영사무실·운영 …)을 살려 적는다
+      if(dt.t24)ln.push('<li><span class="dk">24시간</span><span>'+(dt.t24===1?'24시간 운영':esc(dt.t24)+' 24시간')+' (공식 홈페이지 표기)</span></li>');
       if(ln.length)ex+='<h4>전화</h4><ul class="dl">'+ln.join('')+'</ul>';
       if(dt.pk){
         ln=[dt.pk[0]===1?'주차할 수 있습니다':(dt.pk[0]===0?'주차장이 없습니다':'')].concat([dt.pk[1],dt.pk[2]].map(esc)).filter(function(x){return x;});
