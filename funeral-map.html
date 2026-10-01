@@ -265,7 +265,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 #map.dragging{cursor:grabbing;}
 .map-hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);max-width:88%;padding:8px 14px;background:rgba(14,24,36,0.88);color:#fff;font-size:0.88rem;line-height:1.5;text-align:center;border-radius:4px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
 .map-hint.on{opacity:1;}
-.pt-name{fill:#1c2840;font-weight:700;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-linejoin:round;}
+.pt-name{fill:#1c2840;font-weight:700;dominant-baseline:middle;pointer-events:none;}
 .pt .no{text-anchor:middle;dominant-baseline:central;font-weight:700;pointer-events:none;fill:#fff;}
 .approx .pt .no.hosp{fill:#1c2840;}
 .approx .pt .no.spec{fill:#7d6337;}
@@ -309,7 +309,9 @@ svg.compact .pt .spec{fill:#7d6337;stroke:#fff;}
 .map-cur{position:absolute;left:10px;top:10px;padding:5px 12px;background:rgba(255,255,255,0.94);border:1px solid var(--navy);color:var(--navy);font-size:0.9rem;font-weight:700;pointer-events:none;}
 .map-full-top{position:absolute;right:10px;top:10px;background:rgba(255,255,255,0.96);}
 .map-box.full .map-full-top{display:none;}
-.pt-lead{stroke:#1c2840;opacity:0.55;pointer-events:none;}
+/* 번호 원과 이름을 잇는 흰 띠: 한 덩어리 이름표로 보이게 */
+.pt .tag{fill:rgba(255,255,255,0.93);stroke:rgba(28,40,64,0.55);}
+.gu-plus{fill:#a33a2f;font-weight:700;}
 
 .dong-label{fill:#555b66;}
 .pt{pointer-events:none;}
@@ -436,7 +438,7 @@ svg.compact .pt .spec{fill:#7d6337;stroke:#fff;}
       <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10.5" fill="rgba(28,40,64,0.12)"/><rect x="6.5" y="6.5" width="9" height="9" fill="#fff" stroke="#7d6337" stroke-width="2"/></svg>전문 장례식장 부근</li>
       <li><svg viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="5.5" width="16" height="11" fill="none" stroke="#a33a2f" stroke-width="2"/></svg>고른 동</li>
     </ul>
-    <p class="legend-sub">점 안의 숫자는 아래 목록의 번호와 같습니다. 구·이름순으로 붙인 번호이며 순위가 아닙니다. 구를 누르면 그 구가 크게 보입니다. 물색 띠는 한강의 위치를 알아보기 쉽게 그린 것으로, 실제 강의 모양·폭과는 다릅니다.</p>
+    <p class="legend-sub">점 안의 숫자는 아래 목록의 번호와 같습니다. 구·이름순으로 붙인 번호이며 순위가 아닙니다. 구 이름 옆 붉은 ＋는 자리가 좁아 번호만 보이는 곳이 있다는 표시로, 그 구를 누르면 이름이 모두 보이는 크기로 커집니다. 물색 띠는 한강의 위치를 알아보기 쉽게 그린 것으로, 실제 강의 모양·폭과는 다릅니다.</p>
     <div class="map-wrap">
       <svg id="map" role="group" aria-label="서울 구 경계 지도. 구를 누르면 그 구로 확대됩니다. 같은 내용이 아래 목록에도 있습니다." xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="map-hint" id="mapHint" aria-hidden="true"></div>
@@ -546,6 +548,162 @@ document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(
 document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
 try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
 
+// 장례 지도 — 이름표 자리 잡기(화면을 건드리지 않는 계산만). 지도 화면(map_app.js)과 점검 스크립트(layout_stats.js)가 함께 쓴다.
+// 원칙(기획실 2026-10-01): 번호 원과 이름은 한 덩어리로 붙인다. 붙일 자리(오른쪽 → 왼쪽 → 오른쪽 위·아래 → 왼쪽 위·아래)가 없으면
+// 그 배율에서는 번호 원만 보인다. 떨어뜨려 선으로 잇지 않는다. 구 이름이 먼저 자리를 잡고, 그다음 장례식장 이름.
+function mjMapCore(D,G){
+  var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
+  var BUILDING=G.pointSource==='building';
+  var HALLS=D.halls.filter(function(h){return !!G.pt[h.n];});
+  var LAT0=37.56,KX=Math.cos(LAT0*Math.PI/180),SC=3000;
+  function px(lon){return (lon-126.7)*KX*SC;}
+  function py(lat){return (37.75-lat)*SC;}
+  function decode(a){var out=[],x=0,y=0,i;for(i=0;i<a.length;i+=2){x+=a[i];y+=a[i+1];out.push([x/1e5,y/1e5]);}return out;}
+  function inP(x,y,rings){
+    var c=false,i,j,r,a,b;
+    for(i=0;i<rings.length;i++){r=rings[i];for(j=0;j<r.length-1;j++){a=r[j];b=r[j+1];
+      if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}}
+    return c;
+  }
+  function overlaps(b,arr){for(var q=0;q<arr.length;q++){var a=arr[q];if(b[0]<a[2]&&b[2]>a[0]&&b[1]<a[3]&&b[3]>a[1])return true;}return false;}
+  var GU={},ALL=[1e9,1e9,-1e9,-1e9];
+  GUS.forEach(function(g){
+    var pr=G.gu[g].r.map(function(a){return decode(a).map(function(p){return [px(p[0]),py(p[1])];});}),b=[1e9,1e9,-1e9,-1e9];
+    pr.forEach(function(r){r.forEach(function(p){if(p[0]<b[0])b[0]=p[0];if(p[1]<b[1])b[1]=p[1];if(p[0]>b[2])b[2]=p[0];if(p[1]>b[3])b[3]=p[1];});});
+    // 구 이름을 놓을 자리 후보: 구 안쪽에 고르게 찍은 점들. 가운데 조금 위쪽부터 차례로 살핀다.
+    var cx=px(G.gu[g].c[0]),cy=py(G.gu[g].c[1]),tx=cx,ty=cy-(b[3]-b[1])*0.12,N=11,i,j,x,y,c=[];
+    for(i=1;i<N;i++)for(j=1;j<N;j++){x=b[0]+(b[2]-b[0])*i/N;y=b[1]+(b[3]-b[1])*j/N;if(inP(x,y,pr))c.push([x,y,Math.hypot(x-tx,y-ty)]);}
+    c.sort(function(p,q){return p[2]-q[2];});
+    GU[g]={pr:pr,bbox:b,c:[cx,cy],cands:c,halls:HALLS.filter(function(h){return h.g===g;})};
+    if(b[0]<ALL[0])ALL[0]=b[0];if(b[1]<ALL[1])ALL[1]=b[1];if(b[2]>ALL[2])ALL[2]=b[2];if(b[3]>ALL[3])ALL[3]=b[3];
+  });
+  // 같은 동에 여러 곳이 있으면 좌우로 나란히 벌려 찍는다(건물 좌표일 때는 벌리지 않는다).
+  var groups={};
+  HALLS.forEach(function(h){var k=h.g+'|'+h.d;(groups[k]=groups[k]||[]).push(h);});
+  HALLS.forEach(function(h){var grp=groups[h.g+'|'+h.d];h._i=grp.indexOf(h);h._n=BUILDING?1:grp.length;h._p=G.pt[h.n];});
+
+  var C={GUS:GUS,GU:GU,HALLS:HALLS,ALL:ALL,ratio:0.85,W:340,fullView:null,px:px,py:py,inP:inP,overlaps:overlaps};
+  C.fit=function(b,pad){
+    var w=b[2]-b[0],h=b[3]-b[1],cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2;
+    w*=1+pad;h*=1+pad;
+    if(h/w>C.ratio)w=h/C.ratio;else h=w*C.ratio;
+    return {x:cx-w/2,y:cy-h/2,w:w,h:h};
+  };
+  C.minW=function(){return (ALL[2]-ALL[0])/16;};
+  C.clamp=function(v){
+    var f=C.fullView,w=Math.max(C.minW(),Math.min(f.w,v.w)),h=w*C.ratio;
+    if(w>=f.w-0.01)return {x:f.x,y:f.y,w:f.w,h:f.h};
+    var cx=v.x+v.w/2,cy=v.y+v.h/2,x=cx-w/2,y=cy-h/2;
+    x=Math.min(Math.max(x,f.x),f.x+f.w-w);y=Math.min(Math.max(y,f.y),f.y+f.h-h);
+    return {x:x,y:y,w:w,h:h};
+  };
+  // 지도 크기(화면 px)를 알려 주면 세로/가로 비율과 서울 전체 범위를 다시 잰다
+  C.size=function(W,H){C.W=W;C.ratio=H/W;C.fullView=C.fit(ALL,0.06);C._zoom={};};
+  C.isZoomed=function(v){return v.w<C.fullView.w*(C.W>=700?0.7:0.86);};
+  C.xy=function(h,zoomed,big,u){
+    var off=h._n>1?(h._i-(h._n-1)/2)*(zoomed?25:(big?21:17))*u:0;
+    return [px(h._p[0])+off,py(h._p[1])];
+  };
+
+  // 한 화면(view)의 자리 잡기. 돌려주는 것: 점 자리, 구 이름 자리, 장례식장 이름 자리, 품질 숫자.
+  C.layout=function(view,fsc){
+    fsc=fsc||1;
+    var u=view.w/C.W,zoomed=C.isZoomed(view),big=C.W>=700,compact=!zoomed&&!big,
+        R=zoomed?11:(big?10:4.5),NF=zoomed?12:11,boxes=[],own={},pts=[],names=[],out={u:u,zoomed:zoomed,big:big,compact:compact,R:R,NF:NF};
+    HALLS.forEach(function(h){
+      var xy=C.xy(h,zoomed,big,u),m=30*u,pad=(R+(compact?1:2))*u;
+      if(xy[0]<view.x-m||xy[0]>view.x+view.w+m||xy[1]<view.y-m||xy[1]>view.y+view.h+m)return;
+      own[h.no]=[xy[0]-pad,xy[1]-pad,xy[0]+pad,xy[1]+pad];boxes.push(own[h.no]);
+      pts.push({h:h,x:xy[0],y:xy[1],inView:(xy[0]>=view.x&&xy[0]<=view.x+view.w&&xy[1]>=view.y&&xy[1]<=view.y+view.h)});
+    });
+    // 구 이름: 그 구 안에서 점이 없는 빈 자리. 이름표보다 먼저 자리를 잡는다.
+    var gfs=(zoomed?18:(big?19:13))*fsc*u,gus=[],guOver=0;
+    GUS.forEach(function(g){
+      var o=GU[g],b=o.bbox,w=g.length*gfs*1.06,hh=gfs*0.62,k,c,bx,ok=false,pass;
+      if(b[2]<view.x||b[0]>view.x+view.w||b[3]<view.y||b[1]>view.y+view.h)return;
+      for(pass=0;pass<2&&!ok;pass++){
+        for(k=0;k<o.cands.length;k++){
+          c=o.cands[k];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
+          if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
+          if(pass===0&&(!inP(bx[0]+w*0.12,c[1],o.pr)||!inP(bx[2]-w*0.12,c[1],o.pr)))continue;   // 글자 양 끝도 구 안쪽에(좁은 구는 둘째 바퀴에서 푼다)
+          if(overlaps(bx,boxes))continue;
+          ok=true;break;
+        }
+      }
+      var over=false;
+      if(!ok){
+        // 끝내 빈 자리가 없으면 점과 조금 겹치더라도 구 가운데에 적는다(구 이름이 안 보이는 구는 없게). 겹친 구는 따로 센다.
+        c=o.c;bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
+        if(bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h)return;
+        over=true;guOver++;
+      }
+      boxes.push(bx);gus.push({g:g,x:c[0],y:c[1],fs:gfs,box:bx,over:over,plus:false});
+    });
+    // 장례식장 이름: 번호 원에 붙여서. 점이 몰린 곳부터 자리를 잡는다.
+    var nfs=(zoomed?13:(big?12.5:11))*fsc*u,near=60*u,Rr=R*u,g3=3*u,order=pts.filter(function(p){return p.inView;}).map(function(p){return [p,0];});
+    order.forEach(function(a){order.forEach(function(b){if(a!==b&&Math.abs(a[0].x-b[0].x)<near&&Math.abs(a[0].y-b[0].y)<near)a[1]++;});});
+    order.sort(function(a,b){return b[1]-a[1]||a[0].h.no-b[0].h.no;});
+    var attached=0,only=[];
+    order.forEach(function(it){
+      var p=it[0],h=p.h,x=p.x,y=p.y,w=h.sn.length*nfs*1.0,hh=nfs*0.72,up=(R+2)*u,hint=h.lh||{},T={
+        R:['start',x+Rr+g3,y,[x+Rr+g3,y-hh,x+Rr+g3+w,y+hh]],
+        L:['end',x-Rr-g3,y,[x-Rr-g3-w,y-hh,x-Rr-g3,y+hh]],
+        RU:['start',x+Rr*0.3,y-up-hh,[x+Rr*0.3,y-up-2*hh,x+Rr*0.3+w,y-up]],
+        RD:['start',x+Rr*0.3,y+up+hh,[x+Rr*0.3,y+up,x+Rr*0.3+w,y+up+2*hh]],
+        LU:['end',x-Rr*0.3,y-up-hh,[x-Rr*0.3-w,y-up-2*hh,x-Rr*0.3,y-up]],
+        LD:['end',x-Rr*0.3,y+up+hh,[x-Rr*0.3-w,y+up,x-Rr*0.3,y+up+2*hh]]},
+        dirs=['R','L','RU','RD','LU','LD'],i,t,d;
+      if(hint.hide&&!zoomed){only.push(h.no);return;}
+      if(hint.dir&&T[hint.dir])dirs=[hint.dir].concat(dirs.filter(function(q){return q!==hint.dir;}));
+      for(i=0;i<dirs.length;i++){
+        d=dirs[i];t=T[d];
+        if(t[3][0]<view.x||t[3][2]>view.x+view.w||t[3][1]<view.y||t[3][3]>view.y+view.h)continue;
+        if(overlaps(t[3],boxes))continue;
+        boxes.push(t[3]);attached++;
+        names.push({h:h,dir:d,anchor:t[0],x:t[1],y:t[2],box:t[3],fs:nfs,px:x,py:y});
+        return;
+      }
+      only.push(h.no);
+    });
+    // 번호만 남은 점이 있는 구에는 "＋"(키우면 이름이 나온다는 표시)를 붙인다
+    if(!compact)gus.forEach(function(q){q.plus=GU[q.g].halls.some(function(h){return only.indexOf(h.no)>=0;});});
+    // 겹침 검사(합격 기준 0건): 이름표·구 이름·번호 원끼리. 빈 자리가 없어 일부러 겹쳐 적은 구 이름은 guOverlap으로 따로 센다.
+    var all=names.map(function(n){return n.box;}).concat(gus.filter(function(q){return !q.over;}).map(function(q){return q.box;})),ov=0,a,b2,k2,m2;
+    for(k2=0;k2<all.length;k2++){
+      a=all[k2];
+      for(m2=k2+1;m2<all.length;m2++){b2=all[m2];if(a[0]<b2[2]&&a[2]>b2[0]&&a[1]<b2[3]&&a[3]>b2[1])ov++;}
+      for(m2 in own){b2=own[m2];if(a[0]<b2[2]&&a[2]>b2[0]&&a[1]<b2[3]&&a[3]>b2[1])ov++;}
+    }
+    out.pts=pts;out.gus=gus;out.names=names;out.boxes=boxes;
+    out.stats={inView:order.length,attached:attached,numberOnly:only,guShown:gus.length,guOverlap:guOver,overlap:ov};
+    return out;
+  };
+
+  // 구를 눌렀을 때 들어갈 배율: 그 구의 모든 이름이 번호 옆에 붙어 나오는 가장 작은 배율(몰린 구는 더 크게 들어간다)
+  C.zoomFor=function(g,fsc){
+    var key=g+'|'+(fsc||1);
+    if(C._zoom[key])return C._zoom[key];
+    var o=GU[g],v=C.clamp(C.fit(o.bbox,0.16)),best=v,bestN=-1,i,L,n,hb=null;
+    if(!o.halls.length){C._zoom[key]=v;return v;}
+    o.halls.forEach(function(h){var x=px(h._p[0]),y=py(h._p[1]);hb=hb?[Math.min(hb[0],x),Math.min(hb[1],y),Math.max(hb[2],x),Math.max(hb[3],y)]:[x,y,x,y];});
+    var cx=(hb[0]+hb[2])/2,cy=(hb[1]+hb[3])/2;
+    for(i=0;i<12;i++){
+      L=C.layout(v,fsc);
+      n=o.halls.filter(function(h){return L.names.some(function(q){return q.h===h;});}).length;
+      if(n>bestN){bestN=n;best=v;}
+      if(n===o.halls.length)break;
+      // 더 키운다: 그 구의 점들이 모두 화면 안에 남는 한에서. 가운데를 구 가운데에서 점들의 가운데 쪽으로 옮겨 간다.
+      var w=v.w*0.86,need=Math.max((hb[2]-hb[0])+w*0.5,((hb[3]-hb[1])+w*C.ratio*0.5)/C.ratio);
+      if(w<need||w<C.minW())break;
+      var ocx=v.x+v.w/2,ocy=v.y+v.h/2,ncx=ocx+(cx-ocx)*0.5,ncy=ocy+(cy-ocy)*0.5;
+      v=C.clamp({x:ncx-w/2,y:ncy-w*C.ratio/2,w:w,h:w*C.ratio});
+    }
+    C._zoom[key]=best;return best;
+  };
+  C.size(340,289);
+  return C;
+}
+
 (function(){
   var D=window.MJ_FUNERAL,G=window.MJ_GEO;
   var LOADED=!!(D&&D.halls&&D.halls.length&&G&&G.gu&&G.pt);
@@ -572,6 +730,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var BUILDING=G.pointSource==='building';
   var HALLS=D.halls.filter(function(h){return !!G.pt[h.n];});
   var REGION_POSTS=D.regionPosts||{};
+  var C=mjMapCore(D,G);     // 이름표 자리 잡기 계산(map_layout.js). 화면은 여기서 그린다.
   var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
   var NEAR={'마포구':['서대문구','은평구','용산구','영등포구']};
   var SVGNS='http://www.w3.org/2000/svg';
@@ -607,7 +766,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     if(b[0]<ALL[0])ALL[0]=b[0];if(b[1]<ALL[1])ALL[1]=b[1];if(b[2]>ALL[2])ALL[2]=b[2];if(b[3]>ALL[3])ALL[3]=b[3];
   });
 
-  // 구 이름을 놓을 자리 후보: 구 안쪽에 고르게 찍은 점들. 가운데에서 조금 위쪽에 가까운 순으로 살핀다.
+  // 구 이름을 놓을 자리 후보: 구 안쪽에 고르게 찍은 점들. 가운데 조금 위쪽부터 차례로 살핀다.
   function inP(x,y,rings){
     var c=false,i,j,r,a,b;
     for(i=0;i<rings.length;i++){r=rings[i];for(j=0;j<r.length-1;j++){a=r[j];b=r[j+1];
@@ -673,7 +832,6 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var grp=groups[h.g+'|'+h.d];
     h._i=grp.indexOf(h);h._n=BUILDING?1:grp.length;h._p=G.pt[h.n];
     h._g=el('g',{'class':'pt','data-name':h.n},gPt);
-    h._l=el('line',{'class':'pt-lead'},gName);     // 이름을 조금 떨어뜨려 놓을 때 점과 잇는 가는 선
     h._t=el('text',{'class':'pt-name'},gName);
   });
 
@@ -682,12 +840,11 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   // 글자 크기 단추(위쪽)를 누르면 지도 글자도 같은 비율로 커지게 한다.
   function fontScale(){var f=parseFloat(getComputedStyle(document.documentElement).fontSize)||17;return Math.max(0.8,Math.min(1.5,f/17));}
   // 구 하나쯤으로 커진 상태인가(점을 누를 수 있는 상태). 서울 전체 보기에서는 구 이름과 숫자만 보이고, 구를 먼저 누르게 한다.
-  function isZoomed(){return view.w<fullView.w*(rect().width>=700?0.7:0.86);}
+  function isZoomed(){return C.isZoomed(view);}
   // 넓은 화면(지도 폭 700px 이상)에서는 서울 전체 보기에서도 점을 누를 수 있다. 좁은 화면 전체 보기에서는 구를 먼저 누른다.
   function wide(){return rect().width>=700;}
   function ptXY(h,u){
-    var off=h._n>1?(h._i-(h._n-1)/2)*(isZoomed()?25:(wide()?21:17))*u:0;
-    return [px(h._p[0])+off,py(h._p[1])];
+    return C.xy(h,isZoomed(),wide(),u);
   }
   function overlaps(b,arr){for(var q=0;q<arr.length;q++){var a=arr[q];if(b[0]<a[2]&&b[2]>a[0]&&b[1]<a[3]&&b[3]>a[1])return true;}return false;}
   function draw(){
@@ -700,101 +857,52 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     });
     // 점: 어느 배율에서나 모두 그린다(번호는 늘 보인다). 이웃 구의 점도 바로 누를 수 있다. 화면 밖의 점은 건너뛴다.
     gDong.setAttribute('display',zoomed?'inline':'none');
-    var boxes=[],names=[],R=zoomed?11:(big?10:4.5),NF=zoomed?12:11;
+    var L=C.layout(view,fsc),boxes=L.boxes,R=L.R,NF=L.NF,seen={},nameOf={};
+    L.names.forEach(function(n){nameOf[n.h.no]=n;});
+    L.pts.forEach(function(p){seen[p.h.no]=p;});
     HALLS.forEach(function(h){
-      var g=h._g,html='',xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),mine=true,
-          s=R*(on?1.15:1)*u,cx=xy[0].toFixed(1),cy=xy[1].toFixed(1),m=30*u;
-      h._t.setAttribute('display','none');h._l.setAttribute('display','none');
-      if(xy[0]<view.x-m||xy[0]>view.x+view.w+m||xy[1]<view.y-m||xy[1]>view.y+view.h+m){
-        g.innerHTML='';g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');return;
-      }
-      if(live&&mine)html+='<circle class="hit" cx="'+cx+'" cy="'+cy+'" r="'+(22*u).toFixed(1)+'"/>';
+      var g=h._g,p=seen[h.no],nm=nameOf[h.no],html='';
+      h._t.setAttribute('display','none');
+      if(!p){g.innerHTML='';g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');return;}
+      var hosp=(h.t==='병원'),on=(h.n===state.picked),s=R*(on?1.15:1)*u,cx=p.x.toFixed(1),cy=p.y.toFixed(1);
+      if(live)html+='<circle class="hit" cx="'+cx+'" cy="'+cy+'" r="'+(22*u).toFixed(1)+'"/>';
       if(!BUILDING&&zoomed)html+='<circle class="halo" cx="'+cx+'" cy="'+cy+'" r="'+(19*u).toFixed(1)+'"/>';
+      // 번호 원과 이름이 한 덩어리로 보이게, 이름 밑에 원에서 이어지는 흰 띠를 깐다
+      if(nm){
+        var bx=nm.box,pad=4*u,x0=(nm.dir==='R')?p.x:(nm.dir==='L'?bx[0]-pad:bx[0]-pad),x1=(nm.dir==='L')?p.x:bx[2]+pad;
+        html+='<rect class="tag" x="'+x0.toFixed(1)+'" y="'+(bx[1]-1.5*u).toFixed(1)+'" width="'+(x1-x0).toFixed(1)+'" height="'+(bx[3]-bx[1]+3*u).toFixed(1)+'" rx="'+((bx[3]-bx[1])/2+1.5*u).toFixed(1)+'" stroke-width="'+(1*u).toFixed(2)+'"/>';
+      }
       if(on)html+='<circle class="ring" cx="'+cx+'" cy="'+cy+'" r="'+((R+8)*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>';
       if(hosp)html+='<circle class="mk hosp" cx="'+cx+'" cy="'+cy+'" r="'+s.toFixed(1)+'" stroke-width="'+(1.8*u).toFixed(2)+'"/>';
-      else html+='<rect class="mk spec" x="'+(xy[0]-s*0.92).toFixed(1)+'" y="'+(xy[1]-s*0.92).toFixed(1)+'" width="'+(s*1.84).toFixed(1)+'" height="'+(s*1.84).toFixed(1)+'" stroke-width="'+(1.8*u).toFixed(2)+'"/>';
+      else html+='<rect class="mk spec" x="'+(p.x-s*0.92).toFixed(1)+'" y="'+(p.y-s*0.92).toFixed(1)+'" width="'+(s*1.84).toFixed(1)+'" height="'+(s*1.84).toFixed(1)+'" stroke-width="'+(1.8*u).toFixed(2)+'"/>';
       if(!compact)html+='<text class="no'+(hosp?' hosp':' spec')+'" x="'+cx+'" y="'+cy+'" font-size="'+(NF*u).toFixed(2)+'">'+no2(h)+'</text>';
       g.innerHTML=html;
-      boxes.push([xy[0]-(R+(compact?1:2))*u,xy[1]-(R+(compact?1:2))*u,xy[0]+(R+(compact?1:2))*u,xy[1]+(R+(compact?1:2))*u]);
-      if(live&&mine){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.removeAttribute('aria-hidden');
+      if(live){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.removeAttribute('aria-hidden');
         g.setAttribute('aria-label',noName(h)+'번, '+h.n+', '+h.g+' '+h.d+', '+(hosp?'병원 장례식장':'전문 장례식장'));g.setAttribute('class','pt live');}
       else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');}
-      if(mine)names.push([h,xy,0]);
+      if(nm){
+        h._t.removeAttribute('display');h._t.setAttribute('text-anchor',nm.anchor);h._t.setAttribute('x',nm.x.toFixed(1));h._t.setAttribute('y',nm.y.toFixed(1));
+        h._t.setAttribute('font-size',nm.fs.toFixed(2));h._t.textContent=h.sn;
+      }
     });
-    // 구 이름: 구 한가운데에 못 박지 않고, 그 구 안에서 점이 없는 빈 자리를 찾아 놓는다(이름표보다 먼저 자리를 잡는다).
-    var gfs=(zoomed?18:(big?19:13))*fsc*u,guOver=0;guShown=0;
+    // 구 이름: 빈 자리에(계산 결과). 번호만 남은 점이 있는 구에는 "＋"를 붙여 키우면 이름이 나온다는 것을 알린다.
+    var shownGu={};
+    L.gus.forEach(function(q){shownGu[q.g]=q;});
     GUS.forEach(function(g){
-      // 좁은 화면의 전체 보기에서는 자리가 모자라 "구"를 뺀 짧은 이름으로 적는다(중구는 그대로)
-      var o=GU[g],t=o.label,nm=g,w=nm.length*gfs*1.06,hh=gfs*0.62,k2,c,bx,ok=false,b=o.bbox;
-      if(b[2]<view.x||b[0]>view.x+view.w||b[3]<view.y||b[1]>view.y+view.h){t.setAttribute('display','none');return;}
-      for(k2=0;k2<o.cands.length;k2++){
-        c=o.cands[k2];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
-        if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
-        if(!inP(bx[0]+w*0.12,c[1],o.pr)||!inP(bx[2]-w*0.12,c[1],o.pr))continue;      // 글자 양 끝도 구 안쪽에
-        if(overlaps(bx,boxes))continue;
-        ok=true;break;
-      }
-      if(!ok){
-        // 넓게 못 놓으면 양 끝 조건을 풀어 다시 찾는다(좁은 구)
-        for(k2=0;k2<o.cands.length;k2++){
-          c=o.cands[k2];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
-          if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
-          if(overlaps(bx,boxes))continue;
-          ok=true;break;
-        }
-      }
-      if(!ok){
-        // 끝내 빈 자리가 없으면 점과 조금 겹치더라도 구 가운데에 적는다(구 이름이 안 보이는 구는 없게). 겹친 구는 따로 센다.
-        c=[px(o.c[0]),py(o.c[1])];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
-        if(bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h){t.setAttribute('display','none');return;}
-        guOver++;
-      }
-      boxes.push(bx);guShown++;
-      t.removeAttribute('display');t.setAttribute('x',c[0].toFixed(1));t.setAttribute('y',c[1].toFixed(1));
-      t.setAttribute('font-size',gfs.toFixed(2));t.setAttribute('stroke-width',(3*u).toFixed(2));t.textContent=nm;
+      var t=GU[g].label,q=shownGu[g];
+      if(!q){t.setAttribute('display','none');return;}
+      t.removeAttribute('display');t.setAttribute('x',q.x.toFixed(1));t.setAttribute('y',q.y.toFixed(1));
+      t.setAttribute('font-size',q.fs.toFixed(2));t.setAttribute('stroke-width',(3*u).toFixed(2));
+      t.innerHTML=g+(q.plus?'<tspan class="gu-plus" dx="'+(3*u).toFixed(1)+'" font-size="'+(q.fs*0.8).toFixed(2)+'">＋</tspan>':'');
     });
-    svg.setAttribute('data-gu-shown',guShown);svg.setAttribute('data-gu-overlap',guOver);
+    guShown=L.stats.guShown;
+    svg.setAttribute('data-gu-shown',guShown);svg.setAttribute('data-gu-overlap',L.stats.guOverlap);
+    svg.setAttribute('data-attached',L.stats.attached);svg.setAttribute('data-number-only',L.stats.numberOnly.length);svg.setAttribute('data-overlap',L.stats.overlap);
     // 좁은 화면 전체 보기에서는 구 이름을 점 위에 그려, 점과 겹친 구 이름도 읽히게 한다
     if(compact){if(svg.lastChild!==gLabel)svg.appendChild(gLabel);}
     else if(gLabel.nextSibling!==gDong)svg.insertBefore(gLabel,gDong);
     svg.setAttribute('class',(BUILDING?'':'approx')+(compact?' compact':''));
     var tip=$('mapTip');if(tip)tip.style.display=compact?'':'none';
-    // 점 옆 짧은 이름: 둘레 여덟 자리 가운데 안 겹치는 곳에 놓고, 자리가 없으면 이름은 숨긴다(번호는 남는다).
-    // 점이 몰린 곳부터 자리를 잡게 해서 이름이 되도록 많이 보이게 한다.
-    var nfs=(zoomed?13:(big?12.5:11))*fsc*u,near=60*u;
-    names.forEach(function(a){names.forEach(function(b){if(a!==b&&Math.abs(a[1][0]-b[1][0])<near&&Math.abs(a[1][1]-b[1][1])<near)a[2]++;});});
-    names.sort(function(a,b){return b[2]-a[2]||a[0].no-b[0].no;});
-    names.forEach(function(it){
-      var h=it[0],xy=it[1],w=h.sn.length*nfs*1.0,hh=nfs*0.72,x=xy[0],y=xy[1],tries=[],ring,i,t;
-      // 가까운 둘레 여덟 자리 → 그래도 없으면 한 뼘 더 떨어진 여덟 자리(가는 선으로 점과 잇는다)
-      for(ring=0;ring<2;ring++){
-        var gap=(R+4+ring*20)*u,dg=(R+1+ring*15)*u;
-        tries.push(['start',x+gap,y,[x+gap,y-hh,x+gap+w,y+hh],ring],
-          ['end',x-gap,y,[x-gap-w,y-hh,x-gap,y+hh],ring],
-          ['middle',x,y+gap+hh,[x-w/2,y+gap,x+w/2,y+gap+2*hh],ring],
-          ['middle',x,y-gap-hh,[x-w/2,y-gap-2*hh,x+w/2,y-gap],ring],
-          ['start',x+dg,y+dg+hh,[x+dg,y+dg,x+dg+w,y+dg+2*hh],ring],
-          ['start',x+dg,y-dg-hh,[x+dg,y-dg-2*hh,x+dg+w,y-dg],ring],
-          ['end',x-dg,y+dg+hh,[x-dg-w,y+dg,x-dg,y+dg+2*hh],ring],
-          ['end',x-dg,y-dg-hh,[x-dg-w,y-dg-2*hh,x-dg,y-dg],ring]);
-      }
-      for(i=0;i<tries.length;i++){
-        t=tries[i];
-        if(t[3][0]<view.x||t[3][2]>view.x+view.w||t[3][1]<view.y||t[3][3]>view.y+view.h)continue;
-        if(overlaps(t[3],boxes))continue;
-        boxes.push(t[3]);
-        h._t.removeAttribute('display');h._t.setAttribute('text-anchor',t[0]);h._t.setAttribute('x',t[1].toFixed(1));h._t.setAttribute('y',t[2].toFixed(1));
-        h._t.setAttribute('font-size',nfs.toFixed(2));h._t.setAttribute('stroke-width',(3*u).toFixed(2));
-        h._t.textContent=h.sn;
-        if(t[4]){
-          // 이름 상자에서 점에 가장 가까운 자리까지 선을 긋는다
-          var lx=Math.max(t[3][0],Math.min(x,t[3][2])),ly=Math.max(t[3][1],Math.min(y,t[3][3]));
-          h._l.removeAttribute('display');h._l.setAttribute('x1',x.toFixed(1));h._l.setAttribute('y1',y.toFixed(1));
-          h._l.setAttribute('x2',lx.toFixed(1));h._l.setAttribute('y2',ly.toFixed(1));h._l.setAttribute('stroke-width',(1*u).toFixed(2));
-        }
-        return;
-      }
-    });
     // "한강" 글자: 장례식장 이름표가 먼저이고, 겹치면 숨긴다
     var hanN=0;
     hanLabels.forEach(function(t){
@@ -842,6 +950,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     }
     var r=rect();if(!r.width||!r.height)return;
     var old=view,nr=r.height/r.width;
+    C.size(r.width,r.height);
     ratio=nr;fullView=fit(ALL,0.06);
     if(!old){return;}
     view=clamp({x:old.x,y:old.y+(old.h-old.w*ratio)/2,w:old.w,h:old.w*ratio});
@@ -958,7 +1067,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     // 키보드로 옮겨 다니는 순서: 고른 구의 점이 먼저, 그다음 화면에 보이는 이웃 구의 점
     HALLS.slice().sort(function(a,b){return ((a.g===g?0:1)-(b.g===g?0:1))||(a.no-b.no);}).forEach(function(h){gPt.appendChild(h._g);});
     selGu.value=g;fillDong();drawDongs();showCard(null);
-    setView(g&&g!=='*'?fit(GU[g].bbox,0.16):fullView,opt.now);
+    setView(g&&g!=='*'?C.zoomFor(g,fontScale()):fullView,opt.now);
     renderList();summary();setUrl();
   }
   function chooseDong(n){
@@ -1071,7 +1180,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     state.full=on;box.classList.toggle('full',on);document.documentElement.classList.toggle('map-full',on);
     $('btnFull').setAttribute('aria-pressed',on?'true':'false');
     sizeMap();
-    setView(state.gu&&state.gu!=='*'?fit(GU[state.gu].bbox,0.16):fullView,true);
+    setView(state.gu&&state.gu!=='*'?C.zoomFor(state.gu,fontScale()):fullView,true);
     if(on){try{$('btnFullClose').focus({preventScroll:true});}catch(e){}}
     else{try{$('btnFull').focus({preventScroll:true});}catch(e){}go(box);}
   }
