@@ -251,7 +251,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .map-box{margin-top:6px;}
 .legend{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:0.88rem;color:var(--text);}
 .legend li{display:inline-flex;align-items:center;gap:6px;min-height:30px;}
-.legend svg{width:20px;height:20px;flex:none;}
+.legend svg{width:22px;height:22px;flex:none;}
 .map-wrap{margin-top:8px;border:1px solid var(--line);background:#fff;}
 #map{display:block;width:100%;height:320px;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
 .gu{fill:#f4f0e7;stroke:#1c2840;stroke-width:1.1;vector-effect:non-scaling-stroke;cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -267,6 +267,15 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .gu-label{fill:#1c2840;font-weight:700;}
 .dong-label{fill:#555b66;}
 .pt{pointer-events:none;}
+.pt.far{opacity:0.38;}
+.pt .halo{fill:rgba(28,40,64,0.12);}
+/* 대략의 위치(동 가운데)일 때: 속이 빈 테두리 표시로, 정확한 자리가 아님을 보인다 */
+.approx .pt .hosp{fill:#fff;stroke:#1c2840;}
+.approx .pt .spec{fill:#fff;stroke:#7d6337;}
+.map-top{margin-top:4px;padding:10px 14px;border:1px solid var(--gold);border-left:3px solid var(--gold);background:#fff;font-size:0.92rem;line-height:1.75;color:var(--text);}
+.legend{margin-top:12px;}
+.legend-sub{margin-top:4px;font-size:0.84rem;line-height:1.7;color:#555b66;}
+.lead,.fineprint,.map-top,.map-note,.pick-note,.pick-date,.list-note,.legend-sub,.promise,.first-call p,.notes li{text-wrap:pretty;}
 .pt.live{pointer-events:auto;cursor:pointer;}
 .pt .hit{fill:transparent;}
 .pt .mk{stroke:#fff;}
@@ -278,11 +287,10 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .me-out{fill:none;stroke:#a33a2f;}
 .me-in{fill:#a33a2f;}
 .map-ctrl{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
-.ghost-btn.sq{min-width:44px;padding:8px 0;font-size:1.1rem;}
 .ghost-btn{background:#fff;}
 .ghost-btn:disabled{opacity:0.55;cursor:default;}
 .map-note{margin-top:10px;font-size:0.86rem;line-height:1.75;color:#555b66;}
-.pt-card{margin-top:14px;padding:18px 18px 16px;border:1px solid var(--navy);border-left:3px solid var(--gold);background:#fff;}
+.pt-card{margin-top:12px;scroll-margin-top:80px;padding:18px 18px 16px;border:1px solid var(--navy);border-left:3px solid var(--gold);background:#fff;}
 .pt-card h3{font-size:1.1rem;font-weight:700;color:var(--navy);line-height:1.5;}
 .pt-many{font-size:0.95rem;color:var(--text);line-height:1.8;}
 .dist{margin-top:6px;font-size:0.92rem;font-weight:700;color:var(--gold-text);}
@@ -370,7 +378,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <div class="pick-row">
       <button type="button" class="ghost-btn" id="btnPrint">인쇄하기</button>
     </div>
-    <p class="pick-date">동 고르기의 동 이름은 행정동이라 주소의 동 이름과 다를 수 있습니다(예: 여의도동 → 여의동).</p>
+    <p class="pick-date">동 고르기의 동 이름은 주민센터 이름(행정동) 기준이라 주소에 적힌 동 이름과 다를 수 있습니다(예: 주소는 여의도동, 고르기는 여의동).</p>
     <p class="pick-date">장례식장은 보건복지부 2026년 4월 기준, 경계선은 2025년 6월 기준 자료입니다.</p>
     <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
   </section>
@@ -380,21 +388,23 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
   <div class="map-layout">
   <section class="map-box" aria-label="지도">
+    <p class="map-top" id="mapNote"><strong>점은 대략의 위치입니다.</strong> 건물 위치는 "자세히 보기"의 지도에서 확인해 주세요.</p>
     <ul class="legend" id="legend" aria-label="지도 표시 설명">
-      <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="#1c2840" stroke="#fff" stroke-width="1.5"/></svg>병원 장례식장</li>
-      <li><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="4" width="12" height="12" fill="#7d6337" stroke="#fff" stroke-width="1.5"/></svg>전문 장례식장</li>
-      <li><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="5" width="14" height="10" fill="none" stroke="#a33a2f" stroke-width="2"/></svg>고른 동</li>
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10.5" fill="rgba(28,40,64,0.12)"/><circle cx="11" cy="11" r="5" fill="#fff" stroke="#1c2840" stroke-width="2"/></svg>병원 장례식장 부근</li>
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10.5" fill="rgba(28,40,64,0.12)"/><rect x="6.5" y="6.5" width="9" height="9" fill="#fff" stroke="#7d6337" stroke-width="2"/></svg>전문 장례식장 부근</li>
+      <li><svg viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="5.5" width="16" height="11" fill="none" stroke="#a33a2f" stroke-width="2"/></svg>고른 동</li>
     </ul>
+    <p class="legend-sub">구 이름 옆 숫자는 그 구의 장례식장 수입니다. 구를 누르면 그 구가 크게 보이고 점이 나타납니다.</p>
     <div class="map-wrap">
       <svg id="map" role="group" aria-label="서울 구 경계 지도. 구를 누르면 그 구로 확대됩니다. 같은 내용이 아래 목록에도 있습니다." xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
+    <div id="pointCard" aria-live="polite"></div>
     <div class="map-ctrl">
       <button type="button" class="ghost-btn" id="btnAll">서울 전체로</button>
-      <button type="button" class="ghost-btn sq" id="btnZoomIn" aria-label="지도 크게">＋</button>
-      <button type="button" class="ghost-btn sq" id="btnZoomOut" aria-label="지도 작게">－</button>
+      <button type="button" class="ghost-btn" id="btnZoomIn">지도 크게</button>
+      <button type="button" class="ghost-btn" id="btnZoomOut">지도 작게</button>
     </div>
-    <p class="map-note" id="mapNote">점은 그 장례식장이 있는 동의 위치를 나타냅니다. 건물의 정확한 위치는 "자세히 보기"의 지도에서 확인해 주세요.</p>
-    <div id="pointCard" aria-live="polite"></div>
+    <p class="map-note">옆의 구를 누르면 그 구가 가운데로 옵니다.</p>
   </section>
 
   <div class="list-col">
@@ -420,7 +430,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <section class="notes">
     <span class="eyebrow">보실 때 알아 두실 것</span>
     <ul>
-      <li><strong>점은 그 장례식장이 있는 동의 위치를 나타냅니다.</strong> 건물이 있는 자리가 아니라 주소의 동 가운데에 찍었고, 같은 동에 두 곳이 있으면 나란히 찍었습니다.</li>
+      <li><strong>점은 대략의 위치입니다.</strong> 건물이 있는 자리가 아니라 주소에 적힌 동의 가운데쯤에 찍었습니다. 지도에 그려진 동 경계(주민센터 기준)와 주소의 동이 달라, 점이 옆 동 안에 찍힌 곳도 있습니다. 같은 동에 두 곳이 있으면 나란히 찍었습니다.</li>
       <li>빈소 수는 등록된 시설 규모입니다. <strong>지금 비어 있는지는 장례식장에 전화로 확인</strong>하셔야 합니다.</li>
       <li>장례식장 가격(빈소 사용료, 안치료, 음식 등)은 이 쪽에 싣지 않았습니다. 시설별 공개 가격은 보건복지부 e하늘 장사정보시스템의 "장사시설·장례용품 가격"에서 확인하실 수 있습니다.</li>
       <li>문을 닫았거나 이름이 바뀐 곳이 있을 수 있습니다. 다른 점을 보시면 아래 의견 칸으로 알려 주세요.</li>
@@ -490,13 +500,14 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var D=window.MJ_FUNERAL,G=window.MJ_GEO;
   var LOADED=!!(D&&D.halls&&D.halls.length&&G&&G.gu&&G.pt);
   function $(id){return document.getElementById(id);}
-  var selGu=$('guSelect'),selDong=$('dongSelect'),btnLoc=$('btnLocate'),note=$('pickNote'),svg=$('map'),
+  var selGu=$('guSelect'),selDong=$('dongSelect'),note=$('pickNote'),svg=$('map'),
       cardBox=$('pointCard'),list=$('list'),listNote=$('listNote'),listTop=$('listTop');
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
   // 자료 파일을 읽지 못한 경우: "장례식장이 없다"로 보이지 않게 따로 알린다.
   if(!LOADED){
-    selGu.innerHTML='<option value="">자료를 불러오지 못했습니다</option>';selGu.disabled=true;if(btnLoc)btnLoc.disabled=true;$('btnPrint').disabled=true;
+    selGu.innerHTML='<option value="">자료를 불러오지 못했습니다</option>';selGu.disabled=true;$('btnPrint').disabled=true;
+    if($('btnLocate'))$('btnLocate').disabled=true;
     note.textContent='자료를 불러오지 못했습니다.';
     document.querySelector('.map-box').style.display='none';
     list.innerHTML='<div class="empty load-fail"><p><strong>지도와 장례식장 목록을 불러오지 못했습니다.</strong></p>'
@@ -506,10 +517,9 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     return;
   }
 
+  // 점 위치의 출처: building = 건물 좌표, 그 밖 = 주소의 동 가운데(대략의 위치).
+  // 건물 좌표일 때만 build_map.py가 map_dist.js(재기·순서 기능)를 아래 "덧붙는 기능" 자리에 끼워 넣는다.
   var BUILDING=G.pointSource==='building';
-  // 거리 숫자·가까운 순·현재 위치 찾기는 점이 건물 좌표일 때만 켠다(기획실 결정 10/1).
-  // 점이 동 중심인 동안에는 거리가 실제와 크게 달라 틀린 순서를 줄 수 있어서다. geo_build.py의 POINT_SOURCE가 스위치다.
-  var DIST=BUILDING;
   var HALLS=D.halls.filter(function(h){return !!G.pt[h.n];});
   var REGION_POSTS=D.regionPosts||{};
   var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
@@ -517,6 +527,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var SVGNS='http://www.w3.org/2000/svg';
   var calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function count(g){return HALLS.filter(function(h){return h.g===g;}).length;}
+  // 덧붙는 기능이 끼어드는 자리(없으면 아무 일도 하지 않는다)
+  var X={rowExtra:function(){return '';},listByOrigin:null,summary:null,dongOption:'동을 고르면 지도에 표시합니다',onDong:function(){},drawOrigin:function(){return '';}};
 
   // ── 좌표: 경위도 → 화면 좌표(서울 넓이에서는 단순 비례로 충분하다) ──
   var LAT0=37.56,KX=Math.cos(LAT0*Math.PI/180),SC=3000;
@@ -532,23 +544,6 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var b=[1e9,1e9,-1e9,-1e9],i,j,x,y;
     for(i=0;i<rings.length;i++)for(j=0;j<rings[i].length;j++){x=px(rings[i][j][0]);y=py(rings[i][j][1]);if(x<b[0])b[0]=x;if(y<b[1])b[1]=y;if(x>b[2])b[2]=x;if(y>b[3])b[3]=y;}
     return b;
-  }
-  function inRings(lon,lat,rings){
-    var c=false,i,j,r,a,b;
-    for(i=0;i<rings.length;i++){r=rings[i];for(j=0;j<r.length-1;j++){a=r[j];b=r[j+1];
-      if((a[1]>lat)!==(b[1]>lat)&&lon<(b[0]-a[0])*(lat-a[1])/(b[1]-a[1])+a[0])c=!c;}}
-    return c;
-  }
-  function km(a,b){
-    var R=6371,p=Math.PI/180,dla=(b[1]-a[1])*p,dlo=(b[0]-a[0])*p;
-    var s=Math.sin(dla/2)*Math.sin(dla/2)+Math.cos(a[1]*p)*Math.cos(b[1]*p)*Math.sin(dlo/2)*Math.sin(dlo/2);
-    return 2*R*Math.asin(Math.sqrt(s));
-  }
-  // 점이 동 중심인 동안에는 1km 단위로만 적는다(건물 좌표가 되면 0.1km 단위).
-  function kmKey(d){return BUILDING?Math.round(d*10)/10:(d<1?0:Math.round(d));}
-  function kmText(d){
-    if(BUILDING)return '직선거리 약 '+(Math.round(d*10)/10).toFixed(1)+'km';
-    return d<1?'직선거리 1km 안쪽':'직선거리 약 '+Math.round(d)+'km';
   }
 
   var GU={},ALL=[1e9,1e9,-1e9,-1e9];
@@ -569,10 +564,17 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     return {x:cx-w/2,y:cy-h/2,w:w,h:h};
   }
   fullView=fit(ALL,0.06);
+  // 키운 지도가 서울 밖 빈 곳으로 나가 가장자리가 잘리지 않게, 보이는 범위를 전체 범위 안에 둔다.
+  function clamp(v){
+    if(v.w>=fullView.w)return fullView;
+    var x=Math.min(Math.max(v.x,fullView.x),fullView.x+fullView.w-v.w),y=Math.min(Math.max(v.y,fullView.y),fullView.y+fullView.h-v.h);
+    return {x:x,y:y,w:v.w,h:v.h};
+  }
 
   // ── SVG 뼈대 ──
   function el(name,attrs,parent){var e=document.createElementNS(SVGNS,name),k;for(k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
   var gGu=el('g',{},svg),gDong=el('g',{},svg),gDongLabel=el('g',{'aria-hidden':'true'},svg),gMe=el('g',{'aria-hidden':'true'},svg),gPt=el('g',{},svg),gLabel=el('g',{'aria-hidden':'true'},svg);   // 구 이름은 점 위에 그려 글자가 가려지지 않게 한다
+  if(!BUILDING)svg.setAttribute('class','approx');
   GUS.forEach(function(g){
     var p=el('path',{d:pathOf(GU[g].rings),'class':'gu'+(GU[g].n?'':' zero'),'data-gu':g,tabindex:'0',role:'button',
       'aria-label':g+', 장례식장 '+GU[g].n+'곳'+(GU[g].n?'':' (등록된 곳 없음)')},gGu);
@@ -590,55 +592,56 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   });
 
   function unit(){var w=svg.getBoundingClientRect().width||340;return view.w/w;}   // 화면 1px이 지도에서 얼마인가
-  // 구 하나쯤으로 커진 상태인가(점을 누를 수 있는 상태). 서울 전체 보기에서는 구를 먼저 누르게 한다.
+  // 글자 크기 단추(위쪽)를 누르면 지도 글자도 같은 비율로 커지게 한다.
+  function fontScale(){var f=parseFloat(getComputedStyle(document.documentElement).fontSize)||17;return Math.max(0.8,Math.min(1.5,f/17));}
+  // 구 하나쯤으로 커진 상태인가(점을 누를 수 있는 상태). 서울 전체 보기에서는 구 이름과 숫자만 보이고, 구를 먼저 누르게 한다.
   function isZoomed(){return view.w<fullView.w*0.7;}
   function ptXY(h,u){
-    var off=h._n>1?(h._i-(h._n-1)/2)*(isZoomed()?17:7)*u:0;
+    var off=h._n>1?(h._i-(h._n-1)/2)*17*u:0;
     return [px(h._p[0])+off,py(h._p[1])];
   }
   function draw(){
-    var u=unit(),zoomed=isZoomed(),k;
+    var u=unit(),zoomed=isZoomed(),fsc=fontScale(),k,oneGu=(state.gu&&state.gu!=='*')?state.gu:'';
     svg.setAttribute('viewBox',view.x.toFixed(1)+' '+view.y.toFixed(1)+' '+view.w.toFixed(1)+' '+view.h.toFixed(1));
     // 구 이름
     GUS.forEach(function(g){
-      var t=GU[g].label,on=(g===state.gu);
+      var t=GU[g].label,on=(g===oneGu);
       t.setAttribute('x',px(GU[g].c[0]).toFixed(1));t.setAttribute('y',py(GU[g].c[1]).toFixed(1));
-      t.setAttribute('font-size',((zoomed?13:11)*u).toFixed(2));t.setAttribute('stroke-width',(3*u).toFixed(2));
+      t.setAttribute('font-size',((zoomed?13.5:12)*fsc*u).toFixed(2));t.setAttribute('stroke-width',(3*u).toFixed(2));
       t.textContent=zoomed?(on?'':g):(g==='중구'?g:g.replace(/구$/,''))+' '+GU[g].n;
-      GU[g].path.setAttribute('class','gu'+(GU[g].n?'':' zero')+(on?' on':'')+(state.gu&&state.gu!=='*'&&!on?' dim':''));
+      GU[g].path.setAttribute('class','gu'+(GU[g].n?'':' zero')+(on?' on':'')+(oneGu&&!on?' dim':''));
     });
     // 동 이름: 점에 가려지면 아래로 내리고, 이름끼리 겹치면 뒤에 나온 것은 숨긴다
-    var pts=HALLS.map(function(h){return ptXY(h,u);}),placed=[],fs=10.5*u;
+    var shown=HALLS.filter(function(h){return zoomed;}),pts=shown.map(function(h){return ptXY(h,u);}),placed=[],fs=12*fsc*u;
     for(k=0;k<gDongLabel.childNodes.length;k++){
       var dl=gDongLabel.childNodes[k],lx=+dl.getAttribute('data-x'),ly=+dl.getAttribute('data-y'),q,hit=false,w=dl.textContent.length*fs*0.98,bx;
-      for(q=0;q<pts.length;q++){if(Math.abs(pts[q][0]-lx)<w/2+9*u&&Math.abs(pts[q][1]-ly)<13*u){ly=pts[q][1]+19*u;break;}}
+      for(q=0;q<pts.length;q++){if(Math.abs(pts[q][0]-lx)<w/2+10*u&&Math.abs(pts[q][1]-ly)<15*u){ly=pts[q][1]+22*u;break;}}
       bx=[lx-w/2,ly-fs*0.7,lx+w/2,ly+fs*0.7];
       for(q=0;q<placed.length;q++){if(bx[0]<placed[q][2]&&bx[2]>placed[q][0]&&bx[1]<placed[q][3]&&bx[3]>placed[q][1]){hit=true;break;}}
-      if(hit){dl.setAttribute('display','none');continue;}
+      if(hit||!zoomed){dl.setAttribute('display','none');continue;}
       placed.push(bx);dl.removeAttribute('display');
       dl.setAttribute('x',lx.toFixed(1));dl.setAttribute('y',ly.toFixed(1));
       dl.setAttribute('font-size',fs.toFixed(2));dl.setAttribute('stroke-width',(2.5*u).toFixed(2));
     }
-    // 점
+    // 점: 전체 보기에서는 그리지 않는다. 키운 상태에서 고른 구의 점만 누를 수 있고, 이웃 구의 점은 옅게 보인다.
     HALLS.forEach(function(h){
-      var g=h._g,xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),s=(zoomed?(on?9:7):3)*u,html='';
-      if(zoomed)html+='<circle class="hit" cx="'+xy[0].toFixed(1)+'" cy="'+xy[1].toFixed(1)+'" r="'+(22*u).toFixed(1)+'"/>';
-      if(on)html+='<circle class="ring" cx="'+xy[0].toFixed(1)+'" cy="'+xy[1].toFixed(1)+'" r="'+(14*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>';
-      if(hosp)html+='<circle class="mk hosp" cx="'+xy[0].toFixed(1)+'" cy="'+xy[1].toFixed(1)+'" r="'+s.toFixed(1)+'" stroke-width="'+(1.5*u).toFixed(2)+'"/>';
-      else html+='<rect class="mk spec" x="'+(xy[0]-s*0.92).toFixed(1)+'" y="'+(xy[1]-s*0.92).toFixed(1)+'" width="'+(s*1.84).toFixed(1)+'" height="'+(s*1.84).toFixed(1)+'" stroke-width="'+(1.5*u).toFixed(2)+'"/>';
+      var g=h._g,html='';
+      if(!zoomed){g.innerHTML='';g.setAttribute('class','pt');g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');return;}
+      var xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),mine=(!oneGu||h.g===oneGu),s=(on?9:7)*u,cx=xy[0].toFixed(1),cy=xy[1].toFixed(1);
+      if(mine)html+='<circle class="hit" cx="'+cx+'" cy="'+cy+'" r="'+(22*u).toFixed(1)+'"/>';
+      if(!BUILDING)html+='<circle class="halo" cx="'+cx+'" cy="'+cy+'" r="'+(15*u).toFixed(1)+'"/>';
+      if(on)html+='<circle class="ring" cx="'+cx+'" cy="'+cy+'" r="'+(17*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>';
+      if(hosp)html+='<circle class="mk hosp" cx="'+cx+'" cy="'+cy+'" r="'+s.toFixed(1)+'" stroke-width="'+(2*u).toFixed(2)+'"/>';
+      else html+='<rect class="mk spec" x="'+(xy[0]-s*0.92).toFixed(1)+'" y="'+(xy[1]-s*0.92).toFixed(1)+'" width="'+(s*1.84).toFixed(1)+'" height="'+(s*1.84).toFixed(1)+'" stroke-width="'+(2*u).toFixed(2)+'"/>';
       g.innerHTML=html;
-      if(zoomed){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.setAttribute('aria-label',h.n+', '+h.g+' '+h.d+', '+(hosp?'병원 장례식장':'전문 장례식장'));g.setAttribute('class','pt live');}
-      else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');}
-      if(zoomed)g.removeAttribute('aria-hidden');
+      if(mine){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.removeAttribute('aria-hidden');
+        g.setAttribute('aria-label',h.n+', '+h.g+' '+h.d+', '+(hosp?'병원 장례식장':'전문 장례식장'));g.setAttribute('class','pt live');}
+      else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt far');}
     });
-    // 고른 동·지금 있는 곳
-    if(state.origin){
-      var ox=px(state.origin[0]),oy=py(state.origin[1]);
-      gMe.innerHTML='<circle class="me-out" cx="'+ox.toFixed(1)+'" cy="'+oy.toFixed(1)+'" r="'+(11*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>'
-        +'<circle class="me-in" cx="'+ox.toFixed(1)+'" cy="'+oy.toFixed(1)+'" r="'+(4*u).toFixed(1)+'"/>';
-    }else gMe.innerHTML='';
+    gMe.innerHTML=X.drawOrigin(u);
   }
   function setView(v,now){
+    v=clamp(v);
     if(anim){cancelAnimationFrame(anim);anim=0;}
     if(now||calm||!view||document.visibilityState==='hidden'){view=v;draw();return;}
     var a={x:view.x,y:view.y,w:view.w,h:view.h},t0=null,dur=320;
@@ -666,30 +669,27 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
 
   // ── 목록·카드 ──
   function chips(h){return '<span class="chip">'+esc(h.p)+'</span><span class="chip">'+(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</span>';}
-  function distLine(h,full){
-    if(!state.origin)return '';
-    var t=kmText(km(state.origin,h._p));
-    return '<p class="dist">'+esc(state.originLabel)+'에서 '+t+(full?' (실제 이동 거리와 다릅니다)':'')+'</p>';
-  }
   function acts(h){
     var tel=h.tel?'<a class="act tel" href="tel:'+esc(h.tel.replace(/[^0-9]/g,''))+'">전화 '+esc(h.tel)+'</a>':'';
     return '<p class="acts">'+tel+'<a class="act" href="funeral-halls.html?hall='+encodeURIComponent(h.n)+'">자세히 보기</a></p>';
   }
   function row(h){
     return '<li class="hall'+(h.n===state.picked?' picked':'')+'" data-name="'+esc(h.n)+'"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips(h)+'</p>'
-      +'<p class="addr">'+esc(h.a)+'</p>'+distLine(h,false)+acts(h)+'</li>';
+      +'<p class="addr">'+esc(h.a)+'</p>'+X.rowExtra(h,false)+acts(h)+'</li>';
   }
   function showCard(names){
     if(!names||!names.length){cardBox.innerHTML='';return;}
     if(names.length>1){
       cardBox.innerHTML='<div class="pt-card"><p class="pt-many">이 자리에 '+names.length+'곳이 가까이 있습니다. 보실 곳을 골라 주세요.</p><p class="near">'
         +names.map(function(n){return '<button type="button" class="ghost-btn" data-pick="'+esc(n)+'">'+esc(n)+'</button>';}).join('')+'</p></div>';
-      return;
+    }else{
+      var h=byName(names[0]);
+      cardBox.innerHTML='<div class="pt-card"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips(h)+'</p><p class="addr">'+esc(h.a)+'</p>'
+        +X.rowExtra(h,true)+acts(h)
+        +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a class="tap" href="tel:18771852">전화 상담 1877-1852</a></p></div>';
     }
-    var h=byName(names[0]);
-    cardBox.innerHTML='<div class="pt-card"><h3>'+esc(h.n)+'</h3><p class="chips">'+chips(h)+'</p><p class="addr">'+esc(h.a)+'</p>'
-      +distLine(h,true)+acts(h)
-      +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a class="tap" href="tel:18771852">전화 상담 1877-1852</a></p></div>';
+    // 카드가 화면 밖에 생기면 보이는 데까지만 옮긴다
+    if(cardBox.scrollIntoView)cardBox.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:'nearest'});
   }
   function byName(n){for(var i=0;i<HALLS.length;i++)if(HALLS[i].n===n)return HALLS[i];return null;}
   function pick(name){
@@ -697,14 +697,9 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     var lis=list.querySelectorAll('.hall'),i;for(i=0;i<lis.length;i++)lis[i].classList.toggle('picked',lis[i].getAttribute('data-name')===name);
   }
   function renderList(){
-    var g=state.gu,html='',items,rest=0;
-    if(state.origin){
-      items=HALLS.map(function(h){return {h:h,d:km(state.origin,h._p)};});
-      items.sort(function(a,b){var ka=kmKey(a.d),kb=kmKey(b.d);return ka!==kb?ka-kb:a.h.n.localeCompare(b.h.n,'ko');});
-      listNote.textContent=state.originLabel+'에서 가까운 순 (직선거리, 실제 이동 거리와 다릅니다)'+(BUILDING?'':' · 점이 동 중심에 찍혀 있어 순서가 실제와 다를 수 있습니다');
-      if(!state.more&&items.length>10){rest=items.length-10;items=items.slice(0,10);}
-      html='<ul class="halls">'+items.map(function(x){return row(x.h);}).join('')+'</ul>'
-        +(rest?'<p class="more-row"><button type="button" class="ghost-btn" id="btnMore">나머지 '+rest+'곳도 보기</button></p>':'');
+    var g=state.gu,html='',items;
+    if(state.origin&&X.listByOrigin){
+      html=X.listByOrigin();
     }else if(g==='*'){
       listNote.textContent='서울 전체 '+HALLS.length+'곳 (구별, 이름순)';
       GUS.forEach(function(x){
@@ -730,8 +725,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   }
   function summary(){
     var g=state.gu;
-    if(state.origin)note.textContent=state.originLabel+'에서 가까운 순으로 아래 목록에 나옵니다';
-    else if(g&&g!=='*'&&state.dong)note.textContent=g+' '+state.dong+'을 지도에 붉은 선으로 표시했습니다 · '+g+' '+GU[g].n+'곳은 아래 목록에 나옵니다';
+    if(state.origin&&X.summary){note.textContent=X.summary();return;}
+    if(g&&g!=='*'&&state.dong)note.textContent=g+' '+state.dong+'을 지도에 붉은 선으로 표시했습니다 · '+g+' '+GU[g].n+'곳은 아래 목록에 나옵니다';
     else if(g==='*')note.textContent='서울 전체 '+HALLS.length+'곳 · 아래 목록에 구별로 나옵니다';
     else if(g)note.textContent=GU[g].n?g+' '+GU[g].n+'곳 · 지도가 '+g+'로 커졌고, 아래 목록에도 나옵니다':g+' 0곳 · 아래에서 이웃 구를 골라 주세요';
     else note.textContent='서울 25개 구 가운데 '+GUS.filter(function(x){return GU[x].n>0;}).length+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.';
@@ -741,7 +736,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function fillDong(){
     var g=state.gu,opts;
     if(!g||g==='*'){selDong.innerHTML='<option value="">먼저 구를 골라 주세요</option>';selDong.disabled=true;return;}
-    opts='<option value="">'+(DIST?'동을 고르면 가까운 순으로 보여 드립니다':'동을 고르면 지도에 표시합니다')+'</option>';
+    opts='<option value="">'+X.dongOption+'</option>';
     Object.keys(G.dong[g]).sort(function(a,b){return a.localeCompare(b,'ko',{numeric:true});}).forEach(function(n){opts+='<option value="'+esc(n)+'"'+(n===state.dong?' selected':'')+'>'+esc(n)+'</option>';});
     selDong.innerHTML=opts;selDong.disabled=false;
   }
@@ -759,29 +754,24 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function chooseDong(n){
     var g=state.gu;if(!g||g==='*')return;
     state.dong=n;state.more=false;state.picked='';showCard(null);
-    if(n&&DIST){state.origin=G.dong[g][n].c.slice();state.originLabel=g+' '+n;}
-    else{state.origin=null;state.originLabel='';}
+    state.origin=null;state.originLabel='';
+    X.onDong(g,n);
     drawDongs();draw();renderList();summary();
   }
   function go(elm){if(elm&&elm.scrollIntoView)elm.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:'start'});}
 
-  selGu.innerHTML='<option value="">구를 골라 주세요</option>'+GUS.map(function(g){return '<option value="'+g+'">'+g+' ('+GU[g].n+'곳)</option>';}).join('')+'<option value="*">서울 전체 ('+HALLS.length+'곳)</option>';
-  selGu.addEventListener('change',function(){
-    var g=selGu.value;
-    chooseGu(g);if(g)go(note);
-  });
-  selDong.addEventListener('change',function(){chooseDong(selDong.value);if(selDong.value)go(note);});
-
   gGu.addEventListener('click',function(e){var p=e.target.closest('[data-gu]');if(p)chooseGu(p.getAttribute('data-gu'));});
   gGu.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var p=e.target.closest('[data-gu]');if(p){e.preventDefault();chooseGu(p.getAttribute('data-gu'));}}});
   function tapPoint(name){
-    // 누른 점 가까이(화면 28px 안)에 다른 점이 있으면 먼저 고르게 한다
-    var u=unit(),h=byName(name),a=ptXY(h,u),near=HALLS.filter(function(o){var b=ptXY(o,u);return Math.hypot(a[0]-b[0],a[1]-b[1])<=28*u;}).map(function(o){return o.n;});
+    // 누르는 범위(지름 44px)가 겹치는 점이 있으면 어느 곳인지 먼저 고르게 한다
+    var u=unit(),h=byName(name),a=ptXY(h,u),near=HALLS.filter(function(o){
+      if(state.gu&&state.gu!=='*'&&o.g!==state.gu)return false;
+      var b=ptXY(o,u);return Math.hypot(a[0]-b[0],a[1]-b[1])<=44*u;}).map(function(o){return o.n;});
     if(near.length>1){state.picked='';draw();showCard(near);}
     else pick(name);
   }
-  gPt.addEventListener('click',function(e){var p=e.target.closest('[data-name]');if(p&&isZoomed())tapPoint(p.getAttribute('data-name'));});
-  gPt.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var p=e.target.closest('[data-name]');if(p&&isZoomed()){e.preventDefault();tapPoint(p.getAttribute('data-name'));}}});
+  gPt.addEventListener('click',function(e){var p=e.target.closest('.pt.live');if(p)tapPoint(p.getAttribute('data-name'));});
+  gPt.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var p=e.target.closest('.pt.live');if(p){e.preventDefault();tapPoint(p.getAttribute('data-name'));}}});
   cardBox.addEventListener('click',function(e){var b=e.target.closest('[data-pick]');if(b)pick(b.getAttribute('data-pick'));});
   list.addEventListener('click',function(e){
     var b=e.target.closest('[data-gu]');
@@ -791,7 +781,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
 
   $('btnAll').addEventListener('click',function(){chooseGu('');});
   function zoom(f){
-    var c=state.picked?(function(){var h=byName(state.picked),xy=ptXY(h,unit());return xy;})():[view.x+view.w/2,view.y+view.h/2];
+    var c=state.picked?ptXY(byName(state.picked),unit()):[view.x+view.w/2,view.y+view.h/2];
     var w=Math.max(fullView.w/14,Math.min(fullView.w,view.w*f)),h=w*RATIO;
     if(w>=fullView.w-0.5){setView(fullView);return;}
     setView({x:c[0]-w/2,y:c[1]-h/2,w:w,h:h});
@@ -799,25 +789,14 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   $('btnZoomIn').addEventListener('click',function(){zoom(1/1.5);});
   $('btnZoomOut').addEventListener('click',function(){zoom(1.5);});
   $('skipMap').addEventListener('click',function(e){e.preventDefault();go(listTop);try{listTop.focus({preventScroll:true});}catch(x){}});
+  // 위쪽 글자 크기 단추를 누르면 지도 글자도 다시 그린다
+  ['btnPlus','btnMinus'].forEach(function(id){var b=$(id);if(b)b.addEventListener('click',function(){setTimeout(draw,0);});});
 
-  // ── 지금 있는 곳(브라우저 안에서만 쓰고, 저장하거나 보내지 않는다) ──
-  if(btnLoc&&DIST)btnLoc.addEventListener('click',function(){
-    if(!navigator.geolocation){note.textContent='이 기기에서는 현재 위치를 쓸 수 없습니다. 구와 동을 골라 주세요.';return;}
-    btnLoc.disabled=true;note.textContent='현재 위치를 확인하고 있습니다…';
-    navigator.geolocation.getCurrentPosition(function(pos){
-      btnLoc.disabled=false;
-      var lon=pos.coords.longitude,lat=pos.coords.latitude,g='';
-      GUS.forEach(function(x){if(!g&&inRings(lon,lat,GU[x].rings))g=x;});
-      chooseGu(g,{keepOrigin:true});
-      state.origin=[lon,lat];state.originLabel='지금 있는 곳';state.dong='';
-      draw();renderList();summary();
-      if(!g)note.textContent='서울 밖에 계신 것으로 보입니다. 서울 장례식장까지의 직선거리 순으로 아래 목록에 나옵니다.';
-      go(note);
-    },function(){
-      btnLoc.disabled=false;
-      note.textContent='현재 위치를 확인하지 못했습니다. 위치 사용을 허용하지 않으셔도 구와 동을 골라 찾으실 수 있습니다.';
-    },{enableHighAccuracy:false,timeout:10000,maximumAge:60000});
-  });
+  
+
+  selGu.innerHTML='<option value="">구를 골라 주세요</option>'+GUS.map(function(g){return '<option value="'+g+'">'+g+' ('+GU[g].n+'곳)</option>';}).join('')+'<option value="*">서울 전체 ('+HALLS.length+'곳)</option>';
+  selGu.addEventListener('change',function(){var g=selGu.value;chooseGu(g);if(g)go(note);});
+  selDong.addEventListener('change',function(){chooseDong(selDong.value);if(selDong.value)go(note);});
 
   window.addEventListener('beforeprint',function(){state.more=true;renderList();});
   $('btnPrint').addEventListener('click',function(){state.more=true;renderList();window.print();});
