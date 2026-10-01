@@ -164,6 +164,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .chips{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}
 .chip{display:inline-block;padding:2px 9px;border:1px solid var(--line);font-size:0.78rem;color:#555b66;background:#fff;}
 .addr{margin-top:8px;font-size:0.93rem;line-height:1.75;color:var(--text);overflow-wrap:anywhere;}
+.addr-sub{margin-top:2px;font-size:0.88rem;line-height:1.7;color:#555b66;overflow-wrap:anywhere;}
 .facts{margin-top:4px;font-size:0.9rem;color:#555b66;}
 .acts{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;}
 .act{display:inline-block;min-height:44px;line-height:26px;padding:8px 16px;border:1px solid var(--line);color:var(--navy);text-decoration:none;font-size:0.92rem;background:#fff;}
@@ -203,6 +204,13 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .more-call{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:0.93rem;line-height:1.85;color:#555b66;}
 .more-call a{display:inline-block;color:var(--navy);font-weight:700;white-space:nowrap;}
 .more-src{margin-top:10px;font-size:0.82rem;line-height:1.7;color:#6b7280;}
+.more-src+.more-src{margin-top:4px;}
+/* 상세 정보(오시는 길·전화): 왼쪽에 갈래 이름, 오른쪽에 값 */
+.dl{list-style:none;margin-top:4px;}
+.dl li{display:grid;grid-template-columns:5.2em 1fr;align-items:baseline;font-size:0.93rem;line-height:1.8;color:var(--text);overflow-wrap:anywhere;}
+.dl .dk{font-size:0.84rem;font-weight:700;color:#555b66;}
+.dl a{color:var(--navy);font-weight:700;}
+.more-text .dlink{margin-left:0;margin-right:14px;}
 .pick-date{margin-top:8px;font-size:0.82rem;color:#6b7280;}
 .pick-note{font-size:1rem;scroll-margin-top:76px;}
 .no-js{margin-top:16px;padding:14px 16px;border:1px solid var(--warn);color:var(--warn);font-weight:700;background:#fff;line-height:1.8;}
@@ -338,7 +346,8 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <section class="sources">
     <span class="eyebrow">자료 출처</span>
     <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다.</p>
-    <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>이름 아래의 "(구 …)" 옛 이름 4곳은 원자료에 없는 내용으로, 공식 연혁·옛 기사·이전 공공데이터를 마을장의사가 따로 확인해 덧붙였습니다.</li><li>카드의 안내 한 줄 1곳(없어진 옛 위치 안내)도 공식 자료를 따로 확인해 덧붙였습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
+    <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>이름 아래의 "(구 …)" 옛 이름 4곳은 원자료에 없는 내용으로, 공식 연혁·옛 기사·이전 공공데이터를 마을장의사가 따로 확인해 덧붙였습니다.</li><li>원자료에 지번 주소만 있는 1곳에는 병원 공식 누리집에 적힌 도로명 주소를 함께 적었습니다.</li><li>카드의 안내 한 줄 1곳(없어진 옛 위치 안내)도 공식 자료를 따로 확인해 덧붙였습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
+    <p><strong>오시는 길·전화·주차 안내</strong>(확인이 끝난 5곳부터 싣고 있습니다): 각 시설의 공식 홈페이지에서 확인한 사실을 간추린 것입니다. 확인한 곳과 날짜는 카드마다 적었습니다. 달라졌을 수 있으니 가시기 전에 전화로 확인해 주세요.</p>
   </section>
 
   <div class="feedback" id="feedback">
@@ -377,7 +386,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br>사업자등록번호: 209-90-98193<br>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
 </footer>
 
-<script src="funeral-data.js?v=3382567d"></script>
+<script src="funeral-data.js?v=da554699"></script>
 <script>
 
 
@@ -413,6 +422,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   // 고정 번호: 서울01~. 순위가 아니라 구·이름순으로 한 번 매긴 고유 번호다.
   function noName(h){return '서울'+(h.no<10?'0':'')+h.no;}
   var query='';
+  // 지하철역 이름(상세 정보에 적힌 것만): 이름 찾기에서 "청량리역", "청량리"로도 찾게 한다
+  function stations(h){return (h.dt&&h.dt.sub)?h.dt.sub.map(function(s){return s[0];}).join('|'):'';}
 
   // 자료 파일을 읽지 못한 경우: "장례식장이 없다"로 보이지 않게, 불러오지 못했다고 따로 알린다.
   if(!LOADED){
@@ -439,7 +450,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       FAC.forEach(function(name,i){
         var on=h.f.charAt(i)==='1';
         // 주차장이 등록 안 됨으로 적혀 있어도 주차 대수가 있으면 대수를 따른다
-        if(i===2&&!on&&has(h.k))on=true;
+        if(i===2&&!on&&(has(h.k)||(h.dt&&h.dt.pk&&h.dt.pk[0]===1)))on=true;
         fac+='<li class="'+(on?'on':'off')+'"><span class="mark" aria-hidden="true">'+(on?'●':'○')+'</span>'+name+' <strong>'+(on?'있음':'등록 안 됨')+'</strong></li>';
       });
       fac+='</ul>';
@@ -448,15 +459,46 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     scale.push(has(h.b)?'빈소 '+esc(h.b)+'개':'빈소 수 미등록');
     scale.push(has(h.m)?'안치 가능 '+esc(h.m)+'구':'안치 구수 미등록');
     scale.push(has(h.k)?'주차 '+esc(h.k)+'대':'주차 대수 미등록');
+    // 상세 정보(hall_details.json): 오시는 길·전화·주차·시설·안내 화면. 값이 없는 줄은 만들지 않는다.
+    var dt=h.dt||null,ex='',ln;
+    function tl(n){return '<a class="tap" href="tel:'+esc(n.replace(/[^0-9]/g,''))+'">'+esc(n)+'</a>';}
+    if(dt){
+      ln=[];
+      (dt.sub||[]).forEach(function(s){ln.push('<li><span class="dk">지하철</span><span>'+esc(s[0])+(s[1]?'('+esc(s[1])+')':'')+(s[2]?' '+esc(s[2])+' 출구':'')+(s[3]?', 걸어서 '+esc(s[3])+(s[4]?'('+esc(s[4])+' 기준)':''):'')+'</span></li>');});
+      (dt.bus||[]).forEach(function(b){ln.push('<li><span class="dk">버스</span><span>'+(b[0]?esc(b[0])+(/정류장$|정류소$/.test(b[0])?'':' 정류장'):'')+(b[0]&&b[1].length?' · ':'')+(b[1].length?esc(b[1].join(', '))+'번':'')+'</span></li>');});
+      if(dt.sh)ln.push('<li><span class="dk">셔틀</span><span>셔틀버스가 있습니다(시간은 시설에 문의)</span></li>');
+      if(dt.en)ln.push('<li><span class="dk">위치</span><span>'+esc(dt.en)+'</span></li>');
+      if(ln.length)ex+='<h4>오시는 길</h4><ul class="dl">'+ln.join('')+'</ul>';
+      ln=[];
+      var same=function(a){return a&&h.tel&&a.replace(/[^0-9]/g,'')===h.tel.replace(/[^0-9]/g,'');};
+      if(dt.td&&!same(dt.td))ln.push('<li><span class="dk">장례식장</span><span>'+tl(dt.td)+'</span></li>');
+      if(dt.tm&&!same(dt.tm))ln.push('<li><span class="dk">병원 대표</span><span>'+tl(dt.tm)+'</span></li>');
+      if(dt.t24)ln.push('<li><span class="dk">상담</span><span>24시간 상담·접수</span></li>');
+      if(ln.length)ex+='<h4>전화</h4><ul class="dl">'+ln.join('')+'</ul>';
+      if(dt.pk){
+        ln=[dt.pk[0]===1?'주차할 수 있습니다':(dt.pk[0]===0?'주차장이 없습니다':'')].concat([dt.pk[1],dt.pk[2]].map(esc)).filter(function(x){return x;});
+        if(ln.length)ex+='<h4>주차</h4><p class="more-text">'+ln.join(' · ')+(dt.pk[0]===1?' (요금은 시설에 문의)':'')+'</p>';
+      }
+      if(dt.fc&&dt.fc.length)ex+='<h4>시설</h4><p class="more-text">'+dt.fc.map(esc).join(' · ')+'</p>';
+    }
     var home=h.h?'<a class="tap" href="'+esc(h.h)+'" target="_blank" rel="noopener noreferrer">'+(h.hk==='b'?'병원 홈페이지 열기':'장례식장 홈페이지 열기')+'</a>':'확인된 홈페이지 주소가 없습니다.';
+    // 안내 화면 링크(장례식장 안내·오시는 길·빈소 현황)와 "어디에서 언제 확인했는지" 한 줄
+    var links='',srcLine='';
+    if(dt){
+      if(dt.u)[['장례식장 안내 화면 열기',0],['오시는 길 화면 열기',1],['빈소 현황 화면 열기',2]].forEach(function(q){
+        if(dt.u[q[1]]&&dt.u[q[1]]!==h.h)links+=' <a class="tap dlink" href="'+esc(dt.u[q[1]])+'" target="_blank" rel="noopener noreferrer">'+q[0]+'</a>';});
+      srcLine='<p class="more-src">오시는 길·전화·주차 안내는 '+esc(dt.src)+'에서 '+esc(dt.d)+'에 확인했습니다. 달라졌을 수 있으니 가시기 전에 전화로 확인해 주세요.</p>';
+    }
     return '<details class="more"><summary>자세히 보기</summary><div class="more-body">'
       +'<h4>기본 정보</h4><p class="more-text">'+esc(h.p)+' · '+(h.t==='병원'?'병원 장례식장':'전문 장례식장')+'</p>'
+      +ex
       +'<h4>규모</h4><p class="more-text">'+scale.join(' · ')+'</p>'
       +'<h4>편의시설</h4>'+fac
-      +'<h4>홈페이지</h4><p class="more-text">'+home+'</p>'
+      +'<h4>홈페이지</h4><p class="more-text">'+home+links+'</p>'
       +'<h4>가격</h4><p class="more-text">빈소 사용료·안치료·음식 값은 이 쪽에 싣지 않았습니다. 보건복지부 e하늘 장사정보시스템의 "장사시설·장례용품 가격"에서 확인하실 수 있습니다.</p>'
       +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a class="tap" href="tel:18771852">전화 상담 1877-1852</a></p>'
       +'<p class="more-src">보건복지부 등록 자료, '+esc(DATA.asOf||'')+' 기준. '+(h.s==='c'?'지금 장례식장으로 운영 중인지 확인하고 있습니다. 가시기 전에 전화로 확인해 주세요.':'지금 빈소가 비어 있는지는 장례식장에 전화로 확인해 주세요.')+'</p>'
+      +srcLine
       +'</div></details>';
   }
   function card(h){
@@ -475,7 +517,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     // 안내 한 줄: 옛 이름이 아니라 헷갈리기 쉬운 사실(없어진 옛 위치 등)
     if(h.nt)old+='<p class="hall-note">'+esc(h.nt)+'</p>';
     return '<li class="hall'+(h.s==='c'?' unsure':'')+'" data-name="'+esc(h.n)+'"><h3><span class="no-badge">'+noName(h)+'</span>'+esc(h.n)+'</h3>'+old+'<p class="chips">'+chips+'</p>'
-      +'<p class="addr">'+esc(h.a)+'</p>'
+      +'<p class="addr">'+esc(h.a)+'</p>'+(h.ra?'<p class="addr-sub">도로명: '+esc(h.ra)+'</p>':'')
       +(facts.length?'<p class="facts">'+facts.join(' · ')+'</p>':'')
       +'<p class="acts">'+tel+show+map+'</p>'+more(h)+'</li>';
   }
@@ -491,7 +533,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       // 이름 찾기: 지금 이름·짧은 이름·옛 이름·번호에서 찾는다(구 선택과 상관없이 서울 전체에서)
       // 숫자만, "23번", "서울 23"처럼 넣으면 그 번호 한 곳. 그 밖에는 이름·짧은 이름·옛 이름·흔히 부르는 이름·주소의 건물 이름에서 찾는다.
       var q=query.replace(/ /g,''),mno=/^(?:서울)?0*([0-9]{1,2})번?$/.exec(q),
-          found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
+          found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')+'|'+stations(h)).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
       note.textContent='"'+query+'"(으)로 찾은 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
       sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
       list.innerHTML=found.length?'<ul class="halls">'+found.map(function(h){return card(h).replace('<p class="chips">','<p class="in-gu">'+h.g+'</p><p class="chips">');}).join('')+'</ul>'
@@ -537,6 +579,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     try{if(history.replaceState)history.replaceState(history.state,'',location.pathname+(g?'?gu='+encodeURIComponent(g):''));}catch(e){}
   }
   var search=document.getElementById('nameSearch');
+  // 역이 적힌 시설이 하나라도 있으면 찾기 칸의 안내에 역 이름 찾기를 알린다
+  if(search&&HALLS.some(function(h){return !!stations(h);})){
+    var hintEl=document.querySelector('.name-search .soft');
+    if(hintEl)hintEl.textContent='(흔히 부르는 이름·옛 이름·번호·지하철역 이름으로도 찾습니다. 역 이름은 공식 홈페이지에 적힌 곳만 찾아집니다)';
+    // 예시로 드는 역은 자료에 실제로 있는 역(없는 역을 예로 들면 찾아지지 않는다)
+    search.setAttribute('placeholder','예: 성모, 세브란스, '+HALLS.filter(function(h){return !!stations(h);})[0].dt.sub[0][0]);
+  }
   // 구를 바꾼다(선택 칸·지도·목록·주소가 함께 움직인다). opt.keep: 지도에서 고른 점과 카드를 그대로 둔다.
   function chooseGu(g,opt){
     if(GUS.indexOf(g)<0)g=ALLV;
