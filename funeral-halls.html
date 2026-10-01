@@ -165,6 +165,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .chips{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;}
 .chip{display:inline-block;padding:2px 9px;border:1px solid var(--line);font-size:0.78rem;color:#555b66;background:#fff;}
 .addr{margin-top:8px;font-size:0.93rem;line-height:1.75;color:var(--text);overflow-wrap:anywhere;}
+.addr-sub{margin-top:2px;font-size:0.88rem;line-height:1.7;color:#555b66;overflow-wrap:anywhere;}
 .facts{margin-top:4px;font-size:0.9rem;color:#555b66;}
 .acts{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;}
 .act{display:inline-block;min-height:44px;line-height:26px;padding:8px 16px;border:1px solid var(--line);color:var(--navy);text-decoration:none;font-size:0.92rem;background:#fff;}
@@ -255,7 +256,29 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 }
 
 /* 지도가 실릴 때만 붙는 모양. build_halls.py가 공통 모양 뒤에 붙인다. */
-.skip{margin-top:10px;font-size:0.9rem;}
+/* 제목 바로 아래의 얇은 막대: 구 선택 + 이름 찾기(설명 글 없이). 자세한 안내는 목록 머리에 있다 */
+.quick-bar{display:flex;gap:8px;margin-top:20px;max-width:820px;scroll-margin-top:84px;}
+.quick-bar select,.quick-bar input{min-height:48px;min-width:0;padding:8px 10px;border:1px solid rgba(28,40,64,0.35);font-family:inherit;font-size:1rem;color:var(--text);background:#fff;}
+.quick-bar select{flex:0 0 46%;}
+.quick-bar input{flex:1 1 auto;}
+.quick-bar select:focus,.quick-bar input:focus{outline:2px solid var(--gold);outline-offset:1px;}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+.bar-note{margin-top:6px;font-size:0.95rem;font-weight:700;color:var(--gold-text);display:flex;flex-wrap:wrap;align-items:center;gap:8px;max-width:820px;}
+.bar-note[hidden]{display:none;}
+.bar-go{min-height:44px;padding:6px 14px;border:1px solid var(--navy);background:#fff;color:var(--navy);font-family:inherit;font-size:0.9rem;font-weight:700;cursor:pointer;}
+.skip{margin-top:6px;font-size:0.9rem;}
+/* 건너뛰기 링크는 키보드로 닿았을 때만 보인다(휴대폰 첫 화면에 지도가 들어오게) */
+.skip{position:absolute;left:-9999px;}
+.skip:focus-within{position:static;left:auto;}
+/* 휴대폰: 제목 둘레 여백과 지도 위 안내를 줄여 지도가 첫 화면에 걸치게 */
+@media (max-width:699px){
+  .intro{padding-top:26px;}
+  .intro h1{margin:10px 0 12px;}
+  .quick-bar{margin-top:14px;}
+  .map-box{margin-top:14px;}
+  .map-top{font-size:0.86rem;line-height:1.6;padding:8px 12px;}
+  .legend{margin-top:8px;font-size:0.84rem;}
+}
 .skip a{color:var(--navy);}
 .map-box{margin-top:22px;}
 .skip+.map-box,.no-js+.map-box{margin-top:6px;}
@@ -308,9 +331,9 @@ html.map-full,html.map-full body{overflow:hidden;}
 .gu-label,.dong-label{text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke-linejoin:round;}
 .dong-label{stroke:#fff;}
 /* 구 이름: 점·이름표가 없는 빈 자리에 놓는다. 바탕 글씨이지만 읽히게 조금 진하게 */
-.gu-label{fill:#8a7f63;font-weight:700;letter-spacing:0.03em;stroke:rgba(255,255,255,0.75);}
+.gu-label{fill:#77694a;font-weight:700;letter-spacing:0.03em;stroke:rgba(255,255,255,0.75);}
 /* 구를 눌러 키운 화면의 위계: 장례식장 이름 > 번호 > 구 이름 > 동 이름 */
-.zoomed .gu-label{fill:#978c72;font-weight:600;}
+.zoomed .gu-label{fill:#7f7358;font-weight:600;}
 .han-water{fill:none;stroke:#c9dde8;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
 .han-water.tip{stroke-linecap:butt;}
 .han-label{fill:#4f7d96;font-weight:700;font-style:italic;text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke:rgba(255,255,255,0.8);letter-spacing:0.2em;}
@@ -334,11 +357,12 @@ svg.compact .pt .mk.spec{fill:#7d6337;stroke:#fff;}
 .pt.live:hover .tag,.pt.on .tag{stroke:#1c2840;stroke-width:1.8px;fill:#fff;}
 .pt.live:hover .tag.spec,.pt.on .tag.spec{stroke:#7d6337;}
 /* 구 이름 옆 돋보기: 번호만 보이는 곳이 있어 누르면 커진다는 표시 */
-.gu-zoom{pointer-events:none;}
-.gu-zoom circle{fill:rgba(255,255,255,0.85);stroke:#8a6d2f;stroke-width:1.5px;vector-effect:non-scaling-stroke;}
-.gu-zoom line{stroke:#8a6d2f;stroke-width:1.9px;stroke-linecap:round;vector-effect:non-scaling-stroke;}
+.gu-zoom .zhit{fill:transparent;stroke:none;cursor:pointer;pointer-events:auto;}
+.gu-zoom circle:not(.zhit),.gu-zoom line{pointer-events:none;}
+.gu-zoom circle{fill:rgba(255,255,255,0.9);stroke:#7a5c1e;stroke-width:1.8px;vector-effect:non-scaling-stroke;}
+.gu-zoom line{stroke:#7a5c1e;stroke-width:2.4px;stroke-linecap:round;vector-effect:non-scaling-stroke;}
 
-.dong-label{fill:#7a7f89;}
+.dong-label{fill:#666b75;}
 .pt{pointer-events:none;}
 .pt .halo{fill:rgba(28,40,64,0.12);}
 /* 대략의 위치(동 가운데)일 때: 속이 빈 테두리 표시로, 정확한 자리가 아님을 보인다 */
@@ -373,7 +397,7 @@ button.act{font-family:inherit;cursor:pointer;}
   .intro,.pick,.promise,.first-call,.notes,.sources,.feedback,.skip,#list,.list-head,.list-intro,.list-note,.no-js{max-width:820px;}
 }
 @media print{
-  .map-ctrl,.skip,.map-full-top,.map-tip,.map-note{display:none!important;}
+  .map-ctrl,.skip,.map-full-top,.map-tip,.map-note,.quick-bar,.bar-note{display:none!important;}
   .gu{fill:#fff!important;}
   .map-wrap{break-inside:avoid;}
 }
@@ -427,6 +451,13 @@ button.act{font-family:inherit;cursor:pointer;}
     <h1>서울의 장례식장은<br>어디에 있을까요?</h1>
     <p class="lead">서울의 구 경계와 장례식장 자리만 그린 지도입니다. 구를 누르면 그 구가 크게 보이고, 지도 아래 목록도 그 구로 바뀝니다.</p>
   </header>
+  <div class="quick-bar" id="quickBar" role="search" aria-label="구 선택과 이름 찾기">
+    <label class="vh" for="guSelect">구 선택</label>
+    <select id="guSelect" autocomplete="off"><option value="">목록을 준비하고 있습니다</option></select>
+    <label class="vh" for="nameSearch">장례식장 이름으로 찾기</label>
+    <input type="search" id="nameSearch" autocomplete="off" placeholder="이름으로 찾기">
+  </div>
+  <p class="bar-note" id="barNote" hidden></p>
 
   <p class="skip"><a class="tap" href="#listTop" id="skipMap">지도를 건너뛰고 목록으로</a></p>
   <p class="no-js" id="mapFail" hidden>지도를 불러오지 못했습니다. 아래 목록은 그대로 보실 수 있습니다. 새로 고치면 지도가 나올 수 있습니다.</p>
@@ -459,17 +490,14 @@ button.act{font-family:inherit;cursor:pointer;}
   <h2 class="list-head" id="listTop" tabindex="-1">구별 목록</h2>
   <p class="list-intro">보건복지부가 공개한 자료를 바탕으로 했고, 바로잡은 곳은 아래 출처에 적었습니다. 순위나 추천은 넣지 않았습니다. 가입도 로그인도 없고, 고르신 구는 어디에도 저장하거나 보내지 않습니다.</p>
 
-  <section class="pick" id="pickBox" aria-label="구 선택">
-    <label for="guSelect">구 선택</label>
+  <section class="pick" id="pickBox" aria-label="목록 안내">
+    <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
+    <p class="pick-date" id="searchHint">구 선택과 이름 찾기는 화면 맨 위 제목 아래에 있습니다. 이름 찾기는 흔히 부르는 이름·옛 이름·번호로도 찾습니다.</p>
+    <p class="pick-date">장례식장은 보건복지부 2026년 4월 기준, 경계선은 2025년 6월 기준 자료입니다. 이름 앞의 서울01~서울60은 구·이름순으로 붙인 번호이며 순위가 아닙니다.</p>
     <div class="pick-row">
-      <select id="guSelect" autocomplete="off"><option value="">목록을 준비하고 있습니다</option></select>
+      <button type="button" class="ghost-btn" id="toBar">구 선택·이름 찾기로 올라가기</button>
       <button type="button" class="ghost-btn" id="btnPrint">인쇄하기</button>
     </div>
-    <label class="name-search" for="nameSearch">장례식장 이름으로 찾기 <span class="soft">(흔히 부르는 이름·옛 이름·번호로도 찾습니다)</span>
-      <input type="search" id="nameSearch" autocomplete="off" placeholder="예: 성모, 세브란스">
-    </label>
-    <p class="pick-date">장례식장은 보건복지부 2026년 4월 기준, 경계선은 2025년 6월 기준 자료입니다. 이름 앞의 서울01~서울60은 구·이름순으로 붙인 번호이며 순위가 아닙니다.</p>
-    <p class="pick-note" id="pickNote" role="status" aria-live="polite"></p>
   </section>
   <noscript><p class="no-js">이 화면은 스크립트가 켜져 있어야 지도와 목록이 나옵니다. 급하시면 전화 1877-1852로 문의해 주세요.</p></noscript>
   <p class="list-note" id="listNote"></p>
@@ -503,7 +531,8 @@ button.act{font-family:inherit;cursor:pointer;}
   <section class="sources">
     <span class="eyebrow">자료 출처</span>
     <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다.</p>
-    <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>이름 아래의 "(구 …)" 옛 이름 4곳은 원자료에 없는 내용으로, 공식 연혁·옛 기사·이전 공공데이터를 마을장의사가 따로 확인해 덧붙였습니다.</li><li>카드의 안내 한 줄 1곳(없어진 옛 위치 안내)도 공식 자료를 따로 확인해 덧붙였습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
+    <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>이름 아래의 "(구 …)" 옛 이름 4곳은 원자료에 없는 내용으로, 공식 연혁·옛 기사·이전 공공데이터를 마을장의사가 따로 확인해 덧붙였습니다.</li><li>원자료에 지번 주소만 있는 1곳에는 병원 공식 누리집에 적힌 도로명 주소를 함께 적었습니다.</li><li>카드의 안내 한 줄 1곳(없어진 옛 위치 안내)도 공식 자료를 따로 확인해 덧붙였습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
+    <p><strong>오시는 길·전화·주차 안내</strong>(확인이 끝난 5곳부터 싣고 있습니다): 각 시설의 공식 홈페이지에서 확인한 사실을 간추린 것입니다. 확인한 곳과 날짜는 카드마다 적었습니다. 달라졌을 수 있으니 가시기 전에 전화로 확인해 주세요.</p>
     <p><strong>구·동 경계선</strong>: 국가데이터처 통계지리정보서비스(SGIS) 행정구역 경계(공공데이터포털), <strong>2025년 6월 30일 기준</strong>. 화면에 맞게 선을 단순하게 다듬었습니다. 동 경계와 동 이름은 행정동 기준입니다. 한강 표시는 같은 자료에서 강북과 강남의 구가 맞닿는 경계선을 따라 그린 것입니다.</p>
   </section>
 
@@ -543,7 +572,7 @@ button.act{font-family:inherit;cursor:pointer;}
   <div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br>사업자등록번호: 209-90-98193<br>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
 </footer>
 
-<script src="funeral-data.js?v=3382567d"></script>
+<script src="funeral-data.js?v=da554699"></script>
 <script src="funeral-map-geo.js?v=553656bf"></script>
 <script>
 
@@ -623,7 +652,7 @@ function mjMapCore(D,G){
   C.layout=function(view,fsc,focus){
     fsc=fsc||1;
     var u=view.w/C.W,zoomed=C.isZoomed(view),big=C.W>=700,compact=!zoomed&&!big,
-        R=zoomed?13:(big?10:4.5),NF=zoomed?14:11,boxes=[],own={},pts=[],names=[],out={u:u,zoomed:zoomed,big:big,compact:compact,R:R,NF:NF};
+        R=zoomed?13:(big?10:4.5),NF=zoomed?14:11,boxes=[],own={},pts=[],names=[],resv=[],out={u:u,zoomed:zoomed,big:big,compact:compact,R:R,NF:NF};
     HALLS.forEach(function(h){
       var xy=C.xy(h,zoomed,big,u),m=30*u,pad=(R+(compact?1:2))*u;
       if(xy[0]<view.x-m||xy[0]>view.x+view.w+m||xy[1]<view.y-m||xy[1]>view.y+view.h+m)return;
@@ -633,8 +662,16 @@ function mjMapCore(D,G){
     // 지도 위에 떠 있는 것(오른쪽 위 "지도 크게 보기" 단추, 왼쪽 위 "지금 보는 구" 표시) 밑에는 이름표·구 이름을 놓지 않는다.
     // C.resv={right:[가로,세로],left:[가로,세로]} (화면 px). 지도 화면이 재서 알려 주고, 점검 스크립트는 어림값을 준다.
     var rs=C.resv||{};
-    if(rs.right)boxes.push([view.x+view.w-rs.right[0]*u,view.y,view.x+view.w,view.y+rs.right[1]*u]);
-    if(zoomed&&rs.left)boxes.push([view.x,view.y,view.x+rs.left[0]*u,view.y+rs.left[1]*u]);
+    if(rs.right){resv.push([view.x+view.w-rs.right[0]*u,view.y,view.x+view.w,view.y+rs.right[1]*u]);}
+    if(zoomed&&rs.left){resv.push([view.x,view.y,view.x+rs.left[0]*u,view.y+rs.left[1]*u]);}
+    resv.forEach(function(b){boxes.push(b);});
+    // 구를 고른 화면에서 이웃 구의 점이 그 단추·표시 밑에 반쯤 가려지면 헷갈린다 — 그런 이웃 구 점은 그리지 않는다(지도를 옮기면 나온다)
+    if(focus&&GU[focus]&&resv.length){
+      pts=pts.filter(function(p){
+        if(p.h.g===focus||!overlaps(own[p.h.no],resv))return true;
+        boxes.splice(boxes.indexOf(own[p.h.no]),1);delete own[p.h.no];return false;
+      });
+    }
     // 구 이름: 그 구 안에서 점이 없는 빈 자리. 이름표보다 먼저 자리를 잡는다.
     var gfs=(zoomed?14:(big?19:13))*fsc*u,gus=[],guOver=0;
     GUS.forEach(function(g){
@@ -682,6 +719,7 @@ function mjMapCore(D,G){
         if(t[3][0]<view.x||t[3][2]>view.x+view.w||t[3][1]<view.y||t[3][3]>view.y+view.h)continue;
         tb=[t[3][0]-6*u,t[3][1],t[3][2]+6*u,t[3][3]];
         if(overlaps(t[3],boxes)||overlaps(tb,boxes.filter(function(q){return q!==own[h.no];})))continue;
+        if(focus&&GU[focus]&&h.g!==focus&&inP((t[3][0]+t[3][2])/2,(t[3][1]+t[3][3])/2,GU[focus].pr))continue;
         boxes.push(t[3]);attached++;
         names.push({h:h,dir:d,anchor:t[0],x:t[1],y:t[2],box:t[3],fs:nfs,px:x,py:y});
         return;
@@ -702,6 +740,7 @@ function mjMapCore(D,G){
           if(t[3][0]<view.x||t[3][2]>view.x+view.w||t[3][1]<view.y||t[3][3]>view.y+view.h)continue;
           tb=[t[3][0]-6*u,t[3][1],t[3][2]+6*u,t[3][3]];
           if(overlaps(t[3],boxes)||overlaps(tb,boxes.filter(function(q){return q!==own[h.no];})))continue;
+          if(focus&&GU[focus]&&h.g!==focus&&inP((t[3][0]+t[3][2])/2,(t[3][1]+t[3][3])/2,GU[focus].pr))continue;
           boxes.push(t[3]);attached++;
           names.push({h:h,dir:d,anchor:t[0],x:t[1],y:t[2],box:t[3],fs:nfs,px:x,py:y,lines:ln,lh:nfs*1.2});
           return;
@@ -724,7 +763,7 @@ function mjMapCore(D,G){
       return cw(p1,p2,p3)*cw(p1,p2,p4)<0&&cw(p3,p4,p1)*cw(p3,p4,p2)<0;
     }
     // LH: 이름표 높이의 반, CR: 이름표 안 작은 번호 원의 반지름, pitch: 세로 줄에서 이름표 사이 간격, colGap: 번호 원에서 이름표 줄까지
-    var LH=nfs*0.84,CR=LH*0.72,pitch=2*LH+3.5*u,colGap=(R+15)*u,maxLen=(zoomed?150:135)*u,leads=[],leaderCount=0;
+    var LH=nfs*0.84,CR=LH*0.72,pitch=2*LH+3.5*u,colGap=(R+15)*u,maxLen=(zoomed?150:120)*u,leads=[],leaderCount=0;
     function labelW(h){return 4*u+2*CR+4*u+h.sn.length*nfs*1.0+7*u;}
     // 순서를 지키면서 서로 d 이상 떨어지게, 제자리에서 가장 덜 움직이도록 세로 자리를 잡는다
     function spread(ys,d){
@@ -751,7 +790,7 @@ function mjMapCore(D,G){
     }
     function tryLead(p,side,tx,ty,first){
       var h=p.h,w=labelW(h),lp=leadPath(p.x,p.y,side,tx,ty,first),bx,i,z,sg2;
-      if(!lp||lp.len>maxLen)return null;
+      if(!lp||lp.len>((focus&&GU[focus]&&h.g!==focus)?110*u:maxLen))return null;
       bx=side>0?[tx,ty-LH,tx+w,ty+LH]:[tx-w,ty-LH,tx,ty+LH];
       if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)return null;
       if(overlaps(bx,boxes))return null;
@@ -763,6 +802,7 @@ function mjMapCore(D,G){
         for(z=0;z<names.length;z++)if(segBox(sg2[0],sg2[1],sg2[2],sg2[3],names[z].box))return null;
         for(z=0;z<gus.length;z++)if(!gus[z].over&&segBox(sg2[0],sg2[1],sg2[2],sg2[3],gus[z].box))return null;
         for(z=0;z<leads.length;z++)if(segSeg(sg2,leads[z]))return null;
+        for(z=0;z<resv.length;z++)if(segBox(sg2[0],sg2[1],sg2[2],sg2[3],resv[z]))return null;
       }
       return {bx:bx,P:lp.P};
     }
@@ -863,7 +903,14 @@ function mjMapCore(D,G){
       for(k=0;k<cs.length&&!done;k++){
         vv=C.clamp({x:cs[k][0]-w/2,y:cs[k][1]-w*C.ratio/2,w:w,h:w*C.ratio});mg=20*vv.w/C.W;
         // 그 구의 점은 모두 화면 안에(가장자리에서 20px 안쪽)
-        if(i&&!o.halls.every(function(h){var x=px(h._p[0]),y=py(h._p[1]);return x>vv.x+mg&&x<vv.x+vv.w-mg&&y>vv.y+mg&&y<vv.y+vv.h-mg;}))continue;
+        var u2=vv.w/C.W,rs2=C.resv||{},rr=13*u2;
+        if(!o.halls.every(function(h){
+          var x=px(h._p[0]),y=py(h._p[1]);
+          if(i&&!(x>vv.x+mg&&x<vv.x+vv.w-mg&&y>vv.y+mg&&y<vv.y+vv.h-mg))return false;
+          if(rs2.right&&x+rr>vv.x+vv.w-rs2.right[0]*u2&&y-rr<vv.y+rs2.right[1]*u2)return false;     // 오른쪽 위 단추 밑
+          if(rs2.left&&x-rr<vv.x+rs2.left[0]*u2&&y-rr<vv.y+rs2.left[1]*u2)return false;              // 왼쪽 위 표시 밑
+          return true;
+        })&&i)continue;
         L=C.layout(vv,fsc,g);
         att=o.halls.filter(function(h){return L.names.some(function(q){return q.h===h&&q.dir!=='LEAD';});}).length;
         ld=o.halls.filter(function(h){return L.names.some(function(q){return q.h===h&&q.dir==='LEAD';});}).length;
@@ -893,6 +940,9 @@ function mjMapCore(D,G){
     box.style.display='none';
     if($('skipMap'))$('skipMap').parentNode.style.display='none';
     if(D&&D.halls&&D.halls.length&&$('mapFail'))$('mapFail').hidden=false;
+    // 지도가 없으니 맨 위 소개 문장도 목록용으로 바꾼다
+    var ld=document.querySelector('.intro .lead');
+    if(ld)ld.textContent='서울의 장례식장을 구별로 모은 목록입니다. 구를 고르면 그 구에 있는 장례식장만 이름순으로 보여 드립니다.';
     return;
   }
   var UI=window.MJ_UI=window.MJ_UI||{};
@@ -950,7 +1000,7 @@ function mjMapCore(D,G){
 
   // ── 상태 ──
   var ratio=0.85;                       // 지도 세로/가로(화면 크기에 따라 sizeMap이 다시 잰다)
-  var state={gu:'',picked:'',full:false};
+  var state={gu:'',picked:'',full:false,back:''};   // back: 목록의 "위 지도에서 보기"로 온 장례식장(카드에 돌아가기 단추를 낸다)
   var view=null,fullView=null,anim=0,guShown=0;
   function fit(b,pad){
     var w=b[2]-b[0],h=b[3]-b[1],cx=(b[0]+b[2])/2,cy=(b[1]+b[3])/2;
@@ -1107,9 +1157,9 @@ function mjMapCore(D,G){
       if(!q.plus){zi.setAttribute('display','none');}
       else{
         // 돋보기: 이 구에 번호만 보이는 곳이 있으니 누르면 커진다는 표시
-        var zx=q.zx,zy=q.zy,zr=3.6*u;
+        var zx=q.zx,zy=q.zy,zr=5*u;
         zi.removeAttribute('display');
-        zi.innerHTML='<circle cx="'+zx.toFixed(1)+'" cy="'+zy.toFixed(1)+'" r="'+zr.toFixed(1)+'"/><line x1="'+(zx+zr*0.72).toFixed(1)+'" y1="'+(zy+zr*0.72).toFixed(1)+'" x2="'+(zx+zr*1.75).toFixed(1)+'" y2="'+(zy+zr*1.75).toFixed(1)+'"/>';
+        zi.innerHTML='<circle class="zhit" data-gu="'+g+'" cx="'+zx.toFixed(1)+'" cy="'+zy.toFixed(1)+'" r="'+(22*u).toFixed(1)+'"/><circle cx="'+zx.toFixed(1)+'" cy="'+zy.toFixed(1)+'" r="'+zr.toFixed(1)+'"/><line x1="'+(zx+zr*0.72).toFixed(1)+'" y1="'+(zy+zr*0.72).toFixed(1)+'" x2="'+(zx+zr*1.75).toFixed(1)+'" y2="'+(zy+zr*1.75).toFixed(1)+'"/>';
       }
     });
     guShown=L.stats.guShown;
@@ -1194,9 +1244,10 @@ function mjMapCore(D,G){
   function oldLine(h){return ((h.old&&h.old.length)?'<p class="old-name">(구 '+h.old.map(esc).join(', 구 ')+')</p>':'')+(h.nt?'<p class="hall-note">'+esc(h.nt)+'</p>':'');}
   function acts(h){
     var tel=h.tel?'<a class="act tel" href="tel:'+esc(h.tel.replace(/[^0-9]/g,''))+'">전화 '+esc(h.tel)+'</a>':'';
-    return '<p class="acts">'+tel+'<button type="button" class="act" data-detail="'+esc(h.n)+'">자세히 보기</button></p>';
+    return '<p class="acts">'+tel+'<button type="button" class="act" data-detail="'+esc(h.n)+'">자세히 보기</button>'
+      +(state.back===h.n?'<button type="button" class="act" data-back="'+esc(h.n)+'">목록의 이 장례식장으로 돌아가기</button>':'')+'</p>';
   }
-  function showCard(names){
+  function showCard(names,stay){
     if(!names||!names.length){cardBox.innerHTML='';return;}
     var close='<button type="button" class="card-x" data-card-close aria-label="카드 닫기">닫기</button>';
     if(names.length>1){
@@ -1209,11 +1260,11 @@ function mjMapCore(D,G){
         +'<p class="more-call">이곳으로 정하시기 전에 먼저 상담해 두시면, 빈소 크기와 빈소·안치실 사용료를 가족 규모에 맞춰 함께 살펴볼 수 있습니다. <a class="tap" href="tel:18771852">전화 상담 1877-1852</a></p></div>';
     }
     // 카드가 화면 밖에 생기면 보이는 데까지만 옮긴다(화면 가득 보기에서는 아래에서 올라오는 판이라 옮기지 않는다)
-    if(!state.full&&cardBox.scrollIntoView)cardBox.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:'nearest'});
+    if(!stay&&!state.full&&cardBox.scrollIntoView)cardBox.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:'nearest'});
   }
   function byName(n){for(var i=0;i<HALLS.length;i++)if(HALLS[i].n===n)return HALLS[i];return null;}
-  function pick(name){
-    state.picked=name;showCard([name]);
+  function pick(name,stay){
+    state.picked=name;if(state.back!==name)state.back='';showCard([name],stay);
     // 화면 가득 보기에서는 아래에서 올라온 카드가 점을 가리지 않게, 고른 점을 지도 위쪽 3분의 1쯤으로 옮긴다
     if(state.full){var xy=ptXY(byName(name),unit());setView({x:xy[0]-view.w/2,y:xy[1]-view.h*0.28,w:view.w,h:view.h});}
     else draw();
@@ -1224,7 +1275,7 @@ function mjMapCore(D,G){
     opt=opt||{};
     if(GUS.indexOf(g)<0)g='';
     state.gu=g;
-    if(!opt.keep){state.picked='';showCard(null);}
+    if(!opt.keep){state.picked='';state.back='';showCard(null);}
     // 키보드로 옮겨 다니는 순서: 고른 구의 점이 먼저, 그다음 화면에 보이는 이웃 구의 점
     HALLS.slice().sort(function(a,b){return ((a.g===g?0:1)-(b.g===g?0:1))||(a.no-b.no);}).forEach(function(h){gPt.appendChild(h._g);});
     setView(g?C.zoomFor(g,fontScale()):fullView,opt.now);
@@ -1319,6 +1370,7 @@ function mjMapCore(D,G){
     else pick(name);
   }
   gPt.addEventListener('click',function(e){var p=e.target.closest('.pt.live');if(p)tapPoint(p.getAttribute('data-name'));});
+  gLabel.addEventListener('click',function(e){var z=e.target.closest('.zhit');if(z)LIST().chooseGu(z.getAttribute('data-gu'));});
   gHit.addEventListener('click',function(e){var p=e.target.closest('[data-name]');if(p)pick(p.getAttribute('data-name'));});
   gPt.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var p=e.target.closest('.pt.live');if(p){e.preventDefault();tapPoint(p.getAttribute('data-name'));}}});
   // "자세히 보기": 아래 목록에서 그 장례식장을 펼쳐 보여 준다. 화면 가득 보기였으면 먼저 닫는다.
@@ -1331,7 +1383,8 @@ function mjMapCore(D,G){
   cardBox.addEventListener('click',function(e){
     var b=e.target.closest('[data-pick]');if(b){pick(b.getAttribute('data-pick'));return;}
     var d=e.target.closest('[data-detail]');if(d){toDetail(d.getAttribute('data-detail'));return;}
-    if(e.target.closest('[data-card-close]')){state.picked='';showCard(null);draw();LIST().mark('');}
+    var bk=e.target.closest('[data-back]');if(bk){LIST().back(bk.getAttribute('data-back'));return;}
+    if(e.target.closest('[data-card-close]')){state.picked='';state.back='';showCard(null);draw();LIST().mark('');}
   });
 
   $('btnAll').addEventListener('click',function(){LIST().chooseGu('');});
@@ -1389,12 +1442,14 @@ function mjMapCore(D,G){
     setGu:setGu,
     // 고른 점만 표시한다(카드·화면 옮기기 없음). 주소의 ?no= 로 들어왔을 때 쓴다.
     mark:function(name){if(byName(name)){state.picked=name;draw();}},
-    // 목록의 "위 지도에서 보기": 그 구로 지도를 키우고 점을 골라 카드를 보여 준다.
+    // 목록의 "위 지도에서 보기": 지도만 그 구로 키우고 점을 골라 카드를 보여 준다. 보던 목록·찾기 결과·구 선택은 건드리지 않는다(4회 검토).
+    // 지도 윗변이 고정 띠 바로 아래에 오게 옮기고, 카드에 "목록의 이 장례식장으로 돌아가기" 단추를 낸다.
     show:function(name){
       var h=byName(name);if(!h)return;
-      if(state.gu!==h.g)LIST().chooseGu(h.g);
+      if(state.gu!==h.g)setGu(h.g,{now:true});
+      state.back=name;
+      pick(name,true);
       go($('mapWrap'));
-      pick(name);
     }
   };
 
@@ -1439,7 +1494,8 @@ function mjMapCore(D,G){
     return;
   }
 
-  var opts='<option value="">서울 전체 ('+HALLS.length+'곳)</option>';
+  // 맨 위의 얇은 막대에서는 칸이 좁아 "서울 전체"만 적는다
+  var opts='<option value="">서울 전체'+(document.getElementById('quickBar')?'':' ('+HALLS.length+'곳)')+'</option>';
   GUS.forEach(function(g){opts+='<option value="'+g+'">'+g+' ('+count(g)+'곳)</option>';});
   sel.innerHTML=opts;
 
@@ -1451,7 +1507,7 @@ function mjMapCore(D,G){
       FAC.forEach(function(name,i){
         var on=h.f.charAt(i)==='1';
         // 주차장이 등록 안 됨으로 적혀 있어도 주차 대수가 있으면 대수를 따른다
-        if(i===2&&!on&&has(h.k))on=true;
+        if(i===2&&!on&&(has(h.k)||(h.dt&&h.dt.pk&&h.dt.pk[0]===1)))on=true;
         fac+='<li class="'+(on?'on':'off')+'"><span class="mark" aria-hidden="true">'+(on?'●':'○')+'</span>'+name+' <strong>'+(on?'있음':'등록 안 됨')+'</strong></li>';
       });
       fac+='</ul>';
@@ -1465,10 +1521,10 @@ function mjMapCore(D,G){
     function tl(n){return '<a class="tap" href="tel:'+esc(n.replace(/[^0-9]/g,''))+'">'+esc(n)+'</a>';}
     if(dt){
       ln=[];
-      (dt.sub||[]).forEach(function(s){ln.push('<li><span class="dk">지하철</span><span>'+esc(s[0])+(s[1]?'('+esc(s[1])+')':'')+(s[2]?' '+esc(s[2])+' 출구':'')+(s[3]?', 걸어서 '+esc(s[3]):'')+'</span></li>');});
-      if(dt.bs||dt.bl)ln.push('<li><span class="dk">버스</span><span>'+(dt.bs?esc(dt.bs)+(/정류장$|정류소$/.test(dt.bs)?'':' 정류장'):'')+(dt.bs&&dt.bl?' · ':'')+(dt.bl?esc(dt.bl.join(', '))+'번':'')+'</span></li>');
+      (dt.sub||[]).forEach(function(s){ln.push('<li><span class="dk">지하철</span><span>'+esc(s[0])+(s[1]?'('+esc(s[1])+')':'')+(s[2]?' '+esc(s[2])+' 출구':'')+(s[3]?', 걸어서 '+esc(s[3])+(s[4]?'('+esc(s[4])+' 기준)':''):'')+'</span></li>');});
+      (dt.bus||[]).forEach(function(b){ln.push('<li><span class="dk">버스</span><span>'+(b[0]?esc(b[0])+(/정류장$|정류소$/.test(b[0])?'':' 정류장'):'')+(b[0]&&b[1].length?' · ':'')+(b[1].length?esc(b[1].join(', '))+'번':'')+'</span></li>');});
       if(dt.sh)ln.push('<li><span class="dk">셔틀</span><span>셔틀버스가 있습니다(시간은 시설에 문의)</span></li>');
-      if(dt.en)ln.push('<li><span class="dk">출입구</span><span>'+esc(dt.en)+'</span></li>');
+      if(dt.en)ln.push('<li><span class="dk">위치</span><span>'+esc(dt.en)+'</span></li>');
       if(ln.length)ex+='<h4>오시는 길</h4><ul class="dl">'+ln.join('')+'</ul>';
       ln=[];
       var same=function(a){return a&&h.tel&&a.replace(/[^0-9]/g,'')===h.tel.replace(/[^0-9]/g,'');};
@@ -1518,7 +1574,7 @@ function mjMapCore(D,G){
     // 안내 한 줄: 옛 이름이 아니라 헷갈리기 쉬운 사실(없어진 옛 위치 등)
     if(h.nt)old+='<p class="hall-note">'+esc(h.nt)+'</p>';
     return '<li class="hall'+(h.s==='c'?' unsure':'')+'" data-name="'+esc(h.n)+'"><h3><span class="no-badge">'+noName(h)+'</span>'+esc(h.n)+'</h3>'+old+'<p class="chips">'+chips+'</p>'
-      +'<p class="addr">'+esc(h.a)+'</p>'
+      +'<p class="addr">'+esc(h.a)+'</p>'+(h.ra?'<p class="addr-sub">도로명: '+esc(h.ra)+'</p>':'')
       +(facts.length?'<p class="facts">'+facts.join(' · ')+'</p>':'')
       +'<p class="acts">'+tel+show+map+'</p>'+more(h)+'</li>';
   }
@@ -1528,6 +1584,13 @@ function mjMapCore(D,G){
     return ua!==ub?ua-ub:a.n.localeCompare(b.n,'ko');
   }
   function sub(t){if(listNote)listNote.textContent=t;}
+  // 맨 위 막대(구 선택·이름 찾기) 바로 아래의 한 줄: 무엇이 골라졌는지와 "목록 보기" 단추. 목록이 지도 아래 멀리 있어서 둔다.
+  var barNote=document.getElementById('barNote'),TOP=document.getElementById('quickBar')?'quickBar':'pickBox';
+  function bar(t){
+    if(!barNote)return;
+    if(!t){barNote.hidden=true;barNote.innerHTML='';return;}
+    barNote.hidden=false;barNote.innerHTML='<span>'+esc(t)+'</span> <button type="button" class="bar-go" data-to-list>목록 보기</button>';
+  }
   function render(){
     var g=sel.value,all=(g===ALLV);
     if(query){
@@ -1536,7 +1599,7 @@ function mjMapCore(D,G){
       var q=query.replace(/ /g,''),mno=/^(?:서울)?0*([0-9]{1,2})번?$/.exec(q),
           found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')+'|'+stations(h)).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
       note.textContent='"'+query+'"(으)로 찾은 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
-      sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
+      sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');bar('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
       list.innerHTML=found.length?'<ul class="halls">'+found.map(function(h){return card(h).replace('<p class="chips">','<p class="in-gu">'+h.g+'</p><p class="chips">');}).join('')+'</ul>'
         :'<div class="empty"><p>찾는 이름이 없습니다. 목록의 이름과 다르게 부르는 곳일 수 있으니 구를 골라 보시거나 전화로 문의해 주세요.</p><p class="near"><a class="act tel" href="tel:18771852">전화 1877-1852</a></p></div>';
       return;
@@ -1548,11 +1611,12 @@ function mjMapCore(D,G){
       var near=(NEAR[g]||[]);
       list.innerHTML='<div class="empty"><p><strong>'+esc(g)+'</strong>에는 등록된 장례식장이 없습니다.</p>'
         +(near.length?'<p>이웃한 구를 살펴보세요.</p><p class="near">'+near.map(function(n){return '<button type="button" class="ghost-btn" data-gu="'+n+'">'+n+' ('+count(n)+'곳)</button>';}).join('')+'</p>':'')+'</div>';
-      note.textContent=g+' 0곳 · 아래에서 이웃한 구를 골라 주세요';sub(g+' 0곳');return;
+      note.textContent=g+' 0곳 · 아래에서 이웃한 구를 골라 주세요';sub(g+' 0곳');bar(g+' 0곳');return;
     }
     if(all)note.textContent='서울 25개 구 가운데 '+inGus+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.'+(MAP?'':' 아래에 구별로 나옵니다.');
     else note.textContent=MAP?g+' '+items.length+'곳 · 위 지도가 '+g+'로 커졌고, 아래 목록도 '+g+'로 바뀌었습니다':g+' '+items.length+'곳 · 아래에 이름순으로 나옵니다';
-    sub((all?'서울 전체':g)+' '+items.length+'곳 ('+(all?'구별, ':'')+'이름순) · 번호는 지도의 번호와 같고 순위가 아닙니다');
+    sub((all?'서울 전체':g)+' '+items.length+'곳 ('+(all?'구별, ':'')+'이름순) · '+(MAP?'번호는 지도의 번호와 같고 순위가 아닙니다':'번호는 순위가 아닙니다'));
+    bar(all?'':g+' '+items.length+'곳');
     var html='',cur='';
     if(!all&&REGION_POSTS[g])html+='<p class="region-post"><a class="tap" href="'+esc(REGION_POSTS[g])+'" target="_blank" rel="noopener noreferrer">'+esc(g)+' 장례 안내 글 읽기</a></p>';
     if(all){
@@ -1563,13 +1627,13 @@ function mjMapCore(D,G){
     }
     items.forEach(function(h){
       if(all&&h.g!==cur){
-        if(cur)html+='</ul><p class="to-top"><a href="#guSelect" data-jump="pickBox">구 고르기로 올라가기</a></p>';
+        if(cur)html+='</ul><p class="to-top"><a href="#guSelect" data-jump="'+TOP+'">구 고르기로 올라가기</a></p>';
         cur=h.g;html+='<h2 class="gu-head" id="gu-'+esc(cur)+'">'+esc(cur)+' <span class="gu-n">'+count(cur)+'곳</span></h2><ul class="halls">';
       }
       else if(!all&&!cur){cur=g;html+='<ul class="halls">';}
       html+=card(h);
     });
-    list.innerHTML=html+'</ul>'+(all?'<p class="to-top"><a href="#guSelect" data-jump="pickBox">구 고르기로 올라가기</a></p>':'');
+    list.innerHTML=html+'</ul>'+(all?'<p class="to-top"><a href="#guSelect" data-jump="'+TOP+'">구 고르기로 올라가기</a></p>':'');
   }
   var calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function go(el,block){if(el&&el.scrollIntoView)el.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:block||'start'});}
@@ -1582,10 +1646,11 @@ function mjMapCore(D,G){
   var search=document.getElementById('nameSearch');
   // 역이 적힌 시설이 하나라도 있으면 찾기 칸의 안내에 역 이름 찾기를 알린다
   if(search&&HALLS.some(function(h){return !!stations(h);})){
-    var hintEl=document.querySelector('.name-search .soft');
+    var hintEl=document.querySelector('.name-search .soft'),hintTop=document.getElementById('searchHint'),
+        st0=HALLS.filter(function(h){return !!stations(h);})[0].dt.sub[0][0];   // 예시로 드는 역은 자료에 실제로 있는 역(없는 역을 예로 들면 찾아지지 않는다)
     if(hintEl)hintEl.textContent='(흔히 부르는 이름·옛 이름·번호·지하철역 이름으로도 찾습니다. 역 이름은 공식 홈페이지에 적힌 곳만 찾아집니다)';
-    // 예시로 드는 역은 자료에 실제로 있는 역(없는 역을 예로 들면 찾아지지 않는다)
-    search.setAttribute('placeholder','예: 성모, 세브란스, '+HALLS.filter(function(h){return !!stations(h);})[0].dt.sub[0][0]);
+    if(hintTop)hintTop.textContent='구 선택과 이름 찾기는 화면 맨 위 제목 아래에 있습니다. 이름 찾기는 흔히 부르는 이름·옛 이름·번호·지하철역 이름(예: '+st0+')으로도 찾습니다. 역 이름은 공식 홈페이지에 적힌 곳만 찾아집니다.';
+    search.setAttribute('placeholder',hintTop?'이름·역으로 찾기':'예: 성모, 세브란스, '+st0);
   }
   // 구를 바꾼다(선택 칸·지도·목록·주소가 함께 움직인다). opt.keep: 지도에서 고른 점과 카드를 그대로 둔다.
   function chooseGu(g,opt){
@@ -1611,17 +1676,34 @@ function mjMapCore(D,G){
   // 지도 카드의 "자세히 보기": 목록에서 그 장례식장을 찾아 펼친다. 목록이 다른 구이거나 이름 찾기 중이면 그 구 목록으로 바꾼다.
   function detail(name){
     var h=byName(name);if(!h)return;
-    if(query||(sel.value!==ALLV&&sel.value!==h.g))chooseGu(h.g,{keep:true});
+    if(openHall(name))return;            // 찾기 결과나 서울 전체 목록에 이미 있으면 목록을 바꾸지 않는다
+    chooseGu(h.g,{keep:true});
     openHall(name);
   }
-  UI.list={chooseGu:chooseGu,detail:detail,mark:mark};
+  // 지도 카드의 "목록의 이 장례식장으로 돌아가기": 보던 목록 그대로, 그 카드 자리로 돌아간다(상세는 펼치지 않는다)
+  function back(name){
+    var lis=list.querySelectorAll('.hall'),i;
+    for(i=0;i<lis.length;i++)if(lis[i].getAttribute('data-name')===name){mark(name);lis[i].scrollIntoView({block:'start'});return;}
+    detail(name);
+  }
+  UI.list={chooseGu:chooseGu,detail:detail,mark:mark,back:back};
 
   // 지도가 있는 화면에서는 구 선택 칸이 지도와 목록 사이에 있어, 고른 뒤에 화면을 옮기지 않는다(바로 아래 목록이 바뀐다).
   sel.addEventListener('change',function(){
     chooseGu(sel.value);
     if(!MAP&&sel.value)showResult();
   });
-  if(search)search.addEventListener('input',function(){query=search.value.trim();render();});
+  if(search)search.addEventListener('input',function(){
+    var was=query;query=search.value.trim();
+    // 이름 찾기는 서울 전체에서 찾는다: 찾기를 시작하면 구 선택과 지도도 서울 전체로 돌린다(구 표시가 따로 놀지 않게)
+    if(!was&&query&&sel.value!==ALLV){sel.value=ALLV;setUrl(ALLV);if(MAP)MAP.setGu(ALLV);}
+    render();
+  });
+  // 맨 위 막대에서 찾은 뒤 엔터를 치면 목록으로 내려간다
+  var listTop=document.getElementById('listTop');
+  if(search)search.addEventListener('keydown',function(e){if(e.key==='Enter'&&query&&barNote){e.preventDefault();go(listTop||list);}});
+  if(barNote)barNote.addEventListener('click',function(e){if(e.target.closest('[data-to-list]')){go(listTop||list);try{(listTop||list).focus({preventScroll:true});}catch(x){}}});
+  if(document.getElementById('toBar'))document.getElementById('toBar').addEventListener('click',function(){go(document.getElementById(TOP));try{sel.focus({preventScroll:true});}catch(x){}});
   list.addEventListener('click',function(e){
     var b=e.target.closest('[data-gu]');
     if(b){chooseGu(b.getAttribute('data-gu'));showResult();return;}
