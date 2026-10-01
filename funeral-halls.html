@@ -347,7 +347,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <span class="eyebrow">자료 출처</span>
     <p>보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳. 이름·주소·전화·공설/사설·유형·빈소 수·안치 가능 구수·주차 대수·편의시설 등록 여부를 옮겼습니다. 편의시설의 "등록 안 됨"은 자료에 설치로 적혀 있지 않다는 뜻이며, 실제와 다를 수 있습니다. 주소는 띄어쓰기만 손보았습니다. 홈페이지는 자료에 적힌 주소 가운데 2026년 10월 1일에 열어 그 장례식장(또는 병원)의 화면임을 확인한 것만 실었습니다.</p>
     <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>이름 아래의 "(구 …)" 옛 이름 4곳은 원자료에 없는 내용으로, 공식 연혁·옛 기사·이전 공공데이터를 마을장의사가 따로 확인해 덧붙였습니다.</li><li>원자료에 지번 주소만 있는 1곳에는 병원 공식 누리집에 적힌 도로명 주소를 함께 적었습니다.</li><li>카드의 안내 한 줄 1곳(없어진 옛 위치 안내)도 공식 자료를 따로 확인해 덧붙였습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
-    <p><strong>오시는 길·전화·주차 안내</strong>(확인이 끝난 5곳부터 싣고 있습니다): 각 시설의 공식 홈페이지에서 확인한 사실을 간추린 것입니다. 확인한 곳과 날짜는 카드마다 적었습니다. 달라졌을 수 있으니 가시기 전에 전화로 확인해 주세요.</p>
+    <p><strong>오시는 길·전화·주차 안내</strong>(확인이 끝난 19곳부터 싣고 있습니다): 각 시설의 공식 홈페이지에서 확인한 사실을 간추린 것입니다. 확인한 곳과 날짜는 카드마다 적었습니다. 달라졌을 수 있으니 가시기 전에 전화로 확인해 주세요.</p>
   </section>
 
   <div class="feedback" id="feedback">
@@ -386,7 +386,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <div class="footer-info">운영 상호: 마을장사 · 서비스 브랜드: 마을장의사<br>사업자등록번호: 209-90-98193<br>서울시 동대문구 왕산로 200, L65 섹션오피스 1327호<br>대표: 김광룡 (장례지도사) · 24시간 전화상담</div>
 </footer>
 
-<script src="funeral-data.js?v=da554699"></script>
+<script src="funeral-data.js?v=011c1c76"></script>
 <script>
 
 
@@ -438,7 +438,8 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     return;
   }
 
-  var opts='<option value="">서울 전체 ('+HALLS.length+'곳)</option>';
+  // 맨 위의 얇은 막대에서는 칸이 좁아 "서울 전체"만 적는다
+  var opts='<option value="">서울 전체'+(document.getElementById('quickBar')?'':' ('+HALLS.length+'곳)')+'</option>';
   GUS.forEach(function(g){opts+='<option value="'+g+'">'+g+' ('+count(g)+'곳)</option>';});
   sel.innerHTML=opts;
 
@@ -464,7 +465,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     function tl(n){return '<a class="tap" href="tel:'+esc(n.replace(/[^0-9]/g,''))+'">'+esc(n)+'</a>';}
     if(dt){
       ln=[];
-      (dt.sub||[]).forEach(function(s){ln.push('<li><span class="dk">지하철</span><span>'+esc(s[0])+(s[1]?'('+esc(s[1])+')':'')+(s[2]?' '+esc(s[2])+' 출구':'')+(s[3]?', 걸어서 '+esc(s[3])+(s[4]?'('+esc(s[4])+' 기준)':''):'')+'</span></li>');});
+      (dt.sub||[]).forEach(function(s){ln.push('<li><span class="dk">지하철</span><span>'+esc(s[0])+(s[1]?'('+esc(s[1])+')':'')+(s[2]?' '+esc(s[2])+' 출구':'')+(s[3]?', 걸어서 '+esc(s[3])+(s[4]?'('+esc(s[4])+' 기준)':''):'')+(s[5]?' → '+esc(s[5]):'')+'</span></li>');});
       (dt.bus||[]).forEach(function(b){ln.push('<li><span class="dk">버스</span><span>'+(b[0]?esc(b[0])+(/정류장$|정류소$/.test(b[0])?'':' 정류장'):'')+(b[0]&&b[1].length?' · ':'')+(b[1].length?esc(b[1].join(', '))+'번':'')+'</span></li>');});
       if(dt.sh)ln.push('<li><span class="dk">셔틀</span><span>셔틀버스가 있습니다(시간은 시설에 문의)</span></li>');
       if(dt.en)ln.push('<li><span class="dk">위치</span><span>'+esc(dt.en)+'</span></li>');
@@ -527,6 +528,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     return ua!==ub?ua-ub:a.n.localeCompare(b.n,'ko');
   }
   function sub(t){if(listNote)listNote.textContent=t;}
+  // 맨 위 막대(구 선택·이름 찾기) 바로 아래의 한 줄: 무엇이 골라졌는지와 "목록 보기" 단추. 목록이 지도 아래 멀리 있어서 둔다.
+  var barNote=document.getElementById('barNote'),TOP=document.getElementById('quickBar')?'quickBar':'pickBox';
+  function bar(t){
+    if(!barNote)return;
+    if(!t){barNote.hidden=true;barNote.innerHTML='';return;}
+    barNote.hidden=false;barNote.innerHTML='<span>'+esc(t)+'</span> <button type="button" class="bar-go" data-to-list>목록 보기</button>';
+  }
   function render(){
     var g=sel.value,all=(g===ALLV);
     if(query){
@@ -535,7 +543,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       var q=query.replace(/ /g,''),mno=/^(?:서울)?0*([0-9]{1,2})번?$/.exec(q),
           found=mno?HALLS.filter(function(h){return h.no===+mno[1];}):HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')+'|'+stations(h)).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
       note.textContent='"'+query+'"(으)로 찾은 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
-      sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
+      sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');bar('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
       list.innerHTML=found.length?'<ul class="halls">'+found.map(function(h){return card(h).replace('<p class="chips">','<p class="in-gu">'+h.g+'</p><p class="chips">');}).join('')+'</ul>'
         :'<div class="empty"><p>찾는 이름이 없습니다. 목록의 이름과 다르게 부르는 곳일 수 있으니 구를 골라 보시거나 전화로 문의해 주세요.</p><p class="near"><a class="act tel" href="tel:18771852">전화 1877-1852</a></p></div>';
       return;
@@ -547,11 +555,12 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       var near=(NEAR[g]||[]);
       list.innerHTML='<div class="empty"><p><strong>'+esc(g)+'</strong>에는 등록된 장례식장이 없습니다.</p>'
         +(near.length?'<p>이웃한 구를 살펴보세요.</p><p class="near">'+near.map(function(n){return '<button type="button" class="ghost-btn" data-gu="'+n+'">'+n+' ('+count(n)+'곳)</button>';}).join('')+'</p>':'')+'</div>';
-      note.textContent=g+' 0곳 · 아래에서 이웃한 구를 골라 주세요';sub(g+' 0곳');return;
+      note.textContent=g+' 0곳 · 아래에서 이웃한 구를 골라 주세요';sub(g+' 0곳');bar(g+' 0곳');return;
     }
     if(all)note.textContent='서울 25개 구 가운데 '+inGus+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.'+(MAP?'':' 아래에 구별로 나옵니다.');
     else note.textContent=MAP?g+' '+items.length+'곳 · 위 지도가 '+g+'로 커졌고, 아래 목록도 '+g+'로 바뀌었습니다':g+' '+items.length+'곳 · 아래에 이름순으로 나옵니다';
-    sub((all?'서울 전체':g)+' '+items.length+'곳 ('+(all?'구별, ':'')+'이름순) · 번호는 지도의 번호와 같고 순위가 아닙니다');
+    sub((all?'서울 전체':g)+' '+items.length+'곳 ('+(all?'구별, ':'')+'이름순) · '+(MAP?'번호는 지도의 번호와 같고 순위가 아닙니다':'번호는 순위가 아닙니다'));
+    bar(all?'':g+' '+items.length+'곳');
     var html='',cur='';
     if(!all&&REGION_POSTS[g])html+='<p class="region-post"><a class="tap" href="'+esc(REGION_POSTS[g])+'" target="_blank" rel="noopener noreferrer">'+esc(g)+' 장례 안내 글 읽기</a></p>';
     if(all){
@@ -562,13 +571,13 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
     }
     items.forEach(function(h){
       if(all&&h.g!==cur){
-        if(cur)html+='</ul><p class="to-top"><a href="#guSelect" data-jump="pickBox">구 고르기로 올라가기</a></p>';
+        if(cur)html+='</ul><p class="to-top"><a href="#guSelect" data-jump="'+TOP+'">구 고르기로 올라가기</a></p>';
         cur=h.g;html+='<h2 class="gu-head" id="gu-'+esc(cur)+'">'+esc(cur)+' <span class="gu-n">'+count(cur)+'곳</span></h2><ul class="halls">';
       }
       else if(!all&&!cur){cur=g;html+='<ul class="halls">';}
       html+=card(h);
     });
-    list.innerHTML=html+'</ul>'+(all?'<p class="to-top"><a href="#guSelect" data-jump="pickBox">구 고르기로 올라가기</a></p>':'');
+    list.innerHTML=html+'</ul>'+(all?'<p class="to-top"><a href="#guSelect" data-jump="'+TOP+'">구 고르기로 올라가기</a></p>':'');
   }
   var calm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function go(el,block){if(el&&el.scrollIntoView)el.scrollIntoView({behavior:(calm||document.visibilityState==='hidden')?'auto':'smooth',block:block||'start'});}
@@ -581,10 +590,11 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var search=document.getElementById('nameSearch');
   // 역이 적힌 시설이 하나라도 있으면 찾기 칸의 안내에 역 이름 찾기를 알린다
   if(search&&HALLS.some(function(h){return !!stations(h);})){
-    var hintEl=document.querySelector('.name-search .soft');
+    var hintEl=document.querySelector('.name-search .soft'),hintTop=document.getElementById('searchHint'),
+        st0=HALLS.filter(function(h){return !!stations(h);})[0].dt.sub[0][0];   // 예시로 드는 역은 자료에 실제로 있는 역(없는 역을 예로 들면 찾아지지 않는다)
     if(hintEl)hintEl.textContent='(흔히 부르는 이름·옛 이름·번호·지하철역 이름으로도 찾습니다. 역 이름은 공식 홈페이지에 적힌 곳만 찾아집니다)';
-    // 예시로 드는 역은 자료에 실제로 있는 역(없는 역을 예로 들면 찾아지지 않는다)
-    search.setAttribute('placeholder','예: 성모, 세브란스, '+HALLS.filter(function(h){return !!stations(h);})[0].dt.sub[0][0]);
+    if(hintTop)hintTop.textContent='구 선택과 이름 찾기는 화면 맨 위 제목 아래에 있습니다. 이름 찾기는 흔히 부르는 이름·옛 이름·번호·지하철역 이름(예: '+st0+')으로도 찾습니다. 역 이름은 공식 홈페이지에 적힌 곳만 찾아집니다.';
+    search.setAttribute('placeholder',hintTop?'이름·역으로 찾기':'예: 성모, 세브란스, '+st0);
   }
   // 구를 바꾼다(선택 칸·지도·목록·주소가 함께 움직인다). opt.keep: 지도에서 고른 점과 카드를 그대로 둔다.
   function chooseGu(g,opt){
@@ -610,17 +620,34 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   // 지도 카드의 "자세히 보기": 목록에서 그 장례식장을 찾아 펼친다. 목록이 다른 구이거나 이름 찾기 중이면 그 구 목록으로 바꾼다.
   function detail(name){
     var h=byName(name);if(!h)return;
-    if(query||(sel.value!==ALLV&&sel.value!==h.g))chooseGu(h.g,{keep:true});
+    if(openHall(name))return;            // 찾기 결과나 서울 전체 목록에 이미 있으면 목록을 바꾸지 않는다
+    chooseGu(h.g,{keep:true});
     openHall(name);
   }
-  UI.list={chooseGu:chooseGu,detail:detail,mark:mark};
+  // 지도 카드의 "목록의 이 장례식장으로 돌아가기": 보던 목록 그대로, 그 카드 자리로 돌아간다(상세는 펼치지 않는다)
+  function back(name){
+    var lis=list.querySelectorAll('.hall'),i;
+    for(i=0;i<lis.length;i++)if(lis[i].getAttribute('data-name')===name){mark(name);lis[i].scrollIntoView({block:'start'});return;}
+    detail(name);
+  }
+  UI.list={chooseGu:chooseGu,detail:detail,mark:mark,back:back};
 
   // 지도가 있는 화면에서는 구 선택 칸이 지도와 목록 사이에 있어, 고른 뒤에 화면을 옮기지 않는다(바로 아래 목록이 바뀐다).
   sel.addEventListener('change',function(){
     chooseGu(sel.value);
     if(!MAP&&sel.value)showResult();
   });
-  if(search)search.addEventListener('input',function(){query=search.value.trim();render();});
+  if(search)search.addEventListener('input',function(){
+    var was=query;query=search.value.trim();
+    // 이름 찾기는 서울 전체에서 찾는다: 찾기를 시작하면 구 선택과 지도도 서울 전체로 돌린다(구 표시가 따로 놀지 않게)
+    if(!was&&query&&sel.value!==ALLV){sel.value=ALLV;setUrl(ALLV);if(MAP)MAP.setGu(ALLV);}
+    render();
+  });
+  // 맨 위 막대에서 찾은 뒤 엔터를 치면 목록으로 내려간다
+  var listTop=document.getElementById('listTop');
+  if(search)search.addEventListener('keydown',function(e){if(e.key==='Enter'&&query&&barNote){e.preventDefault();go(listTop||list);}});
+  if(barNote)barNote.addEventListener('click',function(e){if(e.target.closest('[data-to-list]')){go(listTop||list);try{(listTop||list).focus({preventScroll:true});}catch(x){}}});
+  if(document.getElementById('toBar'))document.getElementById('toBar').addEventListener('click',function(){go(document.getElementById(TOP));try{sel.focus({preventScroll:true});}catch(x){}});
   list.addEventListener('click',function(e){
     var b=e.target.closest('[data-gu]');
     if(b){chooseGu(b.getAttribute('data-gu'));showResult();return;}
