@@ -302,6 +302,7 @@ html.map-full,html.map-full body{overflow:hidden;}
 /* 구 이름: 점·이름표가 없는 빈 자리에 놓는다. 바탕 글씨이지만 읽히게 조금 진하게 */
 .gu-label{fill:#8a7f63;font-weight:700;letter-spacing:0.03em;stroke:rgba(255,255,255,0.75);}
 .han-water{fill:none;stroke:#c9dde8;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+.han-water.tip{stroke-linecap:butt;}
 .han-label{fill:#4f7d96;font-weight:700;font-style:italic;text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke:rgba(255,255,255,0.8);letter-spacing:0.2em;}
 .map-tip{position:absolute;left:0;right:0;bottom:0;margin:0;padding:6px 10px;background:rgba(255,255,255,0.92);border-top:1px solid var(--line);font-size:0.84rem;text-align:center;color:var(--navy);pointer-events:none;}
 svg.compact .pt .hosp{fill:#1c2840;stroke:#fff;}
@@ -872,9 +873,27 @@ function mjMapCore(D,G){
   if(G.han&&G.han.length){
     var gHan=document.createElementNS(SVGNS,'g');gHan.setAttribute('aria-hidden','true');gHan.setAttribute('class','han');
     svg.insertBefore(gHan,gLabel);
-    G.han.forEach(function(a){
-      var r=decode(a),d='',j;for(j=0;j<r.length;j++)d+=(j?'L':'M')+px(r[j][0]).toFixed(1)+' '+py(r[j][1]).toFixed(1);
-      el('path',{d:d,'class':'han-water'},gHan);
+    // 띠의 끝(서울 경계에서 끊기는 곳)이 뚝 잘려 보이지 않게, 다른 선과 이어지지 않는 끝은 조금씩 옅어지게 그린다.
+    var hanRuns=G.han.map(function(a){return decode(a).map(function(q){return [px(q[0]),py(q[1])];});}),hanEnds=[];
+    hanRuns.forEach(function(r){hanEnds.push(r[0],r[r.length-1]);});
+    function freeEnd(pt){var n=0;hanEnds.forEach(function(q){if(Math.hypot(q[0]-pt[0],q[1]-pt[1])<6)n++;});return n<2;}
+    function dOf(r){var d='',j;for(j=0;j<r.length;j++)d+=(j?'L':'M')+r[j][0].toFixed(1)+' '+r[j][1].toFixed(1);return d;}
+    // 끝에서 len만큼을 잘라 낸다: [잘라 낸 끝 조각들(끝 쪽부터), 남은 선]
+    function cutTip(r,len,n){
+      var pieces=[],cur=[r[0]],acc=0,step=len/n,i=1,a2=r[0],b2,seg,t,pt;
+      while(i<r.length&&pieces.length<n){
+        b2=r[i];seg=Math.hypot(b2[0]-a2[0],b2[1]-a2[1]);
+        if(acc+seg>=step){t=(step-acc)/seg;pt=[a2[0]+(b2[0]-a2[0])*t,a2[1]+(b2[1]-a2[1])*t];cur.push(pt);pieces.push(cur);cur=[pt];a2=pt;acc=0;}
+        else{cur.push(b2);acc+=seg;a2=b2;i++;}
+      }
+      return [pieces,[a2].concat(r.slice(i))];
+    }
+    hanRuns.forEach(function(r){
+      var tips=[],k;
+      if(freeEnd(r[0])){k=cutTip(r,70,5);tips=tips.concat(k[0]);r=k[1];}
+      if(freeEnd(r[r.length-1])){k=cutTip(r.slice().reverse(),70,5);tips=tips.concat(k[0]);r=k[1].reverse();}
+      el('path',{d:dOf(r),'class':'han-water'},gHan);
+      tips.forEach(function(piece,idx){el('path',{d:dOf(piece),'class':'han-water tip','stroke-opacity':(0.14+0.17*(idx%5)).toFixed(2)},gHan);});
     });
     (G.hanLabel||[]).forEach(function(p){var t=el('text',{'class':'han-label','data-x':px(p[0]).toFixed(1),'data-y':py(p[1]).toFixed(1)},gHan);t.textContent='한강';hanLabels.push(t);});
   }
