@@ -301,6 +301,11 @@ html.map-full,html.map-full body{overflow:hidden;}
 .dong-label{stroke:#fff;}
 /* 구 이름: 점·이름표가 없는 빈 자리에 놓는다. 바탕 글씨이지만 읽히게 조금 진하게 */
 .gu-label{fill:#8a7f63;font-weight:700;letter-spacing:0.03em;stroke:rgba(255,255,255,0.75);}
+.han-water{fill:none;stroke:#c9dde8;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+.han-label{fill:#4f7d96;font-weight:700;font-style:italic;text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke:rgba(255,255,255,0.8);letter-spacing:0.2em;}
+.map-tip{position:absolute;left:0;right:0;bottom:0;margin:0;padding:6px 10px;background:rgba(255,255,255,0.92);border-top:1px solid var(--line);font-size:0.84rem;text-align:center;color:var(--navy);pointer-events:none;}
+svg.compact .pt .hosp{fill:#1c2840;stroke:#fff;}
+svg.compact .pt .spec{fill:#7d6337;stroke:#fff;}
 .map-cur{position:absolute;left:10px;top:10px;padding:5px 12px;background:rgba(255,255,255,0.94);border:1px solid var(--navy);color:var(--navy);font-size:0.9rem;font-weight:700;pointer-events:none;}
 .map-full-top{position:absolute;right:10px;top:10px;background:rgba(255,255,255,0.96);}
 .map-box.full .map-full-top{display:none;}
@@ -431,10 +436,11 @@ html.map-full,html.map-full body{overflow:hidden;}
       <li><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10.5" fill="rgba(28,40,64,0.12)"/><rect x="6.5" y="6.5" width="9" height="9" fill="#fff" stroke="#7d6337" stroke-width="2"/></svg>전문 장례식장 부근</li>
       <li><svg viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="5.5" width="16" height="11" fill="none" stroke="#a33a2f" stroke-width="2"/></svg>고른 동</li>
     </ul>
-    <p class="legend-sub">점 안의 숫자는 아래 목록의 번호와 같습니다. 구·이름순으로 붙인 번호이며 순위가 아닙니다. 구를 누르면 그 구가 크게 보입니다.</p>
+    <p class="legend-sub">점 안의 숫자는 아래 목록의 번호와 같습니다. 구·이름순으로 붙인 번호이며 순위가 아닙니다. 구를 누르면 그 구가 크게 보입니다. 물색 띠는 한강의 위치를 알아보기 쉽게 그린 것으로, 실제 강의 모양·폭과는 다릅니다.</p>
     <div class="map-wrap">
       <svg id="map" role="group" aria-label="서울 구 경계 지도. 구를 누르면 그 구로 확대됩니다. 같은 내용이 아래 목록에도 있습니다." xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="map-hint" id="mapHint" aria-hidden="true"></div>
+      <p class="map-tip" id="mapTip" style="display:none">키우거나 구를 누르면 번호와 장례식장 이름이 나옵니다</p>
       <div class="map-cur" id="mapCur" aria-hidden="true" style="display:none"></div>
       <button type="button" class="ghost-btn strong map-full-top" id="btnFull2">지도 크게 보기</button>
     </div>
@@ -485,7 +491,7 @@ html.map-full,html.map-full body{overflow:hidden;}
     <span class="eyebrow">자료 출처</span>
     <p><strong>장례식장</strong>: 보건복지부 「보건·복지현황 전국 장례식장 현황」(공공데이터포털), <strong>2026년 4월 1일 기준</strong>. 서울 24개 구 60곳.</p>
     <p class="src-head">원자료와 다르게 실은 것</p><ul class="src-list"><li>원자료 61곳 가운데 운영이 확인되지 않은 1곳은 싣지 않았습니다.</li><li>쉴낙원 서울제중장례식장의 전화번호: 원자료의 번호가 시설 공식 홈페이지와 달라, 공식 홈페이지에 적힌 번호로 실었습니다.</li><li>경희의료원장례식장의 홈페이지: 원자료의 주소가 다른 곳으로 연결되어, 경희대학교의료원 장례식장 공식 누리집 주소로 실었습니다.</li><li>홈페이지 주소가 다른 주소로 넘어가는 곳은 넘어간 주소를 실었고, 열리지 않거나 다른 곳으로 연결되는 주소는 싣지 않았습니다.</li></ul>
-    <p><strong>구·동 경계선</strong>: 국가데이터처 통계지리정보서비스(SGIS) 행정구역 경계(공공데이터포털), <strong>2025년 6월 30일 기준</strong>. 화면에 맞게 선을 단순하게 다듬었습니다. 동 경계와 동 이름은 행정동 기준입니다.</p>
+    <p><strong>구·동 경계선</strong>: 국가데이터처 통계지리정보서비스(SGIS) 행정구역 경계(공공데이터포털), <strong>2025년 6월 30일 기준</strong>. 화면에 맞게 선을 단순하게 다듬었습니다. 동 경계와 동 이름은 행정동 기준입니다. 한강 표시는 같은 자료에서 강북과 강남의 구가 맞닿는 경계선을 따라 그린 것입니다.</p>
   </section>
 
   <div class="feedback" id="feedback">
@@ -642,6 +648,17 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   var gGu=el('g',{},svg),gLabel=el('g',{'aria-hidden':'true'},svg),gDong=el('g',{},svg),gDongLabel=el('g',{'aria-hidden':'true'},svg),gMe=el('g',{'aria-hidden':'true'},svg),
       gPt=el('g',{},svg),gName=el('g',{'aria-hidden':'true'},svg);   // 구 이름은 옅은 바탕 글씨로 점 뒤에, 시설 이름은 점 위에
   if(!BUILDING)svg.setAttribute('class','approx');
+  // 한강: 강북·강남 구가 맞닿는 경계선을 따라 그린 옅은 물색 띠(위치를 알아보기 위한 표시). 구 바탕 위, 글자·점 아래.
+  var hanLabels=[];
+  if(G.han&&G.han.length){
+    var gHan=document.createElementNS(SVGNS,'g');gHan.setAttribute('aria-hidden','true');gHan.setAttribute('class','han');
+    svg.insertBefore(gHan,gLabel);
+    G.han.forEach(function(a){
+      var r=decode(a),d='',j;for(j=0;j<r.length;j++)d+=(j?'L':'M')+px(r[j][0]).toFixed(1)+' '+py(r[j][1]).toFixed(1);
+      el('path',{d:d,'class':'han-water'},gHan);
+    });
+    (G.hanLabel||[]).forEach(function(p){var t=el('text',{'class':'han-label','data-x':px(p[0]).toFixed(1),'data-y':py(p[1]).toFixed(1)},gHan);t.textContent='한강';hanLabels.push(t);});
+  }
   GUS.forEach(function(g){
     var p=el('path',{d:pathOf(GU[g].rings),'class':'gu'+(GU[g].n?'':' zero'),'data-gu':g,tabindex:'0',role:'button',
       'aria-label':g+', 장례식장 '+GU[g].n+'곳'+(GU[g].n?'':' (등록된 곳 없음)')},gGu);
@@ -665,7 +682,7 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   // 글자 크기 단추(위쪽)를 누르면 지도 글자도 같은 비율로 커지게 한다.
   function fontScale(){var f=parseFloat(getComputedStyle(document.documentElement).fontSize)||17;return Math.max(0.8,Math.min(1.5,f/17));}
   // 구 하나쯤으로 커진 상태인가(점을 누를 수 있는 상태). 서울 전체 보기에서는 구 이름과 숫자만 보이고, 구를 먼저 누르게 한다.
-  function isZoomed(){return view.w<fullView.w*0.7;}
+  function isZoomed(){return view.w<fullView.w*(rect().width>=700?0.7:0.86);}
   // 넓은 화면(지도 폭 700px 이상)에서는 서울 전체 보기에서도 점을 누를 수 있다. 좁은 화면 전체 보기에서는 구를 먼저 누른다.
   function wide(){return rect().width>=700;}
   function ptXY(h,u){
@@ -676,14 +693,14 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
   function draw(){
     var u=unit(),zoomed=isZoomed(),fsc=fontScale(),k,oneGu=(state.gu&&state.gu!=='*')?state.gu:'';
     svg.setAttribute('viewBox',view.x.toFixed(1)+' '+view.y.toFixed(1)+' '+view.w.toFixed(1)+' '+view.h.toFixed(1));
-    var big=wide(),live=zoomed||big;
+    var big=wide(),live=zoomed||big,compact=!zoomed&&!big;   // compact: 좁은 화면의 전체 보기 — 번호 없는 작은 점, 구 이름을 모두 보이는 것이 먼저
     GUS.forEach(function(g){
       var on=(g===oneGu);
       GU[g].path.setAttribute('class','gu'+(GU[g].n?'':' zero')+(on?' on':'')+(oneGu&&!on?' dim':''));
     });
     // 점: 어느 배율에서나 모두 그린다(번호는 늘 보인다). 이웃 구의 점도 바로 누를 수 있다. 화면 밖의 점은 건너뛴다.
     gDong.setAttribute('display',zoomed?'inline':'none');
-    var boxes=[],names=[],R=zoomed?11:(big?10:8),NF=zoomed?12:(big?11:9.5);
+    var boxes=[],names=[],R=zoomed?11:(big?10:4.5),NF=zoomed?12:11;
     HALLS.forEach(function(h){
       var g=h._g,html='',xy=ptXY(h,u),hosp=(h.t==='병원'),on=(h.n===state.picked),mine=true,
           s=R*(on?1.15:1)*u,cx=xy[0].toFixed(1),cy=xy[1].toFixed(1),m=30*u;
@@ -696,19 +713,19 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
       if(on)html+='<circle class="ring" cx="'+cx+'" cy="'+cy+'" r="'+((R+8)*u).toFixed(1)+'" stroke-width="'+(2.5*u).toFixed(2)+'"/>';
       if(hosp)html+='<circle class="mk hosp" cx="'+cx+'" cy="'+cy+'" r="'+s.toFixed(1)+'" stroke-width="'+(1.8*u).toFixed(2)+'"/>';
       else html+='<rect class="mk spec" x="'+(xy[0]-s*0.92).toFixed(1)+'" y="'+(xy[1]-s*0.92).toFixed(1)+'" width="'+(s*1.84).toFixed(1)+'" height="'+(s*1.84).toFixed(1)+'" stroke-width="'+(1.8*u).toFixed(2)+'"/>';
-      html+='<text class="no'+(hosp?' hosp':' spec')+'" x="'+cx+'" y="'+cy+'" font-size="'+(NF*u).toFixed(2)+'">'+no2(h)+'</text>';
+      if(!compact)html+='<text class="no'+(hosp?' hosp':' spec')+'" x="'+cx+'" y="'+cy+'" font-size="'+(NF*u).toFixed(2)+'">'+no2(h)+'</text>';
       g.innerHTML=html;
-      boxes.push([xy[0]-(R+2)*u,xy[1]-(R+2)*u,xy[0]+(R+2)*u,xy[1]+(R+2)*u]);
+      boxes.push([xy[0]-(R+(compact?1:2))*u,xy[1]-(R+(compact?1:2))*u,xy[0]+(R+(compact?1:2))*u,xy[1]+(R+(compact?1:2))*u]);
       if(live&&mine){g.setAttribute('tabindex','0');g.setAttribute('role','button');g.removeAttribute('aria-hidden');
         g.setAttribute('aria-label',noName(h)+'번, '+h.n+', '+h.g+' '+h.d+', '+(hosp?'병원 장례식장':'전문 장례식장'));g.setAttribute('class','pt live');}
       else{g.removeAttribute('tabindex');g.removeAttribute('role');g.setAttribute('aria-hidden','true');g.setAttribute('class','pt');}
       if(mine)names.push([h,xy,0]);
     });
     // 구 이름: 구 한가운데에 못 박지 않고, 그 구 안에서 점이 없는 빈 자리를 찾아 놓는다(이름표보다 먼저 자리를 잡는다).
-    var gfs=(zoomed?18:(big?19:12.5))*fsc*u;guShown=0;
+    var gfs=(zoomed?18:(big?19:13))*fsc*u,guOver=0;guShown=0;
     GUS.forEach(function(g){
       // 좁은 화면의 전체 보기에서는 자리가 모자라 "구"를 뺀 짧은 이름으로 적는다(중구는 그대로)
-      var o=GU[g],t=o.label,nm=(!zoomed&&!big&&g!=='중구')?g.slice(0,-1):g,w=nm.length*gfs*1.06,hh=gfs*0.62,k2,c,bx,ok=false,b=o.bbox;
+      var o=GU[g],t=o.label,nm=g,w=nm.length*gfs*1.06,hh=gfs*0.62,k2,c,bx,ok=false,b=o.bbox;
       if(b[2]<view.x||b[0]>view.x+view.w||b[3]<view.y||b[1]>view.y+view.h){t.setAttribute('display','none');return;}
       for(k2=0;k2<o.cands.length;k2++){
         c=o.cands[k2];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
@@ -726,12 +743,22 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
           ok=true;break;
         }
       }
-      if(!ok){t.setAttribute('display','none');return;}
+      if(!ok){
+        // 끝내 빈 자리가 없으면 점과 조금 겹치더라도 구 가운데에 적는다(구 이름이 안 보이는 구는 없게). 겹친 구는 따로 센다.
+        c=[px(o.c[0]),py(o.c[1])];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
+        if(bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h){t.setAttribute('display','none');return;}
+        guOver++;
+      }
       boxes.push(bx);guShown++;
       t.removeAttribute('display');t.setAttribute('x',c[0].toFixed(1));t.setAttribute('y',c[1].toFixed(1));
       t.setAttribute('font-size',gfs.toFixed(2));t.setAttribute('stroke-width',(3*u).toFixed(2));t.textContent=nm;
     });
-    svg.setAttribute('data-gu-shown',guShown);
+    svg.setAttribute('data-gu-shown',guShown);svg.setAttribute('data-gu-overlap',guOver);
+    // 좁은 화면 전체 보기에서는 구 이름을 점 위에 그려, 점과 겹친 구 이름도 읽히게 한다
+    if(compact){if(svg.lastChild!==gLabel)svg.appendChild(gLabel);}
+    else if(gLabel.nextSibling!==gDong)svg.insertBefore(gLabel,gDong);
+    svg.setAttribute('class',(BUILDING?'':'approx')+(compact?' compact':''));
+    var tip=$('mapTip');if(tip)tip.style.display=compact?'':'none';
     // 점 옆 짧은 이름: 둘레 여덟 자리 가운데 안 겹치는 곳에 놓고, 자리가 없으면 이름은 숨긴다(번호는 남는다).
     // 점이 몰린 곳부터 자리를 잡게 해서 이름이 되도록 많이 보이게 한다.
     var nfs=(zoomed?13:(big?12.5:11))*fsc*u,near=60*u;
@@ -767,6 +794,15 @@ try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){sca
         }
         return;
       }
+    });
+    // "한강" 글자: 장례식장 이름표가 먼저이고, 겹치면 숨긴다
+    var hanN=0;
+    hanLabels.forEach(function(t){
+      var lx=+t.getAttribute('data-x'),ly=+t.getAttribute('data-y'),hf=(zoomed?14:12)*fsc*u,bx=[lx-hf*1.2,ly-hf*0.7,lx+hf*1.2,ly+hf*0.7];
+      if(hanN>=2||bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h||overlaps(bx,boxes)){t.setAttribute('display','none');return;}
+      hanN++;
+      boxes.push(bx);t.removeAttribute('display');t.setAttribute('x',lx.toFixed(1));t.setAttribute('y',ly.toFixed(1));
+      t.setAttribute('font-size',hf.toFixed(2));t.setAttribute('stroke-width',(2.5*u).toFixed(2));
     });
     // 동 이름: 점·이름과 겹치면 숨긴다
     var fs=11.5*fsc*u;
