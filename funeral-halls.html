@@ -354,7 +354,7 @@ html.map-full,html.map-full body{overflow:hidden;}
 .gu-label,.dong-label{text-anchor:middle;dominant-baseline:middle;pointer-events:none;paint-order:stroke;stroke-linejoin:round;}
 .dong-label{stroke:#fff;}
 /* 구 이름: 점·이름표가 없는 빈 자리에 놓는다. 바탕 글씨이지만 읽히게 조금 진하게 */
-.gu-label{fill:#77694a;font-weight:700;letter-spacing:0.03em;stroke:rgba(255,255,255,0.75);}
+.gu-label{fill:#85775a;font-weight:700;letter-spacing:0.03em;stroke:rgba(255,255,255,0.75);}
 /* 키운 화면의 위계는 크기가 아니라 모양으로(2026-10-02 대표님: 확대하면 구·동 이름도 크게):
    장례식장 이름 = 흰 띠 위 진한 글자·번호 원과 한 덩어리 / 구 이름 = 크지만 옅은 갈색 바탕 글씨, 글자 사이를 벌림 / 동 이름 = 회색 보통 굵기 */
 .zoomed .gu-label{fill:#9a8a62;font-weight:700;letter-spacing:0.1em;stroke:rgba(255,255,255,0.7);}
@@ -737,12 +737,14 @@ function mjMapCore(D,G){
         boxes.splice(boxes.indexOf(own[p.h.no]),1);delete own[p.h.no];return false;
       });
     }
-    // 구 이름: 그 구 안에서 점이 없는 빈 자리. 전체 보기에서는 이름표보다 먼저 자리를 잡는다.
+    // 구 이름: 그 구 안에서 점이 없는 빈 자리. 좁은 화면(휴대폰)의 전체 보기에서만 이름표보다 먼저 자리를 잡는다.
+    // 넓은 화면 전체 보기와 키운 화면에서는 장례식장 이름표·지시선이 먼저 자리를 잡고, 구 이름은 남은 자리에 놓는다(2026-10-02: 구 이름이 한가운데 좋은 자리를 먼저 차지해
+    // 이름표가 멀리 밀려나고 선이 지도를 가로질렀다 — 순서를 바꾸니 창 1004에서 붙는 이름표 27→39곳, 가장 긴 선 563→281px).
     // 키운 화면에서는 글씨가 크다(대표님 2026-10-02: 확대하면 구·동 이름도 크게 — 구를 눌러 들어간 화면 19px, 더 키우면 22px).
     // 그래서 키운 화면에서는 장례식장 이름표가 먼저 자리를 잡고, 구 이름은 남은 자리에 놓는다(자리가 없으면 그 화면에서는 적지 않는다).
-    var gfs=(zoomed?((lvl||1)>=2?22:19):(big?19:13))*fsc*u,gus=[],guOver=0;
+    var gfs=(zoomed?((lvl||1)>=2?22:19):(big?17:13))*fsc*u,gus=[],guOver=0;
     function placeGus(){GUS.forEach(function(g){
-      var o=GU[g],b=o.bbox,fsz=gfs,w,hh,k,c,bx,ok=false,pass,SC2=compact?[1,0.96,0.93,0.93]:(zoomed?[1,0.93,0.86,0.86]:[1,0.86,0.74,0.74]),nm=(compact&&g!=='중구')?g.slice(0,-1):g;
+      var o=GU[g],b=o.bbox,fsz=gfs,w,hh,k,c,bx,ok=false,onLine=false,pass,SC2=compact?[1,0.96,0.93,0.93]:(zoomed?[1,0.93,0.86,0.86]:[1,0.86,0.74,0.74]),nm=(compact&&g!=='중구')?g.slice(0,-1):g;
       if(b[2]<view.x||b[0]>view.x+view.w||b[3]<view.y||b[1]>view.y+view.h)return;
       // 구 이름은 경계 안쪽에: 글자 양 끝이 구 안에 들어가는 자리를 찾고, 좁은 구는 글씨를 줄여 다시 찾는다. 마지막 바퀴에서만 양 끝 조건을 푼다.
       for(pass=0;pass<4&&!ok;pass++){
@@ -752,8 +754,30 @@ function mjMapCore(D,G){
           if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
           if(pass<3&&(!inP(bx[0]+w*0.04,c[1],o.pr)||!inP(c[0]+w/2-w*0.04,c[1],o.pr)))continue;
           if(overlaps(bx,boxes))continue;
-          if((zoomed||marginMode)&&leads&&leads.length&&onLead(bx))continue;
+          if((zoomed||marginMode||guLast)&&leads&&leads.length&&onLead(bx))continue;
           ok=true;break;
+        }
+      }
+      // 전체 보기에서 구 이름을 이름표 뒤에 놓을 때: 자리를 못 찾으면 더 촘촘한 후보에서, 그래도 없으면 선 위에 얹는 것까지 받아 주고(구 이름은 선 아래에 그려진다),
+      // 그래도 없으면 "구"를 뺀 짧은 이름으로 다시 찾는다. 이름표·번호 원과는 겹치지 않는다.
+      if(!ok&&guLast){
+        if(!o.cands2){
+          var N2=22,b2=o.bbox,tx2=o.c[0],ty2=o.c[1]-(b2[3]-b2[1])*0.12,i2,j2,x2,y2;o.cands2=[];
+          for(i2=1;i2<N2;i2++)for(j2=1;j2<N2;j2++){x2=b2[0]+(b2[2]-b2[0])*i2/N2;y2=b2[1]+(b2[3]-b2[1])*j2/N2;if(inP(x2,y2,o.pr))o.cands2.push([x2,y2,Math.hypot(x2-tx2,y2-ty2)]);}
+          o.cands2.sort(function(p,q){return p[2]-q[2];});
+        }
+        var tries=[[nm,1,true,true],[nm,0.86,true,true],[nm,0.74,true,true],[nm,0.74,false,true],[nm,0.86,true,false],[nm,0.74,false,false]],ti,tr;
+        if(nm.length>2){tries.push([nm.slice(0,-1),0.74,false,true]);tries.push([nm.slice(0,-1),0.74,false,false]);}
+        for(ti=0;ti<tries.length&&!ok;ti++){
+          tr=tries[ti];fsz=gfs*tr[1];w=tr[0].length*fsz*1.06;hh=fsz*0.62;
+          for(k=0;k<o.cands2.length;k++){
+            c=o.cands2[k];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
+            if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
+            if(tr[2]&&(!inP(bx[0]+w*0.04,c[1],o.pr)||!inP(c[0]+w/2-w*0.04,c[1],o.pr)))continue;
+            if(overlaps(bx,boxes))continue;
+            if(tr[3]&&leads&&leads.length&&onLead(bx))continue;
+            ok=true;nm=tr[0];onLine=!tr[3]&&leads&&leads.length&&onLead(bx);break;
+          }
         }
       }
       var over=false;
@@ -764,10 +788,10 @@ function mjMapCore(D,G){
         if(bx[2]<view.x||bx[0]>view.x+view.w||bx[3]<view.y||bx[1]>view.y+view.h)return;
         over=true;guOver++;
       }
-      boxes.push(bx);gus.push({g:g,text:nm,x:c[0],y:c[1],w:w,fs:fsz,box:bx,over:over,plus:false,inside:inP(bx[0]+w*0.04,c[1],o.pr)&&inP(c[0]+w/2-w*0.04,c[1],o.pr)});
+      boxes.push(bx);gus.push({g:g,text:nm,x:c[0],y:c[1],w:w,fs:fsz,box:bx,over:over,onLine:!!onLine,plus:false,inside:inP(bx[0]+w*0.04,c[1],o.pr)&&inP(c[0]+w/2-w*0.04,c[1],o.pr)});
     });}
-    var marginMode=!!(pri&&mode.margin&&!compact&&!quick&&!zoomed);
-    if(!zoomed&&!marginMode)placeGus();
+    var marginMode=!!(pri&&mode.margin&&!compact&&!quick&&!zoomed),guLast=!!(big&&!zoomed&&!marginMode&&!compact);
+    if(!zoomed&&!marginMode&&!guLast)placeGus();
     // 장례식장 이름: 번호 원에 붙여서. 점이 몰린 곳부터 자리를 잡는다.
     var nfs=(zoomed?(big?15:16):(big?12.5:11))*fsc*u,near=60*u,Rr=R*u,g3=3*u,order=pts.filter(function(p){return p.inView;}).map(function(p){return [p,0];});
     order.forEach(function(a){order.forEach(function(b){if(a!==b&&Math.abs(a[0].x-b[0].x)<near&&Math.abs(a[0].y-b[0].y)<near)a[1]++;});});
@@ -1015,8 +1039,8 @@ function mjMapCore(D,G){
       // 가장자리 줄까지 곧장 가는 거리의 1.6배 + 80px보다 돌아가는 길은 쓰지 않는다(지도를 가로질러 돌아가는 선을 막는다)
       var straight=col?Math.max(0,col.side<0?p.x-col.XL:(col.side>0?col.XR-p.x:Math.min(p.x-col.XL,col.XR-p.x))):0,maxLen=col?(straight*1.6+80*u):1e12;
       for(d=0;d<8;d++){dist[start*8+d]=0;push(hOf(si),start*8+d);}
-      // 길 찾기 선(가장자리 이름표로도 못 놓은 곳의 마지막 수단)의 길이 상한(px): 좁은 지도(900px 미만)와 키운 화면은 150px, 그 밖에는 없음.
-      var best=null,popN=0,capPx=col?0:((zoomed||C.W<900)?150:0),maxRoute=capPx?capPx/4+14:1e9,g;   // 찾는 범위(칸 수, 꺾는 값 두 번쯤 여유)
+      // 길 찾기 선의 길이 상한(px): 좁은 지도(800px 미만)와 키운 화면은 150px(못 놓은 곳은 지도 아래 단추로), 그 밖에는 없음.
+      var best=null,popN=0,capPx=col?0:((zoomed||C.W<800)?150:0),maxRoute=capPx?capPx/4+14:1e9,g;   // 찾는 범위(칸 수, 꺾는 값 두 번쯤 여유)
       while(hc.length){
         c=hc[0];st=pop();
         n=st>>3;d=st&7;i=n%cols;j=(n-i)/cols;
@@ -1091,8 +1115,9 @@ function mjMapCore(D,G){
       }
       if(best){
         boxes.push(best.bx);leaderCount++;if(col)marginN++;else routed++;
-        for(i=1;i<best.P.length;i++)leads.push([best.P[i-1][0],best.P[i-1][1],best.P[i][0],best.P[i][1]]);
-        names.push({h:h,dir:'LEAD',routed:!col,margin:!!col,ci:Math.round(best.bx[1]/(2*LH+3.5*u))%4,side:best.side,anchor:'start',x:best.bx[0]+4*u+2*CR+4*u,y:(best.bx[1]+best.bx[3])/2,box:best.bx,fs:nfs,px:p.x,py:p.y,path:best.P,cr:CR,cx:best.bx[0]+4*u+CR});
+        var sgs=[],sg1;
+        for(i=1;i<best.P.length;i++){sg1=[best.P[i-1][0],best.P[i-1][1],best.P[i][0],best.P[i][1]];leads.push(sg1);sgs.push(sg1);}
+        names.push({segs:sgs,h:h,dir:'LEAD',routed:!col,margin:!!col,ci:Math.round(best.bx[1]/(2*LH+3.5*u))%4,side:best.side,anchor:'start',x:best.bx[0]+4*u+2*CR+4*u,y:(best.bx[1]+best.bx[3])/2,box:best.bx,fs:nfs,px:p.x,py:p.y,path:best.P,cr:CR,cx:best.bx[0]+4*u+CR});
         return true;
       }
       return false;
@@ -1129,7 +1154,8 @@ function mjMapCore(D,G){
       attachAll(order.filter(function(it){return it[0].h.g!==focus;}));leadAll();
     }else{attachAll(order);leadAll();}
     routeAll();
-    if(zoomed)placeGus();
+    function pathLen(n){var l=0,k;for(k=1;k<n.path.length;k++)l+=Math.hypot(n.path[k][0]-n.path[k-1][0],n.path[k][1]-n.path[k-1][1]);return l;}
+    if(zoomed||guLast)placeGus();
     // 번호만 남은 점이 있는 구에는 구 이름 옆에 돋보기 표시(키우면 이름이 나온다는 뜻)를 붙인다
     if(!compact)gus.forEach(function(q){
       q.plus=GU[q.g].halls.some(function(h){return only.indexOf(h.no)>=0;});
@@ -1159,7 +1185,7 @@ function mjMapCore(D,G){
       for(k2=1;k2<n.path.length;k2++){
         var x1=n.path[k2-1][0],y1=n.path[k2-1][1],x2=n.path[k2][0],y2=n.path[k2][1];
         names.forEach(function(o){if(o!==n&&segRect(x1,y1,x2,y2,o.box)){lineHit++;hitList.push(n.h.no+'선-'+o.h.no+'이름표');}});
-        gus.forEach(function(q){if(!q.over&&segRect(x1,y1,x2,y2,q.box)){lineHit++;hitList.push(n.h.no+'선-'+q.g);}});
+        gus.forEach(function(q){if(!q.over&&!q.onLine&&segRect(x1,y1,x2,y2,q.box)){lineHit++;hitList.push(n.h.no+'선-'+q.g);}});
         pts.forEach(function(o){
           if(o.h===n.h)return;
           var dx=x2-x1,dy=y2-y1,t=Math.max(0,Math.min(1,((o.x-x1)*dx+(o.y-y1)*dy)/((dx*dx+dy*dy)||1)));
@@ -1167,8 +1193,9 @@ function mjMapCore(D,G){
         });
       }
     });
-    var leadLen=0;leads.forEach(function(sg){leadLen+=Math.hypot(sg[2]-sg[0],sg[3]-sg[1])/u;});
-    out.stats={margin:marginN,far:names.filter(function(n){return n.routed;}).map(function(n){return n.h.no;}).concat(only),leadLen:Math.round(leadLen),inView:pts.filter(function(p){return p.inView;}).length,lineHit:lineHit,hitList:hitList,attached:attached,leader:leaderCount,routed:routed,numberOnly:only,guShown:gus.length,guOverlap:guOver,
+    var leadLen=0,leadSq=0,leadMax=0;leads.forEach(function(sg){leadLen+=Math.hypot(sg[2]-sg[0],sg[3]-sg[1])/u;});
+    names.forEach(function(n){if(!n.path)return;var l=pathLen(n)/u;leadSq+=l*l;if(l>leadMax)leadMax=l;});
+    out.stats={leadSq:Math.round(leadSq),leadMax:Math.round(leadMax),long:names.filter(function(n){return n.path&&pathLen(n)/u>220;}).map(function(n){return n.h.no;}),margin:marginN,far:names.filter(function(n){return n.routed;}).map(function(n){return n.h.no;}).concat(only),leadLen:Math.round(leadLen),inView:pts.filter(function(p){return p.inView;}).length,lineHit:lineHit,hitList:hitList,attached:attached,leader:leaderCount,routed:routed,numberOnly:only,guShown:gus.length,guOverlap:guOver,guOnLine:gus.filter(function(q){return q.onLine;}).length,
       guOutside:gus.filter(function(q){return !q.inside;}).length,guOutsideList:gus.filter(function(q){return !q.inside;}).map(function(q){return q.g;}),overlap:ov,cross:cross};
     return out;
   }
@@ -1196,7 +1223,7 @@ function mjMapCore(D,G){
       // (한 번에 다 하면 화면이 1~3초 멈춘다. 지도 화면은 조금씩 나눠 부르고, 좋아질 때마다 다시 그린다).
       var base=layoutOnce(view,fsc,focus,false,null,null,lvl);
       e={best:base,base:base,cur:base,lvl:lvl,m:0,i:0,pri:{},F:{},done:false};
-      if(base.compact||base.zoomed||!(C.useMargin||(C.W>=900&&base.stats.numberOnly.length)))e.done=true;
+      if(base.compact||base.zoomed||!(C.useMargin||(C.W>=800&&base.stats.numberOnly.length)))e.done=true;
       C._cache[key]=e;C._keys.push(key);
       if(C._keys.length>16)delete C._cache[C._keys.shift()];
     }
@@ -1204,9 +1231,9 @@ function mjMapCore(D,G){
   };
   var MODES=[{pen:0,order:'out'},{pen:0,order:'in'},{pen:12,order:'out'},{pen:30,order:'out'},{pen:30,order:'in'},{pen:60,order:'out'}];
   // 고른 구가 있으면 그 구의 이름이 먼저다. 그다음 번호만 남는 곳이 적은 것, 선 길이 합이 짧은 것.
-  function scoreOf(L,focus){var f=0;if(focus&&GU[focus])L.stats.numberOnly.forEach(function(no){if(GU[focus].halls.some(function(h){return h.no===no;}))f++;});return f*1e8+L.stats.numberOnly.length*1e6+(L.stats.overlap+L.stats.cross+L.stats.lineHit)*1e5+(C.useMargin?L.stats.routed*3e3:0)+L.stats.leadLen;}
+  function scoreOf(L,focus){var f=0;if(focus&&GU[focus])L.stats.numberOnly.forEach(function(no){if(GU[focus].halls.some(function(h){return h.no===no;}))f++;});return f*1e8+L.stats.numberOnly.length*1e6+(L.stats.overlap+L.stats.cross+L.stats.lineHit)*1e5+(C.useMargin?L.stats.routed*3e3:0)+L.stats.leadSq/1e4;}
   // 더 나은 배치 찾기 한 걸음. 돌려주는 것: {more: 더 해 볼 것이 남았는가, improved: 이번에 더 나아졌는가}
-  // 넓은 화면(지도 폭 900px 이상)의 서울 전체 보기에서 번호만 남는 곳이 있을 때: 그곳을 먼저 놓는 순서로, 방식을 바꿔 가며(바깥 여백 우선 정도·먼저 놓는 순서 6가지 × 8바퀴까지) 다시 놓아 본다.
+  // 넓은 화면(지도 폭 800px 이상)의 서울 전체 보기에서 번호만 남는 곳이 있을 때: 그곳을 먼저 놓는 순서로, 방식을 바꿔 가며(바깥 여백 우선 정도·먼저 놓는 순서 6가지 × 8바퀴까지) 다시 놓아 본다.
   // 번호만 남는 곳이 0이 되면 멈춘다. 끝까지 0이 안 되면 가장 적게 남은 결과를 쓴다. 걸음 수로만 정해지므로 기기 빠르기와 상관없이 같은 화면에서는 같은 결과가 나온다.
   C.refine=function(view,fsc,focus){
     var e=C._cache&&C._cache[keyOf(view,fsc,focus)],added=0,src,was;
@@ -1220,11 +1247,13 @@ function mjMapCore(D,G){
     }else{
       if(e.i===0){e.pri={};e.cur=e.base;}
       e.cur.stats.numberOnly.forEach(function(no){if(!e.pri[no]){e.pri[no]=1;added++;}});
-      if(!added||e.i>=8){e.m++;e.i=0;if(e.m>=MODES.length)e.done=true;return {more:!e.done,improved:false};}
+      e.n=(e.n||0)+1;
+      if(!added||e.i>=8){e.m++;e.i=0;if(e.m>=MODES.length||e.n>=(C.maxSteps||40))e.done=true;return {more:!e.done,improved:false};}
       e.cur=layoutOnce(view,fsc,focus,false,e.pri,MODES[e.m],e.lvl);e.i++;
     }
     if(scoreOf(e.cur,focus)<was)e.best=e.cur;
     if(!C.useMargin&&e.best.stats.numberOnly.length===0)e.done=true;
+    if(e.n>=(C.maxSteps||40))e.done=true;
     return {more:!e.done,improved:scoreOf(e.best,focus)<was};
   };
   // 끝까지 찾은 결과(점검 스크립트용)
