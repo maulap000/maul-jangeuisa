@@ -781,30 +781,56 @@ function mjMapCore(D,G){
           }
         }
         if(!ok){
-          // 바탕 글씨 자리: 번호 원·다른 구 이름·지도 위 단추와는 겹치지 않고, 이름표에 가려지는 넓이가 가장 작은 곳(같으면 구 가운데에 가까운 곳)
-          var hard=[],z3,bestC=null,bestCov=0.5,cv,nb,ix,iy,pass2,lim;
+          // 바탕 글씨 자리: 번호 원·다른 구 이름·지도 위 단추와는 겹치지 않고, 이름표에 가려지는 넓이가 가장 작은 곳.
+          // 이름은 앞에서부터 읽으므로 앞 글자가 가려지는 자리보다 뒤 글자가 가려지는 자리를 고른다(앞 절반이 가려진 넓이를 세 배로 친다).
+          var hard=[],z3;
           for(z3 in own)hard.push(own[z3]);
           resv.forEach(function(rb){hard.push(rb);});
           gus.forEach(function(q){hard.push(q.box);});
-          fsz=gfs*0.853;w=nm.length*fsz*1.06;hh=fsz*0.62;
-          // 먼저 덜 가려지는 자리(4분의 1 아래)를 찾는다: 글자 양 끝이 구 안에 드는 자리 → 끝이 조금 나가는 자리. 없으면 절반 아래까지.
-          for(pass2=0;pass2<4&&!bestC;pass2++){
-            lim=pass2<2?0.25:0.5;bestCov=lim;
-            for(k=0;k<o.cands2.length;k++){
-              c=o.cands2[k];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
-              if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
-              if(pass2%2===0&&(!inP(bx[0]+w*0.04,c[1],o.pr)||!inP(c[0]+w/2-w*0.04,c[1],o.pr)))continue;
-              if(overlaps(bx,hard))continue;
-              cv=0;
-              for(z3=0;z3<names.length;z3++){
-                nb=names[z3].box;ix=Math.min(bx[2],nb[2]+4*u)-Math.max(bx[0],nb[0]-4*u);iy=Math.min(bx[3],nb[3]+1.5*u)-Math.max(bx[1],nb[1]-1.5*u);
-                if(ix>0&&iy>0)cv+=ix*iy;
+          var underFind=function(sc){
+            var f2=gfs*sc,w3=nm.length*f2*1.06,h3=f2*0.62,best3=null,pass2,lim,k3,c3,b3,cv,cvF,nb,ix,iy,z4,mid;
+            // 먼저 덜 가려지는 자리(4분의 1 아래): 글자 양 끝이 구 안에 드는 자리 → 끝이 조금 나가는 자리. 없으면 절반 아래까지.
+            for(pass2=0;pass2<4&&!best3;pass2++){
+              lim=pass2<2?0.25:0.5;
+              for(k3=0;k3<o.cands2.length;k3++){
+                c3=o.cands2[k3];b3=[c3[0]-w3/2,c3[1]-h3,c3[0]+w3/2,c3[1]+h3];mid=c3[0];
+                if(b3[0]<view.x||b3[2]>view.x+view.w||b3[1]<view.y||b3[3]>view.y+view.h)continue;
+                if(pass2%2===0&&(!inP(b3[0]+w3*0.04,c3[1],o.pr)||!inP(c3[0]+w3/2-w3*0.04,c3[1],o.pr)))continue;
+                if(overlaps(b3,hard))continue;
+                cv=0;cvF=0;
+                for(z4=0;z4<names.length;z4++){
+                  nb=names[z4].box;iy=Math.min(b3[3],nb[3]+1.5*u)-Math.max(b3[1],nb[1]-1.5*u);
+                  if(iy<=0)continue;
+                  ix=Math.min(b3[2],nb[2]+4*u)-Math.max(b3[0],nb[0]-4*u);
+                  if(ix>0)cv+=ix*iy;
+                  ix=Math.min(mid,nb[2]+4*u)-Math.max(b3[0],nb[0]-4*u);
+                  if(ix>0)cvF+=ix*iy;
+                }
+                cv/=(w3*2*h3);cvF/=(w3*2*h3);
+                if(cv>=lim)continue;
+                if(!best3||cv+2*cvF<best3.sc-0.02)best3={c:c3,cov:cv,sc:cv+2*cvF,fsz:f2,w:w3,hh:h3};
               }
-              cv/=(w*2*hh);
-              if(cv<bestCov-0.02){bestCov=cv;bestC=c;}
             }
+            return best3;
+          };
+          var u1=underFind(0.853),u2=null,ft,tr2;
+          if(!u1||u1.cov>0.3){
+            // 30% 넘게 가려지는 자리밖에 없을 때만: 13px까지 줄여 빈 자리(또는 덜 가려지는 자리)를 찾는다(기획실 2026-10-02 밤)
+            ft=[[true,true],[false,true],[true,false],[false,false]];
+            for(ti=0;ti<ft.length&&!ok;ti++){
+              tr2=ft[ti];fsz=gfs*0.765;w=nm.length*fsz*1.06;hh=fsz*0.62;
+              for(k=0;k<o.cands2.length;k++){
+                c=o.cands2[k];bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];
+                if(bx[0]<view.x||bx[2]>view.x+view.w||bx[1]<view.y||bx[3]>view.y+view.h)continue;
+                if(tr2[0]&&(!inP(bx[0]+w*0.04,c[1],o.pr)||!inP(c[0]+w/2-w*0.04,c[1],o.pr)))continue;
+                if(overlaps(bx,boxes))continue;
+                if(tr2[1]&&leads&&leads.length&&onLead(bx))continue;
+                ok=true;onLine=!tr2[1]&&leads&&leads.length&&onLead(bx);break;
+              }
+            }
+            if(!ok){u2=underFind(0.765);if(u2&&(!u1||u2.sc<u1.sc-0.05))u1=u2;}
           }
-          if(bestC){c=bestC;bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];ok=true;under=true;cover=bestCov;onLine=!!(leads&&leads.length&&onLead(bx));}
+          if(!ok&&u1){c=u1.c;fsz=u1.fsz;w=u1.w;hh=u1.hh;bx=[c[0]-w/2,c[1]-hh,c[0]+w/2,c[1]+hh];ok=true;under=true;cover=u1.cov;onLine=!!(leads&&leads.length&&onLead(bx));}
         }
       }
       var over=false;
