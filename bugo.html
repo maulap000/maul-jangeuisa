@@ -216,6 +216,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .part{margin-top:20px;}
   .out{break-inside:avoid;}
 }
+.topbar.nav-tight .nav-inline{display:none!important;}.topbar.nav-tight .nav-hamburger{display:flex!important;}
 </style>
 </head>
 <body>
@@ -228,6 +229,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <a target="_blank" rel="noopener" href="ijang.html">개장·이장서비스</a>
     <a target="_blank" rel="noopener" href="process.html">진행 절차</a>
     <a target="_blank" rel="noopener" href="prepare.html">미리 준비</a>
+    <a href="funeral-halls.html">서울 장례식장</a>
   </nav>
   <div class="topbar-right">
     <button class="nav-hamburger" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">
@@ -245,6 +247,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <a target="_blank" rel="noopener" href="ijang.html">개장·이장서비스</a>
   <a target="_blank" rel="noopener" href="process.html">진행 절차</a>
   <a target="_blank" rel="noopener" href="prepare.html">미리 준비</a>
+  <a href="funeral-halls.html">서울 장례식장</a>
 </nav>
 
 <main class="page">
@@ -412,7 +415,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 
 <footer>
   <div class="footer-brand">마을장의사</div>
-  <div class="footer-links"><a href="process.html">진행 절차</a><a href="prepare.html">미리 준비</a><a href="faq.html">자주 묻는 질문</a><a href="way.html">일하는 방식</a><a href="bugo.html">부고 문자 만들기</a><a href="after.html">장례 후 할 일</a>
+  <div class="footer-links"><a href="process.html">진행 절차</a><a href="prepare.html">미리 준비</a><a href="faq.html">자주 묻는 질문</a><a href="way.html">일하는 방식</a><a href="bugo.html">부고 문자 만들기</a><a href="after.html">장례 후 할 일</a><a href="funeral-halls.html">서울 장례식장</a>
     <a href="https://maulj24.com" target="_blank" rel="noopener">장례 정보 블로그</a>
     <a href="https://blog.naver.com/maulj4" target="_blank" rel="noopener">네이버 블로그</a>
     <a href="https://www.youtube.com/@마을장의사" target="_blank" rel="noopener">유튜브</a>
@@ -424,6 +427,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 const hamburger=document.getElementById('hamburger');const navDropdown=document.getElementById('navDropdown');
 hamburger.addEventListener('click',function(e){e.stopPropagation();navDropdown.classList.toggle('open');hamburger.setAttribute('aria-expanded',navDropdown.classList.contains('open'));});
 document.addEventListener('click',function(e){if(!e.target.closest('#navDropdown')&&!e.target.closest('#hamburger')){navDropdown.classList.remove('open');}});
+!function(){var t=document.querySelector('.topbar'),n=document.querySelector('.nav-inline'),b=document.querySelector('.topbar-brand'),r=document.querySelector('.topbar-right');if(!t||!n||!b||!r)return;function fit(){t.classList.remove('nav-tight');if(getComputedStyle(n).display==='none')return;var a=n.querySelectorAll('a');if(!a.length)return;if(a[0].getBoundingClientRect().left<b.getBoundingClientRect().right+12||a[a.length-1].getBoundingClientRect().right>r.getBoundingClientRect().left-12)t.classList.add('nav-tight');}fit();window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(b);}();
 
 let scale=100;const steps=[80,90,100,110,120,130,140];
 const lbl=document.getElementById('fontLabel');

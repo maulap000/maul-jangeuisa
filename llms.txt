@@ -27,6 +27,7 @@
 - [일하는 방식](https://xn--hz2b29jx3fkcys.com/way): 담당 장례지도사 배정과 비용 원칙
 - [미리 준비 체크리스트](https://xn--hz2b29jx3fkcys.com/prepare)
 - [장례 후 할 일 체크리스트](https://xn--hz2b29jx3fkcys.com/after): 사망신고·상속포기·상속세·연금 등 기한이 있는 일을 날짜순으로
+- [서울의 장례식장은 어디에 있을까요?](https://xn--hz2b29jx3fkcys.com/funeral-halls): 서울 24개 구 장례식장 60곳의 구별 목록 — 이름·주소·전화·빈소 수·편의시설(보건복지부 공공데이터 2026-04-01 기준, 순위·추천 없음)
 - [글로 보내는 부고](https://xn--hz2b29jx3fkcys.com/bugo): 앱이나 링크 없이 문자로 보내는 부고 문안 만들기
 - [후불상조서비스](https://xn--hz2b29jx3fkcys.com/sangjo)
 - [화장장지서비스](https://xn--hz2b29jx3fkcys.com/jangji)
