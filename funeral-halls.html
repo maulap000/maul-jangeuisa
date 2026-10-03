@@ -150,6 +150,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   .item{break-inside:avoid;}
   .dday{border:0;padding:0;margin-top:16px;}
 }
+.topbar.nav-tight .nav-inline{display:none!important;}.topbar.nav-tight .nav-hamburger{display:flex!important;}
 /* 찾기·지도 화면이 함께 쓰는 모양. page_common.py가 after.html의 모양 뒤에 붙인다. */
 .pick{margin-top:44px;padding:20px 20px 16px;border:1px solid var(--line);border-left:2px solid var(--gold);background:#fff;}
 .pick label{display:block;font-weight:700;color:var(--navy);font-size:0.95rem;}
@@ -287,6 +288,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
     <a href="ijang.html">개장·이장서비스</a>
     <a href="process.html">진행 절차</a>
     <a href="prepare.html">미리 준비</a>
+    <a href="funeral-halls.html" class="active" aria-current="page">서울 장례식장</a>
   </nav>
   <div class="topbar-right">
     <button class="nav-hamburger" id="hamburger" aria-label="메뉴 열기">
@@ -304,6 +306,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
   <a href="ijang.html">개장·이장서비스</a>
   <a href="process.html">진행 절차</a>
   <a href="prepare.html">미리 준비</a>
+  <a href="funeral-halls.html" class="active" aria-current="page">서울 장례식장</a>
 </nav>
 
 <main class="page">
@@ -417,6 +420,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 const hamburger=document.getElementById('hamburger');const navDropdown=document.getElementById('navDropdown');
 hamburger.addEventListener('click',function(e){e.stopPropagation();navDropdown.classList.toggle('open');});
 document.addEventListener('click',function(e){if(!e.target.closest('#navDropdown')&&!e.target.closest('#hamburger')){navDropdown.classList.remove('open');}});
+!function(){var t=document.querySelector('.topbar'),n=document.querySelector('.nav-inline'),b=document.querySelector('.topbar-brand'),r=document.querySelector('.topbar-right');if(!t||!n||!b||!r)return;function fit(){t.classList.remove('nav-tight');if(getComputedStyle(n).display==='none')return;var a=n.querySelectorAll('a');if(!a.length)return;if(a[0].getBoundingClientRect().left<b.getBoundingClientRect().right+12||a[a.length-1].getBoundingClientRect().right>r.getBoundingClientRect().left-12)t.classList.add('nav-tight');}fit();window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(b);}();
 
 let scale=100;const steps=[80,90,100,110,120,130,140];
 const lbl=document.getElementById('fontLabel');
