@@ -307,6 +307,7 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .nb-none{margin-top:10px;padding:10px 14px 10px 32px;border:1px dashed var(--line);font-size:0.95rem;}
 .nb-pick{padding:4px 12px 14px;}
 @media print{.nb-gu>summary::before{content:'';}}
+.list-note:empty{display:none;}
 
 /* 지도가 실릴 때만 붙는 모양. build_halls.py가 공통 모양 뒤에 붙인다. */
 /* 제목 바로 아래의 얇은 막대: 구 선택 + 이름 찾기(설명 글 없이). 자세한 안내는 목록 머리에 있다 */
@@ -2228,7 +2229,7 @@ function mjHallsRender(DATA,opt){
       var q=query.replace(/ /g,''),
           found=HALLS.filter(function(h){return (h.n+'|'+(h.sn||'')+'|'+(h.tn||'')+'|'+(h.fn||'')+'|'+(h.old||[]).join('|')+'|'+(h.al||[]).join('|')+'|'+(h.bn||'')+'|'+stations(h)).replace(/ /g,'').indexOf(q)>=0;}).sort(function(a,b){return a.no-b.no;});
       note.textContent='"'+query+'"(으)로 찾은 곳 '+found.length+'곳'+(found.length?' · 아래에 나옵니다':'');
-      sub('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');bar('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
+      sub('');bar('"'+query+'"(으)로 찾은 곳 '+found.length+'곳');
       list.innerHTML=(guHint?'<p class="near"><button type="button" class="ghost-btn" data-gu="'+guHint+'">'+guHint+' 장례식장 보기(이웃 구 함께)</button></p>':'')
         +(found.length?'<ul class="halls">'+found.map(function(h){return card(h).replace('<p class="addr">','<p class="in-gu">'+h.g+'</p><p class="addr">');}).join('')+'</ul>'
         :'<div class="empty"><p>찾는 이름이 없습니다. 목록의 이름과 다르게 부르는 곳일 수 있으니 구를 골라 보시거나 전화로 문의해 주세요.</p><p class="near"><a class="act tel" href="tel:18771852">전화 1877-1852</a></p></div>');
@@ -2238,12 +2239,13 @@ function mjHallsRender(DATA,opt){
     if(!items.length){
       var near=(NEAR[g]||[]),nearN=near.reduce(function(s,n){return s+count(n);},0);
       list.innerHTML='<div class="empty"><p><strong>'+esc(g)+'</strong>에는 등록된 장례식장이 없습니다.</p></div>'+R.nearHtml(g,true);
-      note.textContent=g+' 0곳 · 이웃 구 '+near.length+'개 구의 장례식장 '+nearN+'곳을 아래에 펼쳐 두었습니다';sub(g+' 0곳 · 이웃 구 '+nearN+'곳');bar(g+' 0곳 · 이웃 구 '+nearN+'곳');return;
+      note.textContent=g+' 0곳 · 이웃 구 '+near.length+'개 구의 장례식장 '+nearN+'곳을 아래에 펼쳐 두었습니다';sub('');bar(g+' 0곳 · 이웃 구 '+nearN+'곳');return;
     }
     if(all)note.textContent='서울 25개 구 가운데 '+inGus+'개 구의 장례식장 '+HALLS.length+'곳을 실었습니다.'+(MAP?'':' 아래에 구별로 나옵니다.');
     else note.textContent=(gq?'"'+query+'" — 구 이름이라 '+g+'를 골랐습니다. ':'')+(MAP?g+' '+items.length+'곳 · 위 지도가 '+g+'로 커졌고, 아래 목록도 '+g+'로 바뀌었습니다':g+' '+items.length+'곳 · 아래에 이름순으로 나옵니다')
       +((NEAR[g]||[]).length?'. 목록 끝에 이웃 구 '+NEAR[g].length+'개 구의 장례식장 '+NEAR[g].reduce(function(s,n){return s+count(n);},0)+'곳을 구별로 접어 두었습니다':'');
-    sub((all?'서울 전체':g)+' '+items.length+'곳 ('+(all?'구별, ':'')+'이름순, 순위 아님)');
+    // 바로 위 요약 줄(note)이 곳 수를 말하므로, 여기서는 목록의 차례만 적는다(같은 말을 두 번 하지 않게, 기획실 10/5)
+    sub('목록은 '+(all?'구별·':'')+'이름순이며 순위가 아닙니다');
     bar(all?'':g+' '+items.length+'곳');
     list.innerHTML=R.listHtml(g)+(all?'':R.nearHtml(g,false));
   }
