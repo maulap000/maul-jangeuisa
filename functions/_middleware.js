@@ -4,6 +4,7 @@ const MAIN = 'https://xn--hz2b29jx3fkcys.com';
 const SHORT = {
   'xn--299a782a.mj4.kr': '/bugo', // 부고.mj4.kr
   'bugo.mj4.kr': '/bugo',
+  'xn--hq1b18f1rqw5b.mj4.kr': '/funeral-halls', // 장례지도.mj4.kr (2026-10-14 대표님 결정)
 };
 
 export async function onRequest(context) {
