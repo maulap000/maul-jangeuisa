@@ -522,17 +522,10 @@ button,input,select,textarea{font-family:inherit;}
 .acts .act.tel{border:2px solid var(--gold);color:var(--navy);font-weight:700;}
 
 
-.tone-b .map-wrap{background:#f7f8fa;}
-.tone-b .gu{fill:#eef1f5;stroke:#c7cdd7;}
-.tone-b .gu.zero{fill:#e5e8ed;}
-.tone-b .gu.dim{fill:#eaedf2;}
-.tone-b .gu:hover{fill:#f6f8fb;}
-.tone-b .gu.on{fill:#fff;stroke:#8c97a8;}
-.tone-b .dong{stroke:#d3d8e0;}
-.tone-b .gu-label{fill:#56657b;}
-.tone-b .zoomed .gu-label{fill:#8792a3;}
-.tone-b .han-water{stroke:#b3cde2;}
-.tone-b .han-label{fill:#46708f;}
+@media (max-width:600px){
+  .acts{display:grid;grid-template-columns:1fr;gap:8px;}
+  .acts .act{display:flex;justify-content:center;width:100%;box-sizing:border-box;}
+}
 </style>
 <link rel="preload" as="script" href="funeral-data.js?v=32695531">
 <link rel="preload" as="script" href="funeral-map-geo.js?v=553656bf">
@@ -732,7 +725,6 @@ document.getElementById('btnPlus').onclick=()=>{const i=steps.indexOf(scale);if(
 document.getElementById('btnMinus').onclick=()=>{const i=steps.indexOf(scale);if(i>0){scale=steps[i-1];applyScale();}};
 try{const s=localStorage.getItem('mj_font');if(s&&steps.includes(Number(s))){scale=Number(s);applyScale();}}catch(e){}
 
-(function(){try{if(/[?&]tone=b(&|$)/.test(location.search))document.documentElement.classList.add('tone-b');}catch(e){}})();
 function mjMapCore(D,G){
   var GUS=['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'];
   var BUILDING=G.pointSource==='building';
