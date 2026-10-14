@@ -350,9 +350,11 @@ footer{background:var(--navy-deep);padding:30px 24px 46px;text-align:center;bord
 .card-x{float:right;margin:-6px -6px 6px 10px;min-height:44px;padding:4px 12px;border:1px solid var(--line);background:#fff;color:var(--navy);font-family:inherit;font-size:0.84rem;cursor:pointer;}
 
 
-@media (max-width:699px){.map-box:not(.full) .map-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:0;border-left:0;border-right:0;}}
 
-@media (min-width:700px) and (max-width:999px){.map-box:not(.full) .map-wrap{width:calc(100vw - 16px);margin-left:calc(50% - 50vw + 8px);margin-right:0;}}
+@media (max-width:699px){.map-box:not(.full) .map-wrap{width:auto;margin-left:-28px;margin-right:-28px;border-left:0;border-right:0;}}
+@media (max-width:480px){.map-box:not(.full) .map-wrap{margin-left:-20px;margin-right:-20px;}}
+
+@media (min-width:700px) and (max-width:999px){.map-box:not(.full) .map-wrap{width:auto;margin-left:-20px;margin-right:-20px;}}
 
 html.map-full,html.map-full body{overflow:hidden;}
 .map-box.full{position:fixed;left:0;top:0;right:0;bottom:0;z-index:1000;margin:0;padding:0 12px 10px;background:var(--paper);display:flex;flex-direction:column;}
@@ -522,7 +524,7 @@ button.act{font-family:inherit;cursor:pointer;}
 
   <section class="map-box" id="mapBox" aria-label="지도">
     <div class="full-bar"><strong>서울 장례식장 지도</strong><button type="button" class="ghost-btn" id="btnFullClose">지도 닫기</button></div>
-    <p class="map-top" id="mapNote"><strong>지도의 점은 건물의 정확한 자리가 아닙니다.</strong> 주소에 적힌 동의 가운데쯤에 찍은 대략의 위치라서, 지도에 그려진 동 경계와 맞지 않아 옆 동 안에 찍힌 곳도 있습니다. 건물 위치는 아래 목록의 "네이버 지도에서 보기"에서 확인해 주세요. (정확한 위치는 준비 중입니다)</p>
+    <p class="map-top" id="mapNote">점은 동 가운데쯤의 대략 위치입니다. 건물 위치는 목록의 "네이버 지도에서 보기"에서 확인하세요.</p>
     <div class="map-wrap" id="mapWrap">
       <svg id="map" role="group" aria-label="서울 구 경계 지도. 구를 누르면 그 구로 확대되고 아래 목록도 그 구로 바뀝니다. 같은 내용이 아래 목록에도 있습니다." xmlns="http://www.w3.org/2000/svg"></svg>
       <p class="map-wait" id="mapWait">지도를 준비하고 있습니다.</p>
@@ -537,7 +539,7 @@ button.act{font-family:inherit;cursor:pointer;}
       <button type="button" class="ghost-btn" id="btnZoomOut">지도 축소</button>
       <button type="button" class="ghost-btn strong" id="btnFull" aria-pressed="false">지도 크게 보기</button>
     </div>
-    <p class="map-approx" id="mapApprox" hidden>점은 건물의 정확한 자리가 아니라 동 가운데쯤의 대략의 위치입니다(정확한 위치는 준비 중입니다).</p>
+    <p class="map-approx" id="mapApprox" hidden>점은 동 가운데쯤의 대략 위치입니다. 건물 위치는 목록의 "네이버 지도에서 보기"에서 확인하세요.</p>
     <div class="map-rest" id="mapRest" hidden></div>
     <div id="pointCard" aria-live="polite" tabindex="-1"></div>
     <p class="legend-sub">지도에는 이름을 줄여 적었습니다. 키우거나 구를 누르면 이름 전체가 나오고, 누르면 정식 이름과 전화가 나옵니다.</p>
